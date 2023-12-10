@@ -1,3 +1,4 @@
+import 'package:edupot/routes/themes/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:edupot/routes/auth/login.dart';
 
@@ -13,10 +14,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'EduPot',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        primaryColor: EduPotColorTheme.primaryDark,
         useMaterial3: true,
       ),
-      home: const LoginScreen(title: 'Flutter Demo Home Page'),
+      home: const LoginScreen(title: 'Login to EduPot'),
     );
   }
 }
