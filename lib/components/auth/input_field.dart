@@ -44,10 +44,11 @@ class InputField extends StatelessWidget {
           child: TextFormField(
             autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: (input) {
+              if (input!.isEmpty) return null;
               if (headline == 'Email') {
-                return isValidEmail(input!) ? null : validatorText;
+                return isValidEmail(input) ? null : validatorText;
               } else if (headline == 'Password') {
-                return input!.length >= 8 ? null : validatorText;
+                return input.length >= 8 ? null : validatorText;
               }
               return null;
             },
@@ -57,7 +58,7 @@ class InputField extends StatelessWidget {
               hintText: placeholder,
               hintStyle: EduPotDarkTextTheme.headline2(0.5),
               border: InputBorder.none,
-              contentPadding: const EdgeInsets.only(bottom: 5),
+              contentPadding: const EdgeInsets.only(bottom: 2),
             ),
           ),
         ),

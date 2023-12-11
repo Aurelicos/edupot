@@ -1,0 +1,67 @@
+import 'package:edupot/components/auth/icon_button.dart';
+import 'package:edupot/routes/themes/theme.dart';
+import 'package:flutter/material.dart';
+
+Widget buildtitle(String title) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        title,
+        style: EduPotDarkTextTheme.headline1,
+      ),
+      const SizedBox(height: 10),
+      Text(
+        "Welcome to EduPot - Your Learning Companion",
+        style: EduPotDarkTextTheme.headline2(0.6),
+      ),
+    ],
+  );
+}
+
+Widget orDivider() {
+  return Container(
+    margin: const EdgeInsets.only(top: 20),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: Divider(
+            color: Colors.white.withOpacity(0.1),
+            height: 20,
+            thickness: 1,
+          ),
+        ),
+        Text("or", style: EduPotDarkTextTheme.headline2(1)),
+        Expanded(
+          child: Divider(
+            color: Colors.white.withOpacity(0.1),
+            height: 20,
+            thickness: 1,
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget socialButtons() {
+  return Container(
+    margin: const EdgeInsets.only(top: 20),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        PlatformButton(
+          iconPath: "assets/icons/google.svg",
+          onPressed: () {},
+        ),
+        const SizedBox(width: 20),
+        PlatformButton(
+          iconPath: "assets/icons/facebook.svg",
+          onPressed: () {},
+          color: EduPotColorTheme.facebookPrimary,
+        ),
+      ],
+    ),
+  );
+}
