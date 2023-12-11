@@ -1,15 +1,18 @@
 import 'package:edupot/routes/themes/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:edupot/utils/auth/validator.dart';
 
 class InputField extends StatelessWidget {
   final String headline;
   final String placeholder;
+  final String validatorText;
   final bool isPassword;
 
   const InputField({
     Key? key,
     required this.headline,
     required this.placeholder,
+    required this.validatorText,
     this.isPassword = false,
   }) : super(key: key);
 
@@ -32,17 +35,22 @@ class InputField extends StatelessWidget {
         const SizedBox(height: 10),
         Container(
           decoration: ShapeDecoration(
-            gradient: const LinearGradient(
-              begin: Alignment(1.00, 0.00),
-              end: Alignment(-1, 0),
-              colors: [Color(0x72242547), Color(0xFF242547)],
-            ),
+            gradient: EduPotColorTheme.mainItemGradient,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           ),
           alignment: Alignment.centerLeft,
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-          child: TextField(
+          child: TextFormField(
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            validator: (input) {
+              if (headline == 'Email') {
+                return isValidEmail(input!) ? null : validatorText;
+              } else if (headline == 'Password') {
+                return input!.length >= 8 ? null : validatorText;
+              }
+              return null;
+            },
             obscureText: isPassword,
             style: EduPotDarkTextTheme.headline2(1),
             decoration: InputDecoration(
