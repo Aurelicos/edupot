@@ -4,9 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:edupot/components/auth/input_field.dart';
 import 'package:edupot/components/common/authentication.dart';
 
-class LoginScreen extends StatelessWidget {
-  final String title;
-  const LoginScreen({super.key, required this.title});
+class RegisterScreen extends StatelessWidget {
+  const RegisterScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,17 +14,42 @@ class LoginScreen extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Container(
-          padding: const EdgeInsets.only(left: 20, right: 20, top: 56),
+          padding: const EdgeInsets.only(left: 20, right: 20, top: 32),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              buildtitle(title),
+              buildtitle("Register to EduPot",
+                  "Start Your Learning Journey with EduPot"),
               const SizedBox(height: 46),
+              socialButtons(),
+              const SizedBox(height: 10),
+              orDivider(),
+              const SizedBox(height: 10),
               const InputField(
                 headline: 'Email',
                 placeholder: 'johndoe@example.com',
                 validatorText: "Check your email",
+              ),
+              const SizedBox(height: 20),
+              const Row(
+                children: [
+                  Expanded(
+                    child: InputField(
+                      headline: 'First Name',
+                      placeholder: "John",
+                      validatorText: "",
+                    ),
+                  ),
+                  SizedBox(width: 20),
+                  Expanded(
+                    child: InputField(
+                      headline: 'Last Name',
+                      placeholder: 'Doe',
+                      validatorText: "",
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 20),
               const InputField(
@@ -34,23 +58,6 @@ class LoginScreen extends StatelessWidget {
                 validatorText: "Password must be at least 8 characters",
                 isPassword: true,
               ),
-              orDivider(),
-              socialButtons(),
-              Center(
-                child: Container(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: GestureDetector(
-                    onTap: () {},
-                    child: Text(
-                      "Forgot Password?",
-                      style: EduPotDarkTextTheme.headline2(0.4).copyWith(
-                        decoration: TextDecoration.underline,
-                        decorationColor: Colors.white.withOpacity(0.4),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
               const Spacer(),
               Column(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -58,21 +65,19 @@ class LoginScreen extends StatelessWidget {
                   Row(
                     children: [
                       Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            gradient: EduPotColorTheme.buttonGradient,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(8),
-                            onTap: () {},
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                              child: Center(
-                                child: Text(
-                                  "Login",
-                                  style: EduPotDarkTextTheme.headline2(1),
-                                ),
+                        child: InkWell(
+                          onTap: () {},
+                          borderRadius: BorderRadius.circular(8),
+                          child: Ink(
+                            height: 56,
+                            decoration: BoxDecoration(
+                              gradient: EduPotColorTheme.buttonGradient,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Center(
+                              child: Text(
+                                "Login",
+                                style: EduPotDarkTextTheme.headline2(1),
                               ),
                             ),
                           ),

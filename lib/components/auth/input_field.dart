@@ -40,7 +40,8 @@ class InputField extends StatelessWidget {
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           ),
           alignment: Alignment.centerLeft,
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          height: 56,
           child: TextFormField(
             autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: (input) {

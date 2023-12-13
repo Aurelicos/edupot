@@ -1,6 +1,6 @@
+import 'package:edupot/routes/auth/register_screen.dart';
 import 'package:edupot/routes/themes/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:edupot/routes/auth/login.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
         primaryColor: EduPotColorTheme.primaryDark,
         useMaterial3: true,
       ),
-      home: const LoginScreen(title: 'Login to EduPot'),
+      home: const RegisterScreen(),
     );
   }
 }

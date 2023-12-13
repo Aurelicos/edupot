@@ -2,7 +2,7 @@ import 'package:edupot/components/auth/icon_button.dart';
 import 'package:edupot/routes/themes/theme.dart';
 import 'package:flutter/material.dart';
 
-Widget buildtitle(String title) {
+Widget buildtitle(String title, String title2) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -12,7 +12,7 @@ Widget buildtitle(String title) {
       ),
       const SizedBox(height: 10),
       Text(
-        "Welcome to EduPot - Your Learning Companion",
+        title2,
         style: EduPotDarkTextTheme.headline2(0.6),
       ),
     ],
