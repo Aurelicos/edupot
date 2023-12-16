@@ -11,9 +11,10 @@ class RegisterScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: EduPotColorTheme.primaryDark,
-      resizeToAvoidBottomInset: false,
-      body: SafeArea(
+      resizeToAvoidBottomInset: true,
+      body: SingleChildScrollView(
         child: Container(
+          height: MediaQuery.of(context).size.height,
           padding: const EdgeInsets.only(left: 20, right: 20, top: 32),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
