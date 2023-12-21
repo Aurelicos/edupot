@@ -13,12 +13,14 @@ dependencies:
 
   cupertino_icons: ^1.0.2
   flutter_svg: ^2.0.9
+  flutter_native_splash: ^2.3.8
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
   flutter_lints: ^2.0.0
+  flutter_launcher_icons: "^0.13.1"
 
 flutter:
   uses-material-design: true
@@ -50,3 +52,18 @@ flutter:
           weight: 600
         - asset: assets/fonts/Inter-Thin.ttf
           weight: 100
+
+flutter_native_splash:
+  color: "#171930"
+  image: assets/images/icon.png
+  icon_background_color: "#171930"
+
+  android_12:
+    image: assets/images/icon.png
+    icon_background_color: "#171930"
+    color: "#171930"
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/icon.png"
