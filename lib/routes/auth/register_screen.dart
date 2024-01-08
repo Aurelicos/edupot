@@ -94,10 +94,10 @@ class RegisterPage extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 20),
                       child: ClickableText(
-                        firstText: "I'm a new user. ",
-                        clickableText: "Registration",
+                        firstText: "Already have an account? ",
+                        clickableText: "Login",
                         onPressed: () {
-                          context.router.push(const LoginRoute());
+                          context.pushRoute(const LoginRoute());
                         },
                       ),
                     ),

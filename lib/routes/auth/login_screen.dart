@@ -84,7 +84,7 @@ class LoginPage extends StatelessWidget {
                         firstText: "I'm a new user. ",
                         clickableText: "Registration",
                         onPressed: () {
-                          context.router.push(const RegisterRoute());
+                          context.popRoute(const RegisterRoute());
                         },
                       ),
                     ),
