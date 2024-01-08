@@ -1,5 +1,5 @@
-import 'package:edupot/routes/auth/register_screen.dart';
 import 'package:edupot/routes/themes/theme.dart';
+import 'package:edupot/utils/router/router.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -9,21 +9,24 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(App());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class App extends StatelessWidget {
+  App({super.key});
+
+  final _appRouter = AppRouter();
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'EduPot',
       theme: ThemeData(
         primaryColor: EduPotColorTheme.primaryDark,
         useMaterial3: true,
       ),
-      home: const RegisterScreen(),
+      debugShowCheckedModeBanner: false,
+      routerConfig: _appRouter.config(),
     );
   }
 }

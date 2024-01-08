@@ -1,11 +1,15 @@
+import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:edupot/components/auth/clickable_text.dart';
 import 'package:edupot/routes/themes/theme.dart';
+import 'package:edupot/utils/router/router.dart';
 import 'package:flutter/material.dart';
 import 'package:edupot/components/auth/input_field.dart';
 import 'package:edupot/components/common/authentication.dart';
 
-class RegisterScreen extends StatelessWidget {
-  const RegisterScreen({super.key});
+@RoutePage()
+class RegisterPage extends StatelessWidget {
+  const RegisterPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +96,9 @@ class RegisterScreen extends StatelessWidget {
                       child: ClickableText(
                         firstText: "I'm a new user. ",
                         clickableText: "Registration",
-                        onPressed: () {},
+                        onPressed: () {
+                          context.router.push(const LoginRoute());
+                        },
                       ),
                     ),
                   )
