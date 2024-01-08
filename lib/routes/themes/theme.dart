@@ -15,6 +15,12 @@ class EduPotColorTheme {
     end: Alignment(-0.76, 0.66),
     colors: [Color(0xFF266ED7), Color(0xFF4D8AEB)],
   );
+
+  static const primaryGradient = LinearGradient(
+    begin: Alignment(-0.66, 0.75),
+    end: Alignment(0.66, -0.75),
+    colors: [Color(0xFF171930), Color(0xFF1D1F3E)],
+  );
 }
 
 class EduPotDarkTextTheme {
