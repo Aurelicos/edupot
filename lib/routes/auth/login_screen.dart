@@ -69,14 +69,9 @@ class LoginPage extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   children: [
-                    const Row(
-                      children: [
-                        Expanded(
-                          child: MainButton(
-                            title: "Login",
-                          ),
-                        ),
-                      ],
+                    MainButton(
+                      title: "Login",
+                      onTap: () {},
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(vertical: 20),

@@ -1,8 +1,8 @@
-import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:edupot/components/auth/clickable_text.dart';
 import 'package:edupot/routes/themes/theme.dart';
 import 'package:edupot/utils/router/router.dart';
+import 'package:edupot/widgets/main_button.dart';
 import 'package:flutter/material.dart';
 import 'package:edupot/components/auth/input_field.dart';
 import 'package:edupot/components/common/authentication.dart';
@@ -67,28 +67,9 @@ class RegisterPage extends StatelessWidget {
               Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: InkWell(
-                          onTap: () {},
-                          borderRadius: BorderRadius.circular(8),
-                          child: Ink(
-                            height: 56,
-                            decoration: BoxDecoration(
-                              gradient: EduPotColorTheme.buttonGradient,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Center(
-                              child: Text(
-                                "Login",
-                                style: EduPotDarkTextTheme.headline2(1),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                  MainButton(
+                    title: "Login",
+                    onTap: () {},
                   ),
                   Center(
                     child: Container(

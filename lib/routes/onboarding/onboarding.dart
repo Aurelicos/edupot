@@ -1,15 +1,63 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:edupot/components/onboarding/pages.dart';
 import 'package:edupot/routes/themes/theme.dart';
+import 'package:edupot/widgets/main_button.dart';
 import 'package:flutter/material.dart';
 
 @RoutePage()
-class OnboardingPage extends StatelessWidget {
+class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key});
+
+  @override
+  State<OnboardingPage> createState() => _OnboardingPageState();
+}
+
+class _OnboardingPageState extends State<OnboardingPage> {
+  final PageController _pageController = PageController();
+  int _currentPage = 0;
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  void _nextPage() {
+    if (_currentPage < onboardingPages.length - 1) {
+      _pageController.animateToPage(
+        _currentPage + 1,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+
+  Widget _buildPageIndicator(int length, int currentIndex) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(
+        length,
+        (index) => Container(
+          margin: const EdgeInsets.symmetric(horizontal: 4),
+          width: 10,
+          height: 10,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: currentIndex == index
+                ? Colors.white
+                : Colors.white.withOpacity(0.5),
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+
+    final pageViewHeight = height * 0.75;
 
     return SafeArea(
       child: Scaffold(
@@ -49,6 +97,61 @@ class OnboardingPage extends StatelessWidget {
                             topRight: Radius.circular(15),
                           ),
                         ),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            height: pageViewHeight,
+                            child: PageView.builder(
+                              controller: _pageController,
+                              itemCount: onboardingPages.length,
+                              onPageChanged: (int page) {
+                                setState(() {
+                                  _currentPage = page;
+                                });
+                              },
+                              itemBuilder: (BuildContext context, int index) {
+                                return Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.only(top: 32),
+                                        width: width * .75,
+                                        height: height * .5,
+                                        child: Image(
+                                          image: AssetImage(
+                                            onboardingPages[index]['image'],
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 20),
+                                      Text(
+                                        onboardingPages[index]['title'],
+                                        style: EduPotDarkTextTheme.headline1,
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Text(
+                                        onboardingPages[index]['subtitle'],
+                                        style:
+                                            EduPotDarkTextTheme.headline2(0.6),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          _buildPageIndicator(
+                              onboardingPages.length, _currentPage),
+                          MainButton(
+                            title: "Next",
+                            onTap: _nextPage,
+                          )
+                        ],
                       ),
                     ),
                   ),
