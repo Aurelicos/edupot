@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "78607739105",
+    "project_id": "edupot-6a6ce",
+    "storage_bucket": "edupot-6a6ce.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:78607739105:android:35f2e7268d280854d8afa0",
+        "android_client_info": {
+          "package_name": "com.example.edupot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "78607739105-6n8s3p9827tq8s47busth9htv5f2eahb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvPwaZNl7bLupoPUULYJDP7rsdOpwUO2I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "78607739105-6n8s3p9827tq8s47busth9htv5f2eahb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
