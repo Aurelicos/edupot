@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:edupot/components/onboarding/pages.dart';
-import 'package:edupot/routes/themes/theme.dart';
+import 'package:edupot/utils/themes/theme.dart';
+import 'package:edupot/utils/router/router.dart';
 import 'package:edupot/widgets/main_button.dart';
 import 'package:flutter/material.dart';
 
@@ -90,7 +91,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       height: height - 50,
                       width: width,
                       decoration: const ShapeDecoration(
-                        gradient: EduPotColorTheme.primaryGradient,
+                        gradient: EduPotColorTheme.onboardingGradient,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(15),
@@ -98,62 +99,70 @@ class _OnboardingPageState extends State<OnboardingPage> {
                           ),
                         ),
                       ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SizedBox(
-                            height: pageViewHeight,
-                            child: PageView.builder(
-                              controller: _pageController,
-                              itemCount: onboardingPages.length,
-                              onPageChanged: (int page) {
-                                setState(() {
-                                  _currentPage = page;
-                                });
-                              },
-                              itemBuilder: (BuildContext context, int index) {
-                                return Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20),
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        padding: const EdgeInsets.only(top: 32),
-                                        width: width * .75,
-                                        height: height * .5,
-                                        child: Image(
-                                          image: AssetImage(
-                                            onboardingPages[index]['image'],
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(height: 20),
-                                      Text(
-                                        onboardingPages[index]['title'],
-                                        style: EduPotDarkTextTheme.headline1,
-                                      ),
-                                      const SizedBox(height: 10),
-                                      Text(
-                                        onboardingPages[index]['subtitle'],
-                                        style:
-                                            EduPotDarkTextTheme.headline2(0.6),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                          _buildPageIndicator(
-                              onboardingPages.length, _currentPage),
-                          MainButton(
-                            title: "Next",
-                            onTap: _nextPage,
-                          )
-                        ],
-                      ),
                     ),
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        height: pageViewHeight,
+                        child: PageView.builder(
+                          controller: _pageController,
+                          itemCount: onboardingPages.length,
+                          onPageChanged: (int page) {
+                            setState(() {
+                              _currentPage = page;
+                            });
+                          },
+                          itemBuilder: (BuildContext context, int index) {
+                            return Container(
+                              padding: const EdgeInsets.only(
+                                  left: 20, right: 20, top: 32),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.only(top: 32),
+                                    width: width * .75,
+                                    height: height * .5,
+                                    child: Image(
+                                      image: AssetImage(
+                                        onboardingPages[index]['image'],
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 20),
+                                  Text(
+                                    onboardingPages[index]['title'],
+                                    style: EduPotDarkTextTheme.headline1,
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    onboardingPages[index]['subtitle'],
+                                    style: EduPotDarkTextTheme.headline2(0.6),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      _buildPageIndicator(onboardingPages.length, _currentPage),
+                      Container(
+                        padding: const EdgeInsets.only(
+                            left: 20, right: 20, bottom: 25),
+                        child: Material(
+                          type: MaterialType.transparency,
+                          child: MainButton(
+                            title: "Next",
+                            onTap: _currentPage == onboardingPages.length - 1
+                                ? () =>
+                                    context.pushRoute(const TaskTrackerRoute())
+                                : _nextPage,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

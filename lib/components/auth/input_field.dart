@@ -1,4 +1,4 @@
-import 'package:edupot/routes/themes/theme.dart';
+import 'package:edupot/utils/themes/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:edupot/utils/auth/validator.dart';
 

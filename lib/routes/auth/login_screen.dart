@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:edupot/components/auth/clickable_text.dart';
-import 'package:edupot/routes/themes/theme.dart';
+import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/utils/router/router.dart';
 import 'package:edupot/widgets/main_button.dart';
 import 'package:flutter/material.dart';

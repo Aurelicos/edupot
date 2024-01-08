@@ -16,10 +16,16 @@ class EduPotColorTheme {
     colors: [Color(0xFF266ED7), Color(0xFF4D8AEB)],
   );
 
-  static const primaryGradient = LinearGradient(
+  static const onboardingGradient = LinearGradient(
     begin: Alignment(-0.66, 0.75),
     end: Alignment(0.66, -0.75),
     colors: [Color(0xFF171930), Color(0xFF1D1F3E)],
+  );
+
+  static const primaryGradient = LinearGradient(
+    begin: Alignment(-0.21, -0.98),
+    end: Alignment(0.21, 0.98),
+    colors: [Color(0xFF171930), Color(0xFF171930)],
   );
 }
 

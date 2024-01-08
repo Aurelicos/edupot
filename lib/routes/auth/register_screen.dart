@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:edupot/components/auth/clickable_text.dart';
-import 'package:edupot/routes/themes/theme.dart';
+import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/utils/router/router.dart';
 import 'package:edupot/widgets/main_button.dart';
 import 'package:flutter/material.dart';
@@ -68,8 +68,8 @@ class RegisterPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   MainButton(
-                    title: "Login",
-                    onTap: () {},
+                    title: "Registration",
+                    onTap: () => context.pushRoute(const OnboardingRoute()),
                   ),
                   Center(
                     child: Container(

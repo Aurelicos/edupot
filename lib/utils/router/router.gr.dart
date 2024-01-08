@@ -33,6 +33,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const RegisterPage(),
       );
     },
+    TaskTrackerRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const TaskTrackerPage(),
+      );
+    },
   };
 }
 
@@ -74,6 +80,20 @@ class RegisterRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'RegisterRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [TaskTrackerPage]
+class TaskTrackerRoute extends PageRouteInfo<void> {
+  const TaskTrackerRoute({List<PageRouteInfo>? children})
+      : super(
+          TaskTrackerRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'TaskTrackerRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

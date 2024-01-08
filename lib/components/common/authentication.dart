@@ -1,5 +1,5 @@
 import 'package:edupot/components/auth/icon_button.dart';
-import 'package:edupot/routes/themes/theme.dart';
+import 'package:edupot/utils/themes/theme.dart';
 import 'package:flutter/material.dart';
 
 Widget buildtitle(String title, String title2) {
