@@ -15,7 +15,9 @@ class OnboardingPage extends StatefulWidget {
 
 class _OnboardingPageState extends State<OnboardingPage> {
   final PageController _pageController = PageController();
+  double _swipeVelocity = 0;
   int _currentPage = 0;
+  bool _isPageAnimating = false;
 
   @override
   void dispose() {
@@ -23,13 +25,32 @@ class _OnboardingPageState extends State<OnboardingPage> {
     super.dispose();
   }
 
+  void _onPageChangeStart() {
+    setState(() {
+      _isPageAnimating = true;
+    });
+  }
+
+  void _onPageChangeEnd() {
+    setState(() {
+      _isPageAnimating = false;
+    });
+  }
+
+  void _navigateToNextRoute() {
+    context.pushRoute(const TaskTrackerRoute());
+  }
+
   void _nextPage() {
     if (_currentPage < onboardingPages.length - 1) {
-      _pageController.animateToPage(
-        _currentPage + 1,
-        duration: const Duration(milliseconds: 400),
-        curve: Curves.easeInOut,
-      );
+      _onPageChangeStart();
+      _pageController
+          .animateToPage(
+            _currentPage + 1,
+            duration: const Duration(milliseconds: 400),
+            curve: Curves.easeInOut,
+          )
+          .then((_) => _onPageChangeEnd());
     }
   }
 
@@ -51,17 +72,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
         ),
       ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    _pageController.addListener(() {
-      if (_pageController.page == onboardingPages.length - 1) {
-        context.pushRoute(const TaskTrackerRoute());
-      }
-    });
   }
 
   @override
@@ -99,7 +109,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: Container(
-                      height: height - 50,
+                      height: height - 55,
                       width: width,
                       decoration: const ShapeDecoration(
                         gradient: EduPotColorTheme.onboardingGradient,
@@ -115,47 +125,61 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SizedBox(
-                        height: pageViewHeight,
-                        child: PageView.builder(
-                          controller: _pageController,
-                          itemCount: onboardingPages.length,
-                          onPageChanged: (int page) {
-                            setState(() {
-                              _currentPage = page;
-                            });
-                          },
-                          itemBuilder: (BuildContext context, int index) {
-                            return Container(
-                              padding: const EdgeInsets.only(
-                                  left: 20, right: 20, top: 32),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.only(top: 32),
-                                    width: width * .75,
-                                    height: height * .5,
-                                    child: Image(
-                                      image: AssetImage(
-                                        onboardingPages[index]['image'],
+                      Listener(
+                        onPointerMove: (PointerMoveEvent event) {
+                          if (!_isPageAnimating) {
+                            _swipeVelocity = event.delta.dx;
+                          }
+                        },
+                        onPointerUp: (PointerUpEvent event) {
+                          if (!_isPageAnimating &&
+                              _currentPage == onboardingPages.length - 1 &&
+                              _swipeVelocity < 0) {
+                            _navigateToNextRoute();
+                          }
+                        },
+                        child: SizedBox(
+                          height: pageViewHeight,
+                          child: PageView.builder(
+                            controller: _pageController,
+                            itemCount: onboardingPages.length,
+                            onPageChanged: (int page) {
+                              setState(() {
+                                _currentPage = page;
+                              });
+                            },
+                            itemBuilder: (BuildContext context, int index) {
+                              return Container(
+                                padding: const EdgeInsets.only(
+                                    left: 20, right: 20, top: 32),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.only(top: 32),
+                                      width: width * .75,
+                                      height: height * .5,
+                                      child: Image(
+                                        image: AssetImage(
+                                          onboardingPages[index]['image'],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  const SizedBox(height: 20),
-                                  Text(
-                                    onboardingPages[index]['title'],
-                                    style: EduPotDarkTextTheme.headline1,
-                                  ),
-                                  const SizedBox(height: 10),
-                                  Text(
-                                    onboardingPages[index]['subtitle'],
-                                    style: EduPotDarkTextTheme.headline2(0.6),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
+                                    const SizedBox(height: 20),
+                                    Text(
+                                      onboardingPages[index]['title'],
+                                      style: EduPotDarkTextTheme.headline1,
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Text(
+                                      onboardingPages[index]['subtitle'],
+                                      style: EduPotDarkTextTheme.headline2(0.6),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       ),
                       _buildPageIndicator(onboardingPages.length, _currentPage),

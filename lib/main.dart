@@ -1,7 +1,9 @@
+import 'package:edupot/providers/user_provider.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/utils/router/router.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -9,6 +11,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   runApp(App());
 }
 
@@ -19,14 +22,19 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'EduPot',
-      theme: ThemeData(
-        primaryColor: EduPotColorTheme.primaryDark,
-        useMaterial3: true,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(value: UserProvider()),
+      ],
+      child: MaterialApp.router(
+        title: 'EduPot',
+        theme: ThemeData(
+          primaryColor: EduPotColorTheme.primaryDark,
+          useMaterial3: true,
+        ),
+        debugShowCheckedModeBanner: false,
+        routerConfig: _appRouter.config(),
       ),
-      debugShowCheckedModeBanner: false,
-      routerConfig: _appRouter.config(),
     );
   }
 }

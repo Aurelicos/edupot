@@ -15,7 +15,13 @@ dependencies:
   flutter_svg: ^2.0.9
   flutter_native_splash: ^2.3.8
   firebase_core: ^2.24.2
+  firebase_auth: ^4.16.0
+  google_sign_in: ^6.2.1
   auto_route: ^7.8.4
+  provider: ^6.1.1
+  freezed_annotation: ^2.4.1
+  json_annotation: ^4.8.1
+  cloud_firestore: ^4.14.0
 
 dev_dependencies:
   flutter_test:
@@ -24,7 +30,9 @@ dev_dependencies:
   flutter_lints: ^3.0.1
   flutter_launcher_icons: "^0.13.1"
   auto_route_generator: ^7.3.2
-  build_runner: ^2.4.7
+  build_runner: ^2.4.8
+  freezed: ^2.4.6
+  json_serializable: ^6.7.1
 
 flutter:
   uses-material-design: true

@@ -22,7 +22,7 @@ class RegisterPage extends StatelessWidget {
           padding: EdgeInsets.only(
               left: 20,
               right: 20,
-              top: MediaQuery.of(context).size.height * 0.075),
+              top: MediaQuery.of(context).size.height * 0.085),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
