@@ -21,7 +21,11 @@ class LoginPage extends StatelessWidget {
             Expanded(
               child: SingleChildScrollView(
                 child: Container(
-                  padding: const EdgeInsets.only(left: 20, right: 20, top: 32),
+                  padding: EdgeInsets.only(
+                    left: 20,
+                    right: 20,
+                    top: MediaQuery.of(context).size.height * 0.075,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[

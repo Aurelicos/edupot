@@ -54,6 +54,17 @@ class _OnboardingPageState extends State<OnboardingPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    _pageController.addListener(() {
+      if (_pageController.page == onboardingPages.length - 1) {
+        context.pushRoute(const TaskTrackerRoute());
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
