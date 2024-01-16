@@ -38,7 +38,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
   }
 
   void _navigateToNextRoute() {
-    context.pushRoute(const TaskTrackerRoute());
+    context.pushRoute(const HomeRoute());
   }
 
   void _nextPage() {
@@ -190,8 +190,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                           type: MaterialType.transparency,
                           child: MainButton(
                             onTap: _currentPage == onboardingPages.length - 1
-                                ? () =>
-                                    context.pushRoute(const TaskTrackerRoute())
+                                ? () => context.pushRoute(const HomeRoute())
                                 : _nextPage,
                             child: Text(
                               "Next",

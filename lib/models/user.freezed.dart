@@ -20,14 +20,14 @@ User _$UserFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$User {
-  String get uid => throw _privateConstructorUsedError;
+  String? get uid => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
   String get firstName => throw _privateConstructorUsedError;
   String get lastName => throw _privateConstructorUsedError;
   String get provider => throw _privateConstructorUsedError;
-  DateTime get createdAt => throw _privateConstructorUsedError;
+  dynamic get createdAt => throw _privateConstructorUsedError;
   bool get enabled => throw _privateConstructorUsedError;
-  String get displayName => throw _privateConstructorUsedError;
+  String? get displayName => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -40,14 +40,14 @@ abstract class $UserCopyWith<$Res> {
       _$UserCopyWithImpl<$Res, User>;
   @useResult
   $Res call(
-      {String uid,
+      {String? uid,
       String email,
       String firstName,
       String lastName,
       String provider,
-      DateTime createdAt,
+      dynamic createdAt,
       bool enabled,
-      String displayName});
+      String? displayName});
 }
 
 /// @nodoc
@@ -63,20 +63,20 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? uid = null,
+    Object? uid = freezed,
     Object? email = null,
     Object? firstName = null,
     Object? lastName = null,
     Object? provider = null,
-    Object? createdAt = null,
+    Object? createdAt = freezed,
     Object? enabled = null,
-    Object? displayName = null,
+    Object? displayName = freezed,
   }) {
     return _then(_value.copyWith(
-      uid: null == uid
+      uid: freezed == uid
           ? _value.uid
           : uid // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       email: null == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
@@ -93,18 +93,18 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
           ? _value.provider
           : provider // ignore: cast_nullable_to_non_nullable
               as String,
-      createdAt: null == createdAt
+      createdAt: freezed == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as dynamic,
       enabled: null == enabled
           ? _value.enabled
           : enabled // ignore: cast_nullable_to_non_nullable
               as bool,
-      displayName: null == displayName
+      displayName: freezed == displayName
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ) as $Val);
   }
 }
@@ -117,14 +117,14 @@ abstract class _$$UserImplCopyWith<$Res> implements $UserCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String uid,
+      {String? uid,
       String email,
       String firstName,
       String lastName,
       String provider,
-      DateTime createdAt,
+      dynamic createdAt,
       bool enabled,
-      String displayName});
+      String? displayName});
 }
 
 /// @nodoc
@@ -137,20 +137,20 @@ class __$$UserImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? uid = null,
+    Object? uid = freezed,
     Object? email = null,
     Object? firstName = null,
     Object? lastName = null,
     Object? provider = null,
-    Object? createdAt = null,
+    Object? createdAt = freezed,
     Object? enabled = null,
-    Object? displayName = null,
+    Object? displayName = freezed,
   }) {
     return _then(_$UserImpl(
-      uid: null == uid
+      uid: freezed == uid
           ? _value.uid
           : uid // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       email: null == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
@@ -167,18 +167,18 @@ class __$$UserImplCopyWithImpl<$Res>
           ? _value.provider
           : provider // ignore: cast_nullable_to_non_nullable
               as String,
-      createdAt: null == createdAt
+      createdAt: freezed == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as dynamic,
       enabled: null == enabled
           ? _value.enabled
           : enabled // ignore: cast_nullable_to_non_nullable
               as bool,
-      displayName: null == displayName
+      displayName: freezed == displayName
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 }
@@ -187,20 +187,20 @@ class __$$UserImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$UserImpl with DiagnosticableTreeMixin implements _User {
   const _$UserImpl(
-      {required this.uid,
+      {this.uid,
       required this.email,
       required this.firstName,
       required this.lastName,
       required this.provider,
       required this.createdAt,
       required this.enabled,
-      required this.displayName});
+      this.displayName});
 
   factory _$UserImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserImplFromJson(json);
 
   @override
-  final String uid;
+  final String? uid;
   @override
   final String email;
   @override
@@ -210,11 +210,11 @@ class _$UserImpl with DiagnosticableTreeMixin implements _User {
   @override
   final String provider;
   @override
-  final DateTime createdAt;
+  final dynamic createdAt;
   @override
   final bool enabled;
   @override
-  final String displayName;
+  final String? displayName;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -249,8 +249,7 @@ class _$UserImpl with DiagnosticableTreeMixin implements _User {
                 other.lastName == lastName) &&
             (identical(other.provider, provider) ||
                 other.provider == provider) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt) &&
+            const DeepCollectionEquality().equals(other.createdAt, createdAt) &&
             (identical(other.enabled, enabled) || other.enabled == enabled) &&
             (identical(other.displayName, displayName) ||
                 other.displayName == displayName));
@@ -258,8 +257,16 @@ class _$UserImpl with DiagnosticableTreeMixin implements _User {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, uid, email, firstName, lastName,
-      provider, createdAt, enabled, displayName);
+  int get hashCode => Object.hash(
+      runtimeType,
+      uid,
+      email,
+      firstName,
+      lastName,
+      provider,
+      const DeepCollectionEquality().hash(createdAt),
+      enabled,
+      displayName);
 
   @JsonKey(ignore: true)
   @override
@@ -277,19 +284,19 @@ class _$UserImpl with DiagnosticableTreeMixin implements _User {
 
 abstract class _User implements User {
   const factory _User(
-      {required final String uid,
+      {final String? uid,
       required final String email,
       required final String firstName,
       required final String lastName,
       required final String provider,
-      required final DateTime createdAt,
+      required final dynamic createdAt,
       required final bool enabled,
-      required final String displayName}) = _$UserImpl;
+      final String? displayName}) = _$UserImpl;
 
   factory _User.fromJson(Map<String, dynamic> json) = _$UserImpl.fromJson;
 
   @override
-  String get uid;
+  String? get uid;
   @override
   String get email;
   @override
@@ -299,11 +306,11 @@ abstract class _User implements User {
   @override
   String get provider;
   @override
-  DateTime get createdAt;
+  dynamic get createdAt;
   @override
   bool get enabled;
   @override
-  String get displayName;
+  String? get displayName;
   @override
   @JsonKey(ignore: true)
   _$$UserImplCopyWith<_$UserImpl> get copyWith =>

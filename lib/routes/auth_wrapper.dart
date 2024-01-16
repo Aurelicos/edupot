@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:edupot/routes/app/task_tracker/task_tracker.dart';
+import 'package:edupot/routes/app/task_tracker/home_page.dart';
 import 'package:edupot/routes/auth/register_screen.dart';
+import 'package:edupot/routes/splash_screen.dart';
 import 'package:edupot/services/auth.dart';
 import 'package:flutter/material.dart';
 
@@ -14,14 +15,10 @@ class AuthWrapperPage extends StatelessWidget {
       stream: AuthService().authStateChanges,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Scaffold(
-            body: Center(
-              child: Image(image: AssetImage('assets/images/icon.png')),
-            ),
-          );
+          return const SplashScreen();
         }
         if (snapshot.hasData) {
-          return const TaskTrackerPage();
+          return const HomePage();
         }
 
         return const RegisterPage();

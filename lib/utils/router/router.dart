@@ -3,7 +3,7 @@ import 'package:edupot/routes/auth/login_screen.dart';
 import 'package:edupot/routes/auth/register_screen.dart';
 import 'package:edupot/routes/auth_wrapper.dart';
 import 'package:edupot/routes/onboarding/onboarding.dart';
-import 'package:edupot/routes/app/task_tracker/task_tracker.dart';
+import 'package:edupot/routes/app/task_tracker/home_page.dart';
 
 part 'router.gr.dart';
 
@@ -25,7 +25,7 @@ class AppRouter extends _$AppRouter {
           page: OnboardingRoute.page,
         ),
         AutoRoute(
-          page: TaskTrackerRoute.page,
+          page: HomeRoute.page,
         )
       ];
 }

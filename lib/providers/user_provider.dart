@@ -53,9 +53,8 @@ class UserProvider extends ChangeNotifier {
   Future<dynamic> _fetchUserData({required String uid}) async {
     try {
       final doc = await _db.collection('users').doc(uid).get();
-
       if (doc.exists) {
-        _user = User.fromJson(doc.data()!);
+        _user = User.fromDoc(doc);
         return true;
       } else {
         return false;
@@ -96,7 +95,7 @@ class UserProvider extends ChangeNotifier {
 
         return {
           'success': await _createUser(uid: uid),
-          'fetch': false,
+          'data': false,
         };
       }
     } catch (e) {

@@ -1,15 +1,32 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:edupot/components/auth/clickable_text.dart';
+import 'package:edupot/services/auth.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/utils/router/router.dart';
 import 'package:edupot/widgets/main_button.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:edupot/components/auth/input_field.dart';
 import 'package:edupot/components/common/authentication.dart';
 
 @RoutePage()
-class RegisterPage extends StatelessWidget {
+class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
+
+  @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
+  @override
+  void initState() {
+    super.initState();
+    AuthService().authStateChanges.listen((User? user) {
+      if (user != null) {
+        context.replaceRoute(const HomeRoute());
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

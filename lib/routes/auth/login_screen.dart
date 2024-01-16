@@ -27,6 +27,16 @@ class _LoginPageState extends State<LoginPage> {
   String email = "";
   String password = "";
 
+  @override
+  void initState() {
+    super.initState();
+    AuthService().authStateChanges.listen((User? user) {
+      if (user != null) {
+        context.replaceRoute(const HomeRoute());
+      }
+    });
+  }
+
   Future<bool> _login() async {
     try {
       if (_isEmailValid && _isPasswordValid) {
@@ -152,7 +162,7 @@ class _LoginPageState extends State<LoginPage> {
                         onTap: () {
                           _login().then((value) {
                             if (value) {
-                              context.pushRoute(const TaskTrackerRoute());
+                              context.pushRoute(const HomeRoute());
                             }
                           });
                         },
