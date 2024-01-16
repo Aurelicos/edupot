@@ -42,44 +42,36 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Future<dynamic> _register() async {
-    if (_isEmailValid && _isPasswordValid) {
-      if (firstName.isEmpty || lastName.isEmpty) {
-        setState(() {
-          _error = true;
-        });
-        return false;
-      }
-      setState(() {
-        _loading = true;
-        _error = false;
-      });
-      var result = await AuthService().createUserWithEmailAndPassword(
-        email,
-        password,
-        firstName,
-        lastName,
-      );
-      if (result is String) {
-        setState(() {
-          _loading = false;
-          _error = true;
-        });
-        return result;
-      } else if (result == true) {
-        setState(() {
-          _loading = false;
-          _error = false;
-        });
-        return result;
-      } else {
-        setState(() {
-          _loading = false;
-          _error = true;
-        });
-        return false;
-      }
+    if (!_isEmailValid || !_isPasswordValid) return false;
+
+    if (firstName.isEmpty || lastName.isEmpty) {
+      _updateState(loading: false, error: true);
+      return false;
     }
-    return false;
+
+    _updateState(loading: true, error: false);
+
+    var result = await AuthService().createUserWithEmailAndPassword(
+      email,
+      password,
+      firstName,
+      lastName,
+    );
+
+    if (result is String || result != true) {
+      _updateState(loading: false, error: true);
+      return result is String ? result : false;
+    }
+
+    _updateState(loading: false, error: false);
+    return true;
+  }
+
+  void _updateState({required bool loading, required bool error}) {
+    setState(() {
+      _loading = loading;
+      _error = error;
+    });
   }
 
   @override
