@@ -7,11 +7,11 @@ class PlatformButton extends StatelessWidget {
   final Function() onPressed;
 
   const PlatformButton({
-    Key? key,
+    super.key,
     required this.iconPath,
     required this.onPressed,
     this.color = Colors.white,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

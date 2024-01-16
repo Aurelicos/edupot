@@ -34,45 +34,56 @@ class RegisterPage extends StatelessWidget {
               const SizedBox(height: 10),
               orDivider(),
               const SizedBox(height: 10),
-              const InputField(
+              InputField(
                 headline: 'Email',
                 placeholder: 'johndoe@example.com',
                 validatorText: "Check your email",
+                textChanged: (String value) {},
+                validated: (bool value) {},
               ),
               const SizedBox(height: 20),
-              const Row(
+              Row(
                 children: [
                   Expanded(
                     child: InputField(
                       headline: 'First Name',
                       placeholder: "John",
                       validatorText: "",
+                      textChanged: (String value) {},
+                      validated: (bool value) {},
                     ),
                   ),
-                  SizedBox(width: 20),
+                  const SizedBox(width: 20),
                   Expanded(
                     child: InputField(
                       headline: 'Last Name',
                       placeholder: 'Doe',
                       validatorText: "",
+                      textChanged: (String value) {},
+                      validated: (bool value) {},
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 20),
-              const InputField(
+              InputField(
                 headline: 'Password',
                 placeholder: 'Your Password',
                 validatorText: "Password must be at least 8 characters",
                 isPassword: true,
+                textChanged: (String value) {},
+                validated: (bool value) {},
               ),
               const Spacer(),
               Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   MainButton(
-                    title: "Registration",
                     onTap: () => context.pushRoute(const OnboardingRoute()),
+                    child: Text(
+                      "Registration",
+                      style: EduPotDarkTextTheme.headline2(1),
+                    ),
                   ),
                   Center(
                     child: Container(

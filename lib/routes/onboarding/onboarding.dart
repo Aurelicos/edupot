@@ -189,11 +189,14 @@ class _OnboardingPageState extends State<OnboardingPage> {
                         child: Material(
                           type: MaterialType.transparency,
                           child: MainButton(
-                            title: "Next",
                             onTap: _currentPage == onboardingPages.length - 1
                                 ? () =>
                                     context.pushRoute(const TaskTrackerRoute())
                                 : _nextPage,
+                            child: Text(
+                              "Next",
+                              style: EduPotDarkTextTheme.headline2(1),
+                            ),
                           ),
                         ),
                       ),

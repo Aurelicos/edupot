@@ -7,14 +7,18 @@ class InputField extends StatelessWidget {
   final String placeholder;
   final String validatorText;
   final bool isPassword;
+  final Function(String) textChanged;
+  final Function(bool) validated;
 
   const InputField({
-    Key? key,
+    super.key,
     required this.headline,
     required this.placeholder,
     required this.validatorText,
+    required this.textChanged,
+    required this.validated,
     this.isPassword = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -40,18 +44,25 @@ class InputField extends StatelessWidget {
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           ),
           alignment: Alignment.centerLeft,
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
           height: 56,
           child: TextFormField(
             autovalidateMode: AutovalidateMode.onUserInteraction,
+            onChanged: (input) {
+              bool isValid = false;
+              if (headline == 'Email') {
+                isValid = isValidEmail(input);
+              } else if (headline == 'Password') {
+                isValid = input.length >= 8;
+              }
+              textChanged(input);
+              validated(isValid);
+            },
             validator: (input) {
               if (input!.isEmpty) return null;
-              if (headline == 'Email') {
-                return isValidEmail(input) ? null : validatorText;
-              } else if (headline == 'Password') {
-                return input.length >= 8 ? null : validatorText;
-              }
-              return null;
+              bool isValid = (headline == 'Email' && isValidEmail(input)) ||
+                  (headline == 'Password' && input.length >= 8);
+              return isValid ? null : validatorText;
             },
             obscureText: isPassword,
             style: EduPotDarkTextTheme.headline2(1),

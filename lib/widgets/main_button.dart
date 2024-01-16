@@ -2,9 +2,14 @@ import 'package:edupot/utils/themes/theme.dart';
 import 'package:flutter/material.dart';
 
 class MainButton extends StatelessWidget {
-  final String title;
   final void Function() onTap;
-  const MainButton({super.key, required this.title, required this.onTap});
+  final Widget? child;
+
+  const MainButton({
+    super.key,
+    required this.onTap,
+    this.child,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +26,7 @@ class MainButton extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Center(
-                child: Text(
-                  title,
-                  style: EduPotDarkTextTheme.headline2(1),
-                ),
+                child: child,
               ),
             ),
           ),

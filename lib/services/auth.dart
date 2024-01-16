@@ -20,14 +20,8 @@ class AuthService {
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
       return true;
-    } on FirebaseAuthException catch (e) {
-      if (e.code == "user-not-found") {
-        return "User not found";
-      } else if (e.code == "wrong-password") {
-        return "Wrong password";
-      } else {
-        return "There was an error";
-      }
+    } on FirebaseAuthException {
+      return false;
     }
   }
 
@@ -37,14 +31,8 @@ class AuthService {
       await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       return true;
-    } on FirebaseAuthException catch (e) {
-      if (e.code == "weak-password") {
-        return "Weak password";
-      } else if (e.code == emailInUseError) {
-        return "Email already in use";
-      } else {
-        return "There was an error";
-      }
+    } on FirebaseAuthException {
+      return false;
     }
   }
 
