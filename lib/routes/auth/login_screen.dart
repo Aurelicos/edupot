@@ -69,6 +69,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       backgroundColor: EduPotColorTheme.primaryDark,
       body: SingleChildScrollView(
+        physics: const ClampingScrollPhysics(),
         child: SizedBox(
           height: MediaQuery.of(context).size.height,
           child: Column(

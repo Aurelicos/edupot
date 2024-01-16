@@ -44,6 +44,9 @@ class UserProvider extends ChangeNotifier {
         enabled: true,
         displayName: _displayName ?? '',
       );
+
+      await _db.collection('users').doc(uid).set(User.toDoc(user!));
+
       return true;
     } catch (e) {
       return false;

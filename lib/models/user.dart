@@ -30,6 +30,7 @@ class User with _$User {
       provider: data["provider"],
       createdAt: data["createdAt"],
       enabled: data["enabled"],
+      displayName: data["displayName"] ?? "",
     );
   }
 
@@ -41,6 +42,7 @@ class User with _$User {
       "provider": user.provider,
       "createdAt": user.createdAt,
       "enabled": user.enabled,
+      "displayName": user.displayName ?? "",
     };
   }
 

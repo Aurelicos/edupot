@@ -1,3 +1,4 @@
+import 'package:edupot/providers/user_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -26,13 +27,17 @@ class AuthService {
   }
 
   Future<dynamic> createUserWithEmailAndPassword(
-      String email, String password) async {
+      String email, String password, String firstName, String lastName) async {
+    final userProvider = UserProvider();
+    userProvider.email = email;
+    userProvider.firstName = firstName;
+    userProvider.lastName = lastName;
     try {
       await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       return true;
-    } on FirebaseAuthException {
-      return false;
+    } on FirebaseAuthException catch (e) {
+      return e.code;
     }
   }
 
