@@ -29,6 +29,13 @@
             {
               "client_id": "78607739105-6n8s3p9827tq8s47busth9htv5f2eahb.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "78607739105-7439cab1hogoqpjst3angu2vofajq8i5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.edupot"
+              }
             }
           ]
         }
