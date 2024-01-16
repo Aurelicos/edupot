@@ -1,5 +1,4 @@
 import 'package:edupot/providers/user_provider.dart';
-import 'package:edupot/services/auth.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/utils/router/router.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +11,6 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  AuthService().signOut();
   runApp(App());
 }
 
