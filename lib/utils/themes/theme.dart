@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class EduPotColorTheme {
   static const primaryDark = Color(0xFF171930);
   static const facebookPrimary = Color(0xFF3B5998);
+  static const navbar = Color(0xFF0D0F22);
 
   static const mainItemGradient = LinearGradient(
     begin: Alignment(1.00, 0.00),

@@ -1,5 +1,5 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:edupot/routes/app/task_tracker/home_page.dart';
+import 'package:edupot/routes/app/home_page.dart';
 import 'package:edupot/routes/auth/register_screen.dart';
 import 'package:edupot/routes/splash_screen.dart';
 import 'package:edupot/services/auth.dart';

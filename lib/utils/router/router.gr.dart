@@ -21,6 +21,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const AuthWrapperPage(),
       );
     },
+    CalendarRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const CalendarPage(),
+      );
+    },
     HomeRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -33,6 +39,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const LoginPage(),
       );
     },
+    NotesRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const NotesPage(),
+      );
+    },
     OnboardingRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -43,6 +55,18 @@ abstract class _$AppRouter extends RootStackRouter {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const RegisterPage(),
+      );
+    },
+    SettingsRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const SettingsPage(),
+      );
+    },
+    TaskTrackerRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const TaskTrackerPage(),
       );
     },
   };
@@ -58,6 +82,20 @@ class AuthWrapperRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'AuthWrapperRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [CalendarPage]
+class CalendarRoute extends PageRouteInfo<void> {
+  const CalendarRoute({List<PageRouteInfo>? children})
+      : super(
+          CalendarRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'CalendarRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
@@ -91,6 +129,20 @@ class LoginRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [NotesPage]
+class NotesRoute extends PageRouteInfo<void> {
+  const NotesRoute({List<PageRouteInfo>? children})
+      : super(
+          NotesRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'NotesRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
 /// [OnboardingPage]
 class OnboardingRoute extends PageRouteInfo<void> {
   const OnboardingRoute({List<PageRouteInfo>? children})
@@ -114,6 +166,34 @@ class RegisterRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'RegisterRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [SettingsPage]
+class SettingsRoute extends PageRouteInfo<void> {
+  const SettingsRoute({List<PageRouteInfo>? children})
+      : super(
+          SettingsRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'SettingsRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [TaskTrackerPage]
+class TaskTrackerRoute extends PageRouteInfo<void> {
+  const TaskTrackerRoute({List<PageRouteInfo>? children})
+      : super(
+          TaskTrackerRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'TaskTrackerRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
