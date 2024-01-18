@@ -18,7 +18,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final String _authException = "Wrong email or password";
+  String _authException = "Wrong email or password";
   bool _error = false;
   bool _isEmailValid = false;
   bool _isPasswordValid = false;
@@ -48,6 +48,38 @@ class _LoginPageState extends State<LoginPage> {
         if (AuthService().currentUser != null) {
           return true;
         }
+      }
+    } on FirebaseAuthException {
+      setState(() {
+        _error = true;
+      });
+    } finally {
+      setState(() {
+        _loading = false;
+      });
+    }
+    setState(() {
+      _error = true;
+    });
+    return false;
+  }
+
+  Future<bool> _loginWithGoogle() async {
+    try {
+      setState(() {
+        _loading = true;
+        _error = false;
+      });
+      await AuthService().signInWithGoogle().then((value) {
+        if (value == AuthService.userExistsWithCredentialError) {
+          setState(() {
+            _authException = "User with this email already exists";
+          });
+          return false;
+        }
+      });
+      if (AuthService().currentUser != null) {
+        return true;
       }
     } on FirebaseAuthException {
       setState(() {
@@ -132,7 +164,16 @@ class _LoginPageState extends State<LoginPage> {
                             )
                           : const SizedBox(),
                       orDivider(),
-                      socialButtons(),
+                      socialButtons(
+                        onGoogle: () {
+                          _loginWithGoogle().then((value) {
+                            if (!value) return;
+
+                            context.replaceRoute(const HomeRoute());
+                          });
+                        },
+                        onFacebook: () {},
+                      ),
                       Center(
                         child: Container(
                           padding: const EdgeInsets.only(top: 20),

@@ -4,13 +4,13 @@ import 'package:flutter_svg/svg.dart';
 class PlatformButton extends StatelessWidget {
   final String iconPath;
   final Color color;
-  final Function() onPressed;
+  final Function()? onPressed;
 
   const PlatformButton({
     super.key,
     required this.iconPath,
-    required this.onPressed,
-    this.color = Colors.white,
+    required this.color,
+    this.onPressed,
   });
 
   @override

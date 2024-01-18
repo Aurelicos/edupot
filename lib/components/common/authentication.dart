@@ -45,7 +45,8 @@ Widget orDivider() {
   );
 }
 
-Widget socialButtons() {
+Widget socialButtons(
+    {dynamic Function()? onGoogle, dynamic Function()? onFacebook}) {
   return Container(
     margin: const EdgeInsets.only(top: 20),
     child: Row(
@@ -53,12 +54,13 @@ Widget socialButtons() {
       children: [
         PlatformButton(
           iconPath: "assets/icons/google.svg",
-          onPressed: () {},
+          onPressed: onGoogle,
+          color: Colors.white,
         ),
         const SizedBox(width: 20),
         PlatformButton(
           iconPath: "assets/icons/facebook.svg",
-          onPressed: () {},
+          onPressed: onFacebook,
           color: EduPotColorTheme.facebookPrimary,
         ),
       ],

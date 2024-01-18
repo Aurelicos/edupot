@@ -94,7 +94,10 @@ class _RegisterPageState extends State<RegisterPage> {
               buildtitle("Register to EduPot",
                   "Start Your Learning Journey with EduPot"),
               const SizedBox(height: 46),
-              socialButtons(),
+              socialButtons(
+                onFacebook: () {},
+                onGoogle: () {},
+              ),
               const SizedBox(height: 10),
               orDivider(),
               const SizedBox(height: 10),

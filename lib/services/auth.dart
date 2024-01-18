@@ -41,7 +41,29 @@ class AuthService {
     }
   }
 
+  Future<dynamic> signInWithGoogle() async {
+    try {
+      final googleUser = await googleSignIn.signIn();
+      if (googleUser == null) return false;
+
+      final googleAuth = await googleUser.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      await _auth.signInWithCredential(credential);
+
+      return true;
+    } on FirebaseAuthException catch (e) {
+      return e.code;
+    }
+  }
+
   Future<void> signOut() async {
     await _auth.signOut();
+    if (currentUser?.providerData[0].providerId == 'google.com') {
+      await googleSignIn.signOut();
+    }
   }
 }
