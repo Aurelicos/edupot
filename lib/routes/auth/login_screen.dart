@@ -31,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     AuthService().authStateChanges.listen((User? user) {
-      if (user != null) {
+      if (user != null && mounted) {
         context.replaceRoute(const HomeRoute());
       }
     });

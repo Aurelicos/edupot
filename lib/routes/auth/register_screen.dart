@@ -35,7 +35,7 @@ class _RegisterPageState extends State<RegisterPage> {
   void initState() {
     super.initState();
     AuthService().authStateChanges.listen((User? user) {
-      if (user != null) {
+      if (user != null && mounted) {
         context.replaceRoute(const HomeRoute());
       }
     });
