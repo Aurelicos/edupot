@@ -74,6 +74,38 @@ class _RegisterPageState extends State<RegisterPage> {
     });
   }
 
+  Future<bool> _loginWithGoogle() async {
+    try {
+      setState(() {
+        _loading = true;
+        _error = false;
+      });
+      await AuthService().signInWithGoogle().then((value) {
+        if (value == AuthService.userExistsWithCredentialError) {
+          setState(() {
+            _exception = "User with this email already exists";
+          });
+          return false;
+        }
+      });
+      if (AuthService().currentUser != null) {
+        return true;
+      }
+    } on FirebaseAuthException {
+      setState(() {
+        _error = true;
+      });
+    } finally {
+      setState(() {
+        _loading = false;
+      });
+    }
+    setState(() {
+      _error = true;
+    });
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,7 +128,13 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(height: 46),
               socialButtons(
                 onFacebook: () {},
-                onGoogle: () {},
+                onGoogle: () {
+                  _loginWithGoogle().then((value) {
+                    if (!value) return;
+
+                    context.replaceRoute(const HomeRoute());
+                  });
+                },
               ),
               const SizedBox(height: 10),
               orDivider(),
