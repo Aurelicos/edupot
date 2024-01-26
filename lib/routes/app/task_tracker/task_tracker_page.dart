@@ -11,6 +11,11 @@ class TaskTrackerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final array = [
+      {"title": "Task 1", "description": "Description 1"},
+      {"title": "Task 2", "description": "Description 2"},
+    ];
+
     return PrimaryScaffold(
       child: SizedBox(
         height: MediaQuery.of(context).size.height,
@@ -33,14 +38,19 @@ class TaskTrackerPage extends StatelessWidget {
                     ),
                     SizedBox(
                       width: 45,
-                      child: TextButton(
-                        onPressed: () {},
+                      child: GestureDetector(
+                        onTap: () {},
                         child: SvgPicture.asset("assets/icons/search.svg"),
                       ),
                     )
                   ],
                 ),
-                const TaskView(),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.5,
+                  child: TaskView(
+                    itemArray: array,
+                  ),
+                ),
               ],
             ),
           ),
