@@ -28,6 +28,13 @@ class EduPotColorTheme {
     end: Alignment(0.21, 0.98),
     colors: [Color(0xFF171930), Color(0xFF171930)],
   );
+
+  static const firstCardGradient = LinearGradient(
+    colors: [
+      Color.fromRGBO(165, 175, 196, 1),
+      Color.fromRGBO(109, 123, 152, 1)
+    ],
+  );
 }
 
 class EduPotDarkTextTheme {
