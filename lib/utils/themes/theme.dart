@@ -58,6 +58,15 @@ class EduPotColorTheme {
       Color.fromRGBO(255, 255, 255, 0.1),
     ],
   );
+
+  static const orangeGradient = LinearGradient(
+    begin: Alignment(0.76, -0.66),
+    end: Alignment(-0.76, 0.66),
+    colors: [
+      Color.fromRGBO(255, 201, 44, 1),
+      Color.fromRGBO(253, 147, 113, 1),
+    ],
+  );
 }
 
 class EduPotDarkTextTheme {

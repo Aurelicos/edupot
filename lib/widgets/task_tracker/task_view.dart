@@ -15,13 +15,17 @@ class _TaskViewState extends State<TaskView> {
   @override
   Widget build(BuildContext context) {
     if (widget.itemArray.length <= 2) {
-      return ProjectWidget(itemArray: widget.itemArray);
+      return ProjectWidget(
+        itemArray: widget.itemArray,
+      );
     } else if (widget.itemArray.length <= 4) {
       return GridProject(
         itemArray: widget.itemArray,
       );
     } else if (widget.itemArray.length > 4) {
-      return const ListProject();
+      return ListProject(
+        itemArray: widget.itemArray,
+      );
     } else {
       return const SizedBox();
     }
