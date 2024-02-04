@@ -12,7 +12,7 @@ Widget indicator(int size, int filled) {
               children: [
                 Container(
                   decoration: BoxDecoration(
-                    gradient: EduPotColorTheme.mainBlueGradient,
+                    gradient: EduPotColorTheme.mainBlueGradient(),
                     borderRadius: BorderRadius.circular(5),
                   ),
                   width: constraints.maxWidth * (filled / size),

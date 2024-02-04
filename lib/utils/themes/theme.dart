@@ -12,11 +12,16 @@ class EduPotColorTheme {
     colors: [Color(0x72242547), Color(0xFF242547)],
   );
 
-  static const mainBlueGradient = LinearGradient(
-    begin: Alignment(0.76, -0.66),
-    end: Alignment(-0.76, 0.66),
-    colors: [Color(0xFF266ED7), Color(0xFF4D8AEB)],
-  );
+  static LinearGradient mainBlueGradient({double opacity = 1}) {
+    return LinearGradient(
+      begin: const Alignment(0.76, -0.66),
+      end: const Alignment(-0.76, 0.66),
+      colors: [
+        Color.fromRGBO(38, 110, 215, opacity),
+        Color.fromRGBO(77, 138, 235, opacity)
+      ],
+    );
+  }
 
   static const onboardingGradient = LinearGradient(
     begin: Alignment(-0.66, 0.75),
@@ -45,6 +50,14 @@ class EduPotColorTheme {
       Color.fromRGBO(234, 175, 200, 0.4)
     ],
   );
+
+  static const darkGrayCardGradient = LinearGradient(
+    transform: GradientRotation(pi / 2),
+    colors: [
+      Color.fromRGBO(0, 0, 0, 0.4),
+      Color.fromRGBO(255, 255, 255, 0.1),
+    ],
+  );
 }
 
 class EduPotDarkTextTheme {
@@ -54,6 +67,7 @@ class EduPotDarkTextTheme {
     fontWeight: FontWeight.w700,
     color: Colors.white,
   );
+
   static TextStyle headline2(double opacity) {
     return TextStyle(
       fontFamily: "Inter",
@@ -62,4 +76,11 @@ class EduPotDarkTextTheme {
       color: Colors.white.withOpacity(opacity),
     );
   }
+
+  static const TextStyle headline3 = TextStyle(
+    fontFamily: "Inter",
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+    color: Colors.white,
+  );
 }

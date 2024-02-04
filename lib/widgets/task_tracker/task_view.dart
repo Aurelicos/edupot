@@ -14,19 +14,16 @@ class TaskView extends StatefulWidget {
 class _TaskViewState extends State<TaskView> {
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: widget.itemArray.length,
-      itemBuilder: (_, i) {
-        if (widget.itemArray.length <= 2) {
-          return ProjectWidget(itemArray: widget.itemArray, index: i);
-        } else if (widget.itemArray.length <= 4) {
-          return const GridProject();
-        } else if (widget.itemArray.length > 4) {
-          return const ListProject();
-        } else {
-          return const SizedBox();
-        }
-      },
-    );
+    if (widget.itemArray.length <= 2) {
+      return ProjectWidget(itemArray: widget.itemArray);
+    } else if (widget.itemArray.length <= 4) {
+      return GridProject(
+        itemArray: widget.itemArray,
+      );
+    } else if (widget.itemArray.length > 4) {
+      return const ListProject();
+    } else {
+      return const SizedBox();
+    }
   }
 }

@@ -13,10 +13,11 @@ class TaskTrackerPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final array = [
       {
-        "title": "Task 1",
+        "title": "Math - planimetry",
         "description": "Description 1",
         "finalDate": DateTime.parse("2022-01-22 22:18:04Z"),
         "tasks": ["Task 1", "Task 2", "Task 3", "Task 4", "Task 5"],
+        "finished": 3,
         "iconTitle": "SP"
       },
       {
@@ -24,7 +25,24 @@ class TaskTrackerPage extends StatelessWidget {
         "description": "Description 2",
         "finalDate": DateTime.now(),
         "tasks": ["Task 1", "Task 2", "Task 3", "Task 4"],
+        "finished": 2,
         "iconTitle": "UI"
+      },
+      {
+        "title": "Task 3",
+        "description": "Description 3",
+        "finalDate": DateTime.now(),
+        "tasks": ["Task 1", "Task 2", "Task 3", "Task 4", "Task 5"],
+        "finished": 4,
+        "iconTitle": "SP"
+      },
+      {
+        "title": "Task 3",
+        "description": "Description 3",
+        "finalDate": DateTime.now(),
+        "tasks": ["Task 1", "Task 2", "Task 3", "Task 4", "Task 5"],
+        "finished": 4,
+        "iconTitle": "SP"
       },
     ];
 
