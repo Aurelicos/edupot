@@ -22,7 +22,7 @@ class MainButton extends StatelessWidget {
             child: Ink(
               height: 56,
               decoration: BoxDecoration(
-                gradient: EduPotColorTheme.buttonGradient,
+                gradient: EduPotColorTheme.mainBlueGradient,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Center(

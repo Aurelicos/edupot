@@ -12,8 +12,20 @@ class TaskTrackerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final array = [
-      {"title": "Task 1", "description": "Description 1"},
-      {"title": "Task 2", "description": "Description 2"},
+      {
+        "title": "Task 1",
+        "description": "Description 1",
+        "finalDate": DateTime.parse("2022-01-22 22:18:04Z"),
+        "tasks": ["Task 1", "Task 2", "Task 3", "Task 4", "Task 5"],
+        "iconTitle": "SP"
+      },
+      {
+        "title": "Task 2",
+        "description": "Description 2",
+        "finalDate": DateTime.now(),
+        "tasks": ["Task 1", "Task 2", "Task 3", "Task 4"],
+        "iconTitle": "UI"
+      },
     ];
 
     return PrimaryScaffold(
