@@ -4,7 +4,7 @@ import 'package:edupot/widgets/common/haxagon.dart';
 import 'package:flutter/material.dart';
 
 class GridProject extends StatelessWidget {
-  final List<Map<String, dynamic>> itemArray;
+  final List<dynamic> itemArray;
   const GridProject({super.key, required this.itemArray});
 
   @override

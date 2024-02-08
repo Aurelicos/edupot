@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:edupot/components/app/primary_scaffold.dart';
 import 'package:edupot/utils/themes/theme.dart';
+import 'package:edupot/widgets/task_tracker/project_view.dart';
 import 'package:edupot/widgets/task_tracker/task_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -54,7 +55,30 @@ class TaskTrackerPage extends StatelessWidget {
       },
     ];
 
+    final examsArray = [
+      {
+        "title": "Math - planimetry",
+        "finalDate": DateTime.parse("2024-02-08 22:18:04Z"),
+      },
+      {
+        "title": "Math - algebra",
+        "finalDate": DateTime.parse("2024-02-09 22:18:04Z"),
+      }
+    ];
+
+    final tasksArray = [
+      {
+        "title": "Go home",
+        "finalDate": DateTime.parse("2024-02-14 22:18:04Z"),
+      },
+      {
+        "title": "Play with niggas",
+        "finalDate": DateTime.parse("2024-02-12 22:18:04Z"),
+      }
+    ];
+
     return PrimaryScaffold(
+      onPressed: () {},
       child: SizedBox(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -83,11 +107,18 @@ class TaskTrackerPage extends StatelessWidget {
                     )
                   ],
                 ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.5,
-                  child: TaskView(
-                    itemArray: array,
-                  ),
+                ProjectView(
+                  itemArray: array,
+                ),
+                TaskView(
+                  title: "Exams",
+                  array: examsArray,
+                  color: EduPotColorTheme.examsOrange,
+                ),
+                TaskView(
+                  title: "Tasks",
+                  array: tasksArray,
+                  color: EduPotColorTheme.tasksPurple,
                 ),
               ],
             ),

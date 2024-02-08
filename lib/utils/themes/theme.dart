@@ -5,6 +5,10 @@ class EduPotColorTheme {
   static const primaryDark = Color(0xFF171930);
   static const facebookPrimary = Color(0xFF3B5998);
   static const navbar = Color(0xFF0D0F22);
+  static const floatingButtonColor = Color(0xFF6D7B98);
+  static const primaryBlueDark = Color(0xFF1E203B);
+  static const examsOrange = Color(0xFFF18C27);
+  static const tasksPurple = Color(0xFFBB476C);
 
   static const mainItemGradient = LinearGradient(
     begin: Alignment(1.00, 0.00),
@@ -90,6 +94,13 @@ class EduPotDarkTextTheme {
     fontFamily: "Inter",
     fontSize: 14,
     fontWeight: FontWeight.w500,
+    color: Colors.white,
+  );
+
+  static const TextStyle headline4 = TextStyle(
+    fontFamily: "Inter",
+    fontSize: 16,
+    fontWeight: FontWeight.w700,
     color: Colors.white,
   );
 }

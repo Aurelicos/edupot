@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 
 class PrimaryScaffold extends StatefulWidget {
   final Widget? child;
-  const PrimaryScaffold({super.key, this.child});
+  final void Function()? onPressed;
+  const PrimaryScaffold({super.key, this.child, this.onPressed});
 
   @override
   State<PrimaryScaffold> createState() => _PrimaryScaffoldState();
@@ -22,6 +23,14 @@ class _PrimaryScaffoldState extends State<PrimaryScaffold> {
         child: widget.child,
       ),
       bottomNavigationBar: const Navbar(),
+      floatingActionButton: widget.onPressed != null
+          ? FloatingActionButton(
+              onPressed: widget.onPressed,
+              backgroundColor: EduPotColorTheme.floatingButtonColor,
+              foregroundColor: Colors.white,
+              child: const Icon(Icons.add),
+            )
+          : null,
     );
   }
 }

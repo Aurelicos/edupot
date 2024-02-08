@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class ListProject extends StatelessWidget {
-  final List<Map<String, dynamic>> itemArray;
+  final List<dynamic> itemArray;
   const ListProject({super.key, required this.itemArray});
 
   @override
@@ -20,114 +20,109 @@ class ListProject extends StatelessWidget {
       itemCount: itemArray.length,
       scrollDirection: Axis.horizontal,
       itemBuilder: (_, i) {
-        return Column(
-          children: [
-            Container(
-              margin: const EdgeInsets.only(
-                right: 16,
-                top: 15,
+        return Container(
+          margin: const EdgeInsets.only(
+            right: 16,
+            top: 15,
+          ),
+          width: 225,
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          decoration: BoxDecoration(
+            gradient: gradientList[i % 4],
+            borderRadius: BorderRadius.circular(15),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 10,
+                offset: Offset(0, 5),
               ),
-              width: 225,
-              height: 165,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              decoration: BoxDecoration(
-                gradient: gradientList[i % 4],
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 10,
-                    offset: Offset(0, 5),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(right: 15),
+                    height: 55,
+                    width: 5,
+                    decoration: BoxDecoration(
+                      gradient: EduPotColorTheme.orangeGradient,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 150,
+                    height: 55,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        formatTitle(itemArray[i]["title"]),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Row(
+                children: [
+                  Expanded(
+                    child: Divider(
+                      color: Colors.white.withOpacity(0.2),
+                      thickness: 1,
+                    ),
+                  ),
+                ],
+              ),
+              Column(
                 children: [
                   Row(
                     children: [
-                      Container(
-                        margin: const EdgeInsets.only(right: 15),
-                        height: 55,
-                        width: 5,
-                        decoration: BoxDecoration(
-                          gradient: EduPotColorTheme.orangeGradient,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
+                      SvgPicture.asset(
+                        "assets/icons/clock.svg",
+                        height: 18,
+                        width: 18,
                       ),
-                      SizedBox(
-                        width: 150,
-                        height: 55,
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            formatTitle(itemArray[i]["title"]),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        formatTime(itemArray[i]["finalDate"]),
+                        style: EduPotDarkTextTheme.headline2(0.6).copyWith(
+                          fontSize: 14,
                         ),
                       ),
                     ],
+                  ),
+                  const SizedBox(
+                    height: 5,
                   ),
                   Row(
                     children: [
-                      Expanded(
-                        child: Divider(
-                          color: Colors.white.withOpacity(0.2),
-                          thickness: 1,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      Row(
-                        children: [
-                          SvgPicture.asset(
-                            "assets/icons/clock.svg",
-                            height: 18,
-                            width: 18,
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          Text(
-                            formatTime(itemArray[i]["finalDate"]),
-                            style: EduPotDarkTextTheme.headline2(0.6).copyWith(
-                              fontSize: 14,
-                            ),
-                          ),
-                        ],
+                      SvgPicture.asset(
+                        "assets/icons/check.svg",
+                        height: 18,
+                        width: 18,
                       ),
                       const SizedBox(
-                        height: 5,
+                        width: 5,
                       ),
-                      Row(
-                        children: [
-                          SvgPicture.asset(
-                            "assets/icons/check.svg",
-                            height: 18,
-                            width: 18,
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          Text(
-                            "${itemArray[i]["finished"]} out of ${itemArray[i]["tasks"].length}",
-                            style: EduPotDarkTextTheme.headline3,
-                          ),
-                        ],
+                      Text(
+                        "${itemArray[i]["finished"]} out of ${itemArray[i]["tasks"].length}",
+                        style: EduPotDarkTextTheme.headline3,
                       ),
                     ],
                   ),
                 ],
               ),
-            ),
-          ],
+            ],
+          ),
         );
       },
     );

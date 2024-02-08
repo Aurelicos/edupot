@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class ProjectWidget extends StatelessWidget {
-  final List<Map<String, dynamic>> itemArray;
+  final List<dynamic> itemArray;
   const ProjectWidget({super.key, required this.itemArray});
 
   @override
