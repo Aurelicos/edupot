@@ -11,95 +11,98 @@ class ProjectWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: itemArray.length,
-      itemBuilder: (_, index) {
-        return Container(
-          margin: index > 0 ? const EdgeInsets.only(top: 20) : null,
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          decoration: BoxDecoration(
-            gradient: index > 0
-                ? EduPotColorTheme.purpleCardGradient
-                : EduPotColorTheme.lightGrayCardGradient,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 10,
-                offset: Offset(0, 5),
-              ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Hexagon(
-                    title: itemArray[index]["iconTitle"],
-                    height: 28,
-                    width: 28,
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    itemArray[index]["title"],
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
-                      fontWeight: FontWeight.w600,
+    return Column(
+      children: [
+        const SizedBox(
+          height: 15,
+        ),
+        for (int index = 0; index < itemArray.length; index++)
+          Container(
+            margin: index > 0 ? const EdgeInsets.only(top: 20) : null,
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            decoration: BoxDecoration(
+              gradient: index > 0
+                  ? EduPotColorTheme.purpleCardGradient
+                  : EduPotColorTheme.lightGrayCardGradient,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 10,
+                  offset: Offset(0, 5),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Hexagon(
+                      title: itemArray[index]["iconTitle"],
+                      height: 28,
+                      width: 28,
                     ),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: Divider(
-                      color: Colors.white.withOpacity(0.2),
-                      height: 32,
-                      thickness: 2,
+                    const SizedBox(
+                      width: 10,
                     ),
-                  )
-                ],
-              ),
-              Row(
-                children: [
-                  SvgPicture.asset(
-                    "assets/icons/clock.svg",
-                    height: 18,
-                    width: 18,
-                  ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  Text(
-                    formatTime(itemArray[index]["finalDate"]),
-                    style: EduPotDarkTextTheme.headline2(0.6),
-                  ),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  SvgPicture.asset(
-                    "assets/icons/check.svg",
-                    height: 18,
-                    width: 18,
-                  ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  Text(
-                    "${itemArray[index]["tasks"].length} Tasks",
-                    style: EduPotDarkTextTheme.headline2(0.6),
-                  ),
-                ],
-              ),
-              indicator(10, 7),
-            ],
+                    Text(
+                      itemArray[index]["title"],
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Divider(
+                        color: Colors.white.withOpacity(0.2),
+                        height: 32,
+                        thickness: 2,
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
+                    SvgPicture.asset(
+                      "assets/icons/clock.svg",
+                      height: 18,
+                      width: 18,
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    Text(
+                      formatTime(itemArray[index]["finalDate"]),
+                      style: EduPotDarkTextTheme.headline2(0.6),
+                    ),
+                    const SizedBox(
+                      width: 15,
+                    ),
+                    SvgPicture.asset(
+                      "assets/icons/check.svg",
+                      height: 18,
+                      width: 18,
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    Text(
+                      "${itemArray[index]["tasks"].length} Tasks",
+                      style: EduPotDarkTextTheme.headline2(0.6),
+                    ),
+                  ],
+                ),
+                indicator(10, 7),
+              ],
+            ),
           ),
-        );
-      },
+      ],
     );
   }
 }

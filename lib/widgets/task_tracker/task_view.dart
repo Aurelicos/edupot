@@ -29,50 +29,42 @@ class TaskView extends StatelessWidget {
                 title,
                 style: EduPotDarkTextTheme.headline4,
               ),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                padding: EdgeInsets.zero,
-                itemCount: sortedArray.length,
-                itemBuilder: (_, i) {
-                  var formattedDate = formatDate(sortedArray[i]["finalDate"]);
-                  Color dateColor = getColorForDays(formattedDate["daysUntil"]);
-                  return Container(
-                    margin: const EdgeInsets.only(top: 10),
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 15,
-                      horizontal: 20,
-                    ),
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: EduPotColorTheme.primaryBlueDark,
-                    ),
-                    child: Row(
-                      children: [
-                        SvgPicture.asset(
-                          "assets/icons/circle.svg",
-                          color: color,
+              for (int i = 0; i < sortedArray.length; i++)
+                Container(
+                  margin: const EdgeInsets.only(top: 10),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 15,
+                    horizontal: 20,
+                  ),
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: EduPotColorTheme.primaryBlueDark,
+                  ),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        "assets/icons/circle.svg",
+                        color: color,
+                      ),
+                      const SizedBox(
+                        width: 15,
+                      ),
+                      Text(
+                        sortedArray[i]["title"],
+                        style: EduPotDarkTextTheme.headline2(1),
+                      ),
+                      const Spacer(),
+                      Text(
+                        formatDate(sortedArray[i]["finalDate"])["finalDate"],
+                        style: EduPotDarkTextTheme.headline2(1).copyWith(
+                          color: getColorForDays(formatDate(
+                              sortedArray[i]["finalDate"])["daysUntil"]),
                         ),
-                        const SizedBox(
-                          width: 15,
-                        ),
-                        Text(
-                          sortedArray[i]["title"],
-                          style: EduPotDarkTextTheme.headline2(1),
-                        ),
-                        const Spacer(),
-                        Text(
-                          formattedDate["finalDate"],
-                          style: EduPotDarkTextTheme.headline2(1).copyWith(
-                            color: dateColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
+                      ),
+                    ],
+                  ),
+                ),
             ],
           )
         : const SizedBox();

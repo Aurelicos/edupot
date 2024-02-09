@@ -7,81 +7,61 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 @RoutePage()
-class TaskTrackerPage extends StatelessWidget {
+class TaskTrackerPage extends StatefulWidget {
   const TaskTrackerPage({super.key});
 
   @override
+  State<TaskTrackerPage> createState() => _TaskTrackerPageState();
+}
+
+class _TaskTrackerPageState extends State<TaskTrackerPage> {
+  List array = [
+    {
+      "title": "Muster Projekt Beispiel",
+      "description": "Description 1",
+      "finalDate": DateTime.parse("2022-01-22 22:18:04Z"),
+      "tasks": ["Task 1", "Task 2", "Task 3", "Task 4", "Task 5"],
+      "finished": 3,
+      "iconTitle": "SP"
+    },
+  ];
+  final examsArray = [
+    {
+      "title": "Math - planimetry",
+      "finalDate": DateTime.parse("2024-02-08 22:18:04Z"),
+    },
+    {
+      "title": "Math - algebra",
+      "finalDate": DateTime.parse("2024-02-09 22:18:04Z"),
+    }
+  ];
+
+  final tasksArray = [
+    {
+      "title": "Go home",
+      "finalDate": DateTime.parse("2024-02-14 22:18:04Z"),
+    },
+    {
+      "title": "Play with niggas",
+      "finalDate": DateTime.parse("2024-02-12 22:18:04Z"),
+    }
+  ];
+  @override
   Widget build(BuildContext context) {
-    final array = [
-      {
-        "title": "Muster Projekt Beispiel",
-        "description": "Description 1",
-        "finalDate": DateTime.parse("2022-01-22 22:18:04Z"),
-        "tasks": ["Task 1", "Task 2", "Task 3", "Task 4", "Task 5"],
-        "finished": 3,
-        "iconTitle": "SP"
-      },
-      {
-        "title": "Task 2",
-        "description": "Description 2",
-        "finalDate": DateTime.now(),
-        "tasks": ["Task 1", "Task 2", "Task 3", "Task 4"],
-        "finished": 2,
-        "iconTitle": "UI"
-      },
-      {
-        "title": "Task 3",
-        "description": "Description 3",
-        "finalDate": DateTime.now(),
-        "tasks": ["Task 1", "Task 2", "Task 3", "Task 4", "Task 5"],
-        "finished": 4,
-        "iconTitle": "SP"
-      },
-      {
-        "title": "Task 3",
-        "description": "Description 3",
-        "finalDate": DateTime.now(),
-        "tasks": ["Task 1", "Task 2", "Task 3", "Task 4", "Task 5"],
-        "finished": 4,
-        "iconTitle": "SP"
-      },
-      {
-        "title": "Task 3",
-        "description": "Description 3",
-        "finalDate": DateTime.now(),
-        "tasks": ["Task 1", "Task 2", "Task 3", "Task 4", "Task 5"],
-        "finished": 4,
-        "iconTitle": "SP"
-      },
-    ];
-
-    final examsArray = [
-      {
-        "title": "Math - planimetry",
-        "finalDate": DateTime.parse("2024-02-08 22:18:04Z"),
-      },
-      {
-        "title": "Math - algebra",
-        "finalDate": DateTime.parse("2024-02-09 22:18:04Z"),
-      }
-    ];
-
-    final tasksArray = [
-      {
-        "title": "Go home",
-        "finalDate": DateTime.parse("2024-02-14 22:18:04Z"),
-      },
-      {
-        "title": "Play with niggas",
-        "finalDate": DateTime.parse("2024-02-12 22:18:04Z"),
-      }
-    ];
-
     return PrimaryScaffold(
-      onPressed: () {},
-      child: SizedBox(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
+      onPressed: () {
+        setState(() {
+          array.add({
+            "title": "New Project Example",
+            "description": "Description for the new project",
+            "finalDate": DateTime.parse("2023-01-22 22:18:04Z"),
+            "tasks": ["Task 1", "Task 2"],
+            "finished": 1,
+            "iconTitle": "NP"
+          });
+        });
+      },
+      child: SafeArea(
         child: SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -89,7 +69,7 @@ class TaskTrackerPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.085,
+                  height: MediaQuery.of(context).size.height * 0.045,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -15,18 +15,12 @@ class _ProjectViewState extends State<ProjectView> {
   @override
   Widget build(BuildContext context) {
     if (widget.itemArray.length <= 2) {
-      return SizedBox(
-        height: 345,
-        child: ProjectWidget(
-          itemArray: widget.itemArray,
-        ),
+      return ProjectWidget(
+        itemArray: widget.itemArray,
       );
     } else if (widget.itemArray.length <= 4) {
-      return SizedBox(
-        height: 315,
-        child: GridProject(
-          itemArray: widget.itemArray,
-        ),
+      return GridProject(
+        itemArray: widget.itemArray,
       );
     } else if (widget.itemArray.length > 4) {
       return SizedBox(
