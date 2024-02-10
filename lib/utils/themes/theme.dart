@@ -3,6 +3,7 @@ import 'dart:math';
 
 class EduPotColorTheme {
   static const primaryDark = Color(0xFF171930);
+  static const primaryLightDark = Color(0xFF272943);
   static const facebookPrimary = Color(0xFF3B5998);
   static const navbar = Color(0xFF0D0F22);
   static const floatingButtonColor = Color(0xFF6D7B98);
@@ -69,6 +70,13 @@ class EduPotColorTheme {
     colors: [
       Color.fromRGBO(255, 201, 44, 1),
       Color.fromRGBO(253, 147, 113, 1),
+    ],
+  );
+
+  static const darkGradient = LinearGradient(
+    colors: [
+      Color(0xFF313346),
+      Color(0XFF54566E),
     ],
   );
 }

@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:edupot/components/app/primary_scaffold.dart';
+import 'package:edupot/routes/app/task_tracker/task_modal.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/widgets/task_tracker/project_view.dart';
 import 'package:edupot/widgets/task_tracker/task_view.dart';
@@ -60,6 +61,23 @@ class _TaskTrackerPageState extends State<TaskTrackerPage> {
             "iconTitle": "NP"
           });
         });
+        showModalBottomSheet(
+          context: context,
+          backgroundColor: EduPotColorTheme.primaryDark,
+          builder: (BuildContext context) {
+            return TaskModal(
+              onTask: () {
+                Navigator.pop(context);
+              },
+              onExam: () {
+                Navigator.pop(context);
+              },
+              onProject: () {
+                Navigator.pop(context);
+              },
+            );
+          },
+        );
       },
       child: SafeArea(
         child: SingleChildScrollView(
