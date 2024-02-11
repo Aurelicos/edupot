@@ -44,7 +44,12 @@ class _AddTaskPageState extends State<AddTaskPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  formatText(title),
+                  formatText(
+                    title,
+                    context,
+                    EduPotDarkTextTheme.headline1.copyWith(fontSize: 32),
+                    MediaQuery.of(context).size.width * 0.75,
+                  ),
                   style: EduPotDarkTextTheme.headline1.copyWith(
                     fontSize: 32,
                   ),
@@ -67,16 +72,13 @@ class _AddTaskPageState extends State<AddTaskPage> {
               headline: "Title",
               placeholder: "",
               validatorText: "",
+              maxLines: 1,
               textChanged: (String input) {
                 setState(() {
                   if (input.isEmpty) {
                     title = "Task";
                   } else {
-                    if (input.contains("\n")) {
-                      title = input.replaceAll("\n", "");
-                    } else {
-                      title = input;
-                    }
+                    title = input;
                   }
                 });
               },
@@ -87,11 +89,31 @@ class _AddTaskPageState extends State<AddTaskPage> {
     );
   }
 
-  String formatText(String input) {
-    String finalText = input;
-    if (input.length > 17) {
-      finalText = "${input.substring(0, 15)}...";
+  String formatText(
+    String input,
+    BuildContext context,
+    TextStyle textStyle,
+    double maxWidth,
+  ) {
+    TextPainter painter = TextPainter(
+      textDirection: TextDirection.ltr,
+      text: TextSpan(text: input, style: textStyle),
+    );
+
+    painter.layout();
+
+    if (painter.width > maxWidth) {
+      for (int i = input.length; i > 0; i--) {
+        painter.text =
+            TextSpan(text: "${input.substring(0, i)}...", style: textStyle);
+        painter.layout();
+
+        if (painter.width <= maxWidth) {
+          return "${input.substring(0, i)}...";
+        }
+      }
     }
-    return finalText;
+
+    return input;
   }
 }

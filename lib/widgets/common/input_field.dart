@@ -1,6 +1,7 @@
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:edupot/utils/auth/validator.dart';
+import 'package:flutter/services.dart';
 
 class InputField extends StatelessWidget {
   final String headline;
@@ -72,6 +73,9 @@ class InputField extends StatelessWidget {
             },
             obscureText: isPassword,
             style: EduPotDarkTextTheme.headline2(1),
+            keyboardType: TextInputType.text,
+            textInputAction: TextInputAction.done,
+            inputFormatters: [FilteringTextInputFormatter.deny(RegExp('[\n]'))],
             decoration: InputDecoration(
               hintText: placeholder,
               hintStyle: EduPotDarkTextTheme.headline2(0.5),
