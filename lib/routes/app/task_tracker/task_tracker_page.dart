@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:edupot/components/app/primary_scaffold.dart';
-import 'package:edupot/routes/app/task_tracker/task_modal.dart';
+import 'package:edupot/components/app/task_tracker/task_modal.dart';
+import 'package:edupot/utils/router/router.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/widgets/task_tracker/project_view.dart';
 import 'package:edupot/widgets/task_tracker/task_view.dart';
@@ -51,30 +52,16 @@ class _TaskTrackerPageState extends State<TaskTrackerPage> {
   Widget build(BuildContext context) {
     return PrimaryScaffold(
       onPressed: () {
-        setState(() {
-          array.add({
-            "title": "New Project Example",
-            "description": "Description for the new project",
-            "finalDate": DateTime.parse("2023-01-22 22:18:04Z"),
-            "tasks": ["Task 1", "Task 2"],
-            "finished": 1,
-            "iconTitle": "NP"
-          });
-        });
         showModalBottomSheet(
           context: context,
           backgroundColor: EduPotColorTheme.primaryDark,
           builder: (BuildContext context) {
             return TaskModal(
               onTask: () {
-                Navigator.pop(context);
+                context.pushRoute(const AddTaskRoute());
               },
-              onExam: () {
-                Navigator.pop(context);
-              },
-              onProject: () {
-                Navigator.pop(context);
-              },
+              onExam: () {},
+              onProject: () {},
             );
           },
         );

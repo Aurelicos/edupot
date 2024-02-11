@@ -8,17 +8,21 @@ class InputField extends StatelessWidget {
   final String validatorText;
   final bool isPassword;
   final Function(String) textChanged;
-  final Function(bool) validated;
+  final Function(bool)? validated;
 
-  const InputField({
-    super.key,
-    required this.headline,
-    required this.placeholder,
-    required this.validatorText,
-    required this.textChanged,
-    required this.validated,
-    this.isPassword = false,
-  });
+  final int? maxLength;
+  final int? maxLines;
+
+  const InputField(
+      {super.key,
+      required this.headline,
+      required this.placeholder,
+      required this.validatorText,
+      required this.textChanged,
+      this.isPassword = false,
+      this.validated,
+      this.maxLength,
+      this.maxLines});
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +40,7 @@ class InputField extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 5),
         Container(
           decoration: ShapeDecoration(
             gradient: EduPotColorTheme.mainItemGradient,
@@ -47,6 +51,8 @@ class InputField extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
           height: 56,
           child: TextFormField(
+            maxLength: maxLength,
+            maxLines: maxLines,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             onChanged: (input) {
               bool isValid = false;
@@ -56,7 +62,7 @@ class InputField extends StatelessWidget {
                 isValid = input.length >= 8;
               }
               textChanged(input);
-              validated(isValid);
+              validated != null ? validated!(isValid) : null;
             },
             validator: (input) {
               if (input!.isEmpty) return null;

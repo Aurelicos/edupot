@@ -7,7 +7,7 @@ import 'package:edupot/utils/router/router.dart';
 import 'package:edupot/widgets/main_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:edupot/components/auth/input_field.dart';
+import 'package:edupot/widgets/common/input_field.dart';
 import 'package:edupot/components/common/authentication.dart';
 import 'package:provider/provider.dart';
 
@@ -167,7 +167,6 @@ class _RegisterPageState extends State<RegisterPage> {
                           firstName = value;
                         });
                       },
-                      validated: (bool value) {},
                     ),
                   ),
                   const SizedBox(width: 20),
@@ -181,7 +180,6 @@ class _RegisterPageState extends State<RegisterPage> {
                           lastName = value;
                         });
                       },
-                      validated: (bool value) {},
                     ),
                   ),
                 ],

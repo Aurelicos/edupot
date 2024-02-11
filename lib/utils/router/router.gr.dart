@@ -15,6 +15,12 @@ abstract class _$AppRouter extends RootStackRouter {
 
   @override
   final Map<String, PageFactory> pagesMap = {
+    AddTaskRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const AddTaskPage(),
+      );
+    },
     AuthWrapperRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -70,6 +76,20 @@ abstract class _$AppRouter extends RootStackRouter {
       );
     },
   };
+}
+
+/// generated route for
+/// [AddTaskPage]
+class AddTaskRoute extends PageRouteInfo<void> {
+  const AddTaskRoute({List<PageRouteInfo>? children})
+      : super(
+          AddTaskRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'AddTaskRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for
