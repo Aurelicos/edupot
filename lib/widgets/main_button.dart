@@ -3,35 +3,37 @@ import 'package:flutter/material.dart';
 
 class MainButton extends StatelessWidget {
   final void Function() onTap;
-  final Widget? child;
+  final Widget child;
 
   const MainButton({
     super.key,
     required this.onTap,
-    this.child,
+    required this.child,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: InkWell(
-            onTap: onTap,
-            borderRadius: BorderRadius.circular(8),
-            child: Ink(
-              height: 56,
-              decoration: BoxDecoration(
-                gradient: EduPotColorTheme.mainBlueGradient(),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Center(
-                child: child,
-              ),
-            ),
-          ),
+    return TextButton(
+      onPressed: onTap,
+      style: ButtonStyle(
+        padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero),
+        backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
-      ],
+      ),
+      child: Ink(
+        decoration: BoxDecoration(
+          gradient: EduPotColorTheme.mainBlueGradient(),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Container(
+          alignment: Alignment.center,
+          width: double.infinity,
+          height: 56,
+          child: child,
+        ),
+      ),
     );
   }
 }

@@ -6,24 +6,28 @@ import 'package:flutter/services.dart';
 class InputField extends StatelessWidget {
   final String headline;
   final String placeholder;
-  final String validatorText;
   final bool isPassword;
   final Function(String) textChanged;
+
   final Function(bool)? validated;
+  final String? validatorText;
 
   final int? maxLength;
   final int? maxLines;
+  final double? height;
 
-  const InputField(
-      {super.key,
-      required this.headline,
-      required this.placeholder,
-      required this.validatorText,
-      required this.textChanged,
-      this.isPassword = false,
-      this.validated,
-      this.maxLength,
-      this.maxLines});
+  const InputField({
+    super.key,
+    required this.headline,
+    required this.placeholder,
+    required this.textChanged,
+    this.validatorText,
+    this.isPassword = false,
+    this.validated,
+    this.maxLength,
+    this.maxLines = 1,
+    this.height,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -49,8 +53,11 @@ class InputField extends StatelessWidget {
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           ),
           alignment: Alignment.centerLeft,
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
-          height: 56,
+          padding: EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: height != null ? 8 : 2,
+          ),
+          height: height ?? 56,
           child: TextFormField(
             maxLength: maxLength,
             maxLines: maxLines,
@@ -67,9 +74,10 @@ class InputField extends StatelessWidget {
             },
             validator: (input) {
               if (input!.isEmpty) return null;
+              if (validatorText == null) return null;
               bool isValid = (headline == 'Email' && isValidEmail(input)) ||
                   (headline == 'Password' && input.length >= 8);
-              return isValid ? null : validatorText;
+              return isValid ? null : validatorText ?? '';
             },
             obscureText: isPassword,
             style: EduPotDarkTextTheme.headline2(1),

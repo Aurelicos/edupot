@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:edupot/components/app/primary_scaffold.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/widgets/common/input_field.dart';
+import 'package:edupot/widgets/main_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -70,9 +71,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
             ),
             InputField(
               headline: "Title",
-              placeholder: "",
+              placeholder: "My Task",
               validatorText: "",
-              maxLines: 1,
               textChanged: (String input) {
                 setState(() {
                   if (input.isEmpty) {
@@ -82,7 +82,29 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   }
                 });
               },
-            )
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            InputField(
+              headline: "Description",
+              placeholder:
+                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris gravida urna purus, eget mattis eros cursus lorem ipsum...",
+              height: 100,
+              maxLines: 3,
+              textChanged: (String input) {},
+            ),
+            const Spacer(),
+            MainButton(
+              onTap: () {},
+              child: Text(
+                "Submit",
+                style: EduPotDarkTextTheme.headline2(1),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
           ],
         ),
       ),

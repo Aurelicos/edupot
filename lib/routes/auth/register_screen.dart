@@ -161,7 +161,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: InputField(
                       headline: 'First Name',
                       placeholder: "John",
-                      validatorText: "",
                       textChanged: (String value) {
                         setState(() {
                           firstName = value;
@@ -174,7 +173,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: InputField(
                       headline: 'Last Name',
                       placeholder: 'Doe',
-                      validatorText: "",
                       textChanged: (String value) {
                         setState(() {
                           lastName = value;
