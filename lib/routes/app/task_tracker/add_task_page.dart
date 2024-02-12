@@ -3,6 +3,7 @@ import 'package:edupot/components/app/primary_scaffold.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/widgets/common/input_field.dart';
 import 'package:edupot/widgets/main_button.dart';
+import 'package:edupot/widgets/task_tracker/task_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -93,6 +94,12 @@ class _AddTaskPageState extends State<AddTaskPage> {
               height: 100,
               maxLines: 3,
               textChanged: (String input) {},
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            const TaskDropdown(
+              items: ["One", "Two", "Three"],
             ),
             const Spacer(),
             MainButton(
