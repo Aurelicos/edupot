@@ -98,8 +98,51 @@ class _AddTaskPageState extends State<AddTaskPage> {
             const SizedBox(
               height: 20,
             ),
-            const TaskDropdown(
-              items: ["One", "Two", "Three"],
+            TaskDropdown<int>(
+              onChange: (int index) => print("index: $index"),
+              gradient: EduPotColorTheme.mainItemGradient,
+              dropdownButtonStyle: TaskDropdownButtonStyle(
+                height: 56,
+                width: double.infinity,
+                elevation: 1,
+                gradient: EduPotColorTheme.mainItemGradient,
+                borderRadius: BorderRadius.circular(7),
+              ),
+              dropdownStyle: TaskDropdownStyle(
+                elevation: 1,
+                padding: const EdgeInsets.all(5),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(7),
+                ),
+              ),
+              items: [
+                '📝 Exam',
+                '💻 Task',
+                '🗂️ Project',
+              ]
+                  .asMap()
+                  .entries
+                  .map(
+                    (item) => TaskDropdownItem<int>(
+                      gradient: EduPotColorTheme.mainItemGradient,
+                      value: item.key + 1,
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Text(
+                          item.value,
+                          style: EduPotDarkTextTheme.headline2(1),
+                        ),
+                      ),
+                    ),
+                  )
+                  .toList(),
+              child: Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Text(
+                  "📝 Exam",
+                  style: EduPotDarkTextTheme.headline2(1),
+                ),
+              ),
             ),
             const Spacer(),
             MainButton(
