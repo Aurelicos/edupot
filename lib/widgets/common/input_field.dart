@@ -1,4 +1,5 @@
 import 'package:edupot/utils/themes/theme.dart';
+import 'package:edupot/widgets/common/description_text.dart';
 import 'package:flutter/material.dart';
 import 'package:edupot/utils/auth/validator.dart';
 import 'package:flutter/services.dart';
@@ -34,18 +35,7 @@ class InputField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          padding: const EdgeInsets.only(left: 20),
-          child: Text(
-            headline,
-            style: TextStyle(
-              color: Colors.white.withOpacity(0.4),
-              fontSize: 15,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-        const SizedBox(height: 5),
+        DescriptionText(text: headline),
         Container(
           decoration: ShapeDecoration(
             gradient: EduPotColorTheme.mainItemGradient,

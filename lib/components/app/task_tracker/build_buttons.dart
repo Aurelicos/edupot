@@ -42,13 +42,6 @@ Widget buildButtons(void Function(int) onChange) {
           ),
         )
         .toList(),
-    child: Padding(
-      padding: const EdgeInsets.all(15.0),
-      child: Text(
-        "📝 Exam",
-        style: EduPotDarkTextTheme.headline2(1),
-      ),
-    ),
   );
 }
 

@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:edupot/components/app/primary_scaffold.dart';
 import 'package:edupot/components/app/task_tracker/build_buttons.dart';
 import 'package:edupot/utils/themes/theme.dart';
+import 'package:edupot/widgets/common/description_text.dart';
 import 'package:edupot/widgets/common/input_button.dart';
 import 'package:edupot/widgets/common/input_field.dart';
 import 'package:edupot/widgets/main_button.dart';
@@ -29,7 +30,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.085,
+                height: MediaQuery.of(context).size.height * 0.07,
               ),
               InkWell(
                 onTap: () => context.popRoute(),
@@ -40,7 +41,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 ),
               ),
               const SizedBox(
-                height: 20,
+                height: 15,
               ),
               buildHeadline(title, context),
               const SizedBox(
@@ -74,21 +75,53 @@ class _AddTaskPageState extends State<AddTaskPage> {
               const SizedBox(
                 height: 20,
               ),
-              Container(
-                padding: const EdgeInsets.only(left: 20, bottom: 5),
-                child: Text(
-                  "Category",
-                  style: TextStyle(
-                    color: Colors.white.withOpacity(0.4),
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
+              const DescriptionText(text: "Category"),
               buildButtons((int index) => print("$index")),
-              const InputButton(),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.2,
+              const SizedBox(
+                height: 20,
+              ),
+              const DescriptionText(text: "Details"),
+              Row(
+                children: [
+                  Expanded(
+                    child: InputButton(
+                      onPressed: () {},
+                      asset: "assets/icons/calendar.svg",
+                      text: "Select Date",
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  Expanded(
+                    child: InputButton(
+                      onPressed: () {},
+                      asset: "assets/icons/clock_simple.svg",
+                      text: "Select Time",
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              const DescriptionText(text: "Attachment"),
+              InputButton(
+                onPressed: () {},
+                asset: "assets/icons/upload.svg",
+                text: "Attach notes",
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              const DescriptionText(text: "Import notes from GitHub"),
+              InputButton(
+                onPressed: () {},
+                asset: "assets/icons/github.svg",
+                text: "Import notes",
+              ),
+              const SizedBox(
+                height: 72,
               ),
               MainButton(
                 onTap: () {},

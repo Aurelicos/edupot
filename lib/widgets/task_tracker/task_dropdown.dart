@@ -1,24 +1,18 @@
 import 'package:flutter/material.dart';
 
 class TaskDropdown<T> extends StatefulWidget {
-  final Widget child;
-
   final void Function(int) onChange;
   final List<TaskDropdownItem<T>> items;
   final TaskDropdownStyle dropdownStyle;
-
   final TaskDropdownButtonStyle dropdownButtonStyle;
   final Icon? icon;
   final bool hideIcon;
-
   final bool leadingIcon;
-
   final LinearGradient? gradient;
 
   const TaskDropdown({
     super.key,
     this.hideIcon = false,
-    required this.child,
     required this.items,
     required this.onChange,
     this.dropdownStyle = const TaskDropdownStyle(),
@@ -47,17 +41,20 @@ class _TaskDropdownState<T> extends State<TaskDropdown<T>>
   @override
   void initState() {
     super.initState();
-
     _animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 200));
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+    );
     _expandAnimation = CurvedAnimation(
       parent: _animationController,
       curve: Curves.easeInOut,
     );
-    _rotateAnimation = Tween(begin: 0.0, end: 0.5).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    ));
+    _rotateAnimation = Tween(begin: 0.0, end: 0.5).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeInOut,
+      ),
+    );
   }
 
   @override
@@ -71,7 +68,7 @@ class _TaskDropdownState<T> extends State<TaskDropdown<T>>
         padding: style.padding,
         decoration: BoxDecoration(
           color: style.backgroundColor,
-          gradient: style.gradient,
+          gradient: widget.gradient,
           borderRadius: style.borderRadius,
         ),
         child: InkWell(
@@ -83,14 +80,15 @@ class _TaskDropdownState<T> extends State<TaskDropdown<T>>
                 widget.leadingIcon ? TextDirection.rtl : TextDirection.ltr,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Row(
-                children: [
-                  if (_currentIndex == -1) ...[
-                    widget.child,
-                  ] else ...[
-                    widget.items[_currentIndex],
-                  ],
-                ],
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    left: 5,
+                  ),
+                  child: widget.items.isNotEmpty
+                      ? (widget.items[_currentIndex == -1 ? 0 : _currentIndex])
+                      : Container(),
+                ),
               ),
               if (!widget.hideIcon)
                 Padding(
@@ -203,9 +201,7 @@ class _TaskDropdownState<T> extends State<TaskDropdown<T>>
     if (_isOpen || close) {
       await _animationController.reverse();
       _overlayEntry.remove();
-      setState(() {
-        _isOpen = false;
-      });
+      setState(() => _isOpen = false);
     } else {
       _overlayEntry = _createOverlayEntry();
       Overlay.of(context).insert(_overlayEntry);
@@ -274,11 +270,8 @@ class TaskDropdownStyle {
   final EdgeInsets? padding;
   final BoxConstraints? constraints;
   final Color? scrollbarColor;
-
   final ShapeBorder? shape;
-
   final Offset? offset;
-
   final double? width;
 
   const TaskDropdownStyle({
