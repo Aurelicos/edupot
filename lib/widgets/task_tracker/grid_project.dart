@@ -1,6 +1,6 @@
 import 'package:edupot/utils/common/time_format.dart';
 import 'package:edupot/utils/themes/theme.dart';
-import 'package:edupot/widgets/common/haxagon.dart';
+import 'package:edupot/widgets/common/hexagon.dart';
 import 'package:flutter/material.dart';
 
 class GridProject extends StatelessWidget {

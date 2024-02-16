@@ -3,10 +3,11 @@ import 'package:edupot/widgets/task_tracker/task_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-Widget buildButtons(void Function(int) onChange) {
+Widget buildButtons(int index, void Function(int) onChange) {
   return TaskDropdown<int>(
     onChange: onChange,
     gradient: EduPotColorTheme.mainItemGradient,
+    index: index,
     dropdownButtonStyle: TaskDropdownButtonStyle(
       height: 56,
       width: double.infinity,

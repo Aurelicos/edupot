@@ -1,12 +1,15 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:edupot/components/app/primary_scaffold.dart';
 import 'package:edupot/components/app/task_tracker/build_buttons.dart';
+import 'package:edupot/components/app/task_tracker/content.dart';
+import 'package:edupot/providers/selection_provider.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/widgets/common/description_text.dart';
-import 'package:edupot/widgets/common/input_button.dart';
 import 'package:edupot/widgets/common/input_field.dart';
 import 'package:edupot/widgets/main_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 
 @RoutePage()
 class AddTaskPage extends StatefulWidget {
@@ -16,11 +19,37 @@ class AddTaskPage extends StatefulWidget {
   State<AddTaskPage> createState() => _AddTaskPageState();
 }
 
-class _AddTaskPageState extends State<AddTaskPage> {
+class _AddTaskPageState extends State<AddTaskPage>
+    with SingleTickerProviderStateMixin {
   String title = "Task";
+  late AnimationController _animationController;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 150),
+    );
+
+    _scaleAnimation =
+        Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.watch<SelectionProvider>();
+    Content content = Content();
+
+    _animationController.reset();
+    _animationController.forward();
     return PrimaryScaffold(
       navBar: false,
       child: SingleChildScrollView(
@@ -45,7 +74,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
               ),
               buildHeadline(title, context),
               const SizedBox(
-                height: 20,
+                height: 15,
               ),
               InputField(
                 headline: "Title",
@@ -62,7 +91,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 },
               ),
               const SizedBox(
-                height: 20,
+                height: 15,
               ),
               InputField(
                 headline: "Description",
@@ -73,55 +102,27 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 textChanged: (String input) {},
               ),
               const SizedBox(
-                height: 20,
+                height: 15,
               ),
               const DescriptionText(text: "Category"),
-              buildButtons((int index) => print("$index")),
+              buildButtons(provider.selectedIndex, (int index) {
+                provider.selectedIndex = index;
+                _animationController.reset();
+                _animationController.forward();
+              }),
               const SizedBox(
-                height: 20,
+                height: 15,
               ),
-              const DescriptionText(text: "Details"),
-              Row(
-                children: [
-                  Expanded(
-                    child: InputButton(
-                      onPressed: () {},
-                      asset: "assets/icons/calendar.svg",
-                      text: "Select Date",
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  Expanded(
-                    child: InputButton(
-                      onPressed: () {},
-                      asset: "assets/icons/clock_simple.svg",
-                      text: "Select Time",
-                    ),
-                  ),
-                ],
+              SizeTransition(
+                sizeFactor: _scaleAnimation,
+                child: content.getContent(
+                  provider.selectedIndex,
+                  examContent: const ExamContent(),
+                  taskContent: const TaskContent(title: "SP"),
+                ),
               ),
               const SizedBox(
-                height: 20,
-              ),
-              const DescriptionText(text: "Attachment"),
-              InputButton(
-                onPressed: () {},
-                asset: "assets/icons/upload.svg",
-                text: "Attach notes",
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const DescriptionText(text: "Import notes from GitHub"),
-              InputButton(
-                onPressed: () {},
-                asset: "assets/icons/github.svg",
-                text: "Import notes",
-              ),
-              const SizedBox(
-                height: 72,
+                height: 30,
               ),
               MainButton(
                 onTap: () {},

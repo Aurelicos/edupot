@@ -9,6 +9,7 @@ class TaskDropdown<T> extends StatefulWidget {
   final bool hideIcon;
   final bool leadingIcon;
   final LinearGradient? gradient;
+  final int? index;
 
   const TaskDropdown({
     super.key,
@@ -20,6 +21,7 @@ class TaskDropdown<T> extends StatefulWidget {
     this.icon,
     this.leadingIcon = false,
     this.gradient,
+    this.index,
   });
 
   @override
@@ -41,6 +43,7 @@ class _TaskDropdownState<T> extends State<TaskDropdown<T>>
   @override
   void initState() {
     super.initState();
+    _currentIndex = widget.index ?? -1;
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 200),
