@@ -8,7 +8,6 @@ import 'package:edupot/widgets/common/description_text.dart';
 import 'package:edupot/widgets/common/input_field.dart';
 import 'package:edupot/widgets/main_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 @RoutePage()
@@ -119,6 +118,9 @@ class _AddTaskPageState extends State<AddTaskPage>
                   provider.selectedIndex,
                   examContent: const ExamContent(),
                   taskContent: const TaskContent(title: "SP"),
+                  projectContent: ProjectContent(
+                    onTextChanged: (String value) {},
+                  ),
                 ),
               ),
               const SizedBox(

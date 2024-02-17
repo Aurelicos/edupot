@@ -48,37 +48,44 @@ class InputField extends StatelessWidget {
             vertical: height != null ? 8 : 2,
           ),
           height: height ?? 56,
-          child: TextFormField(
-            maxLength: maxLength,
-            maxLines: maxLines,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            onChanged: (input) {
-              bool isValid = false;
-              if (headline == 'Email') {
-                isValid = isValidEmail(input);
-              } else if (headline == 'Password') {
-                isValid = input.length >= 8;
-              }
-              textChanged(input);
-              validated != null ? validated!(isValid) : null;
-            },
-            validator: (input) {
-              if (input!.isEmpty) return null;
-              if (validatorText == null) return null;
-              bool isValid = (headline == 'Email' && isValidEmail(input)) ||
-                  (headline == 'Password' && input.length >= 8);
-              return isValid ? null : validatorText ?? '';
-            },
-            obscureText: isPassword,
-            style: EduPotDarkTextTheme.headline2(1),
-            keyboardType: TextInputType.text,
-            textInputAction: TextInputAction.done,
-            inputFormatters: [FilteringTextInputFormatter.deny(RegExp('[\n]'))],
-            decoration: InputDecoration(
-              hintText: placeholder,
-              hintStyle: EduPotDarkTextTheme.headline2(0.5),
-              border: InputBorder.none,
-              contentPadding: const EdgeInsets.only(bottom: 2),
+          child: Padding(
+            padding: maxLength != null
+                ? const EdgeInsets.symmetric(vertical: 5)
+                : EdgeInsets.zero,
+            child: TextFormField(
+              maxLength: maxLength,
+              maxLines: maxLines,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              onChanged: (input) {
+                bool isValid = false;
+                if (headline == 'Email') {
+                  isValid = isValidEmail(input);
+                } else if (headline == 'Password') {
+                  isValid = input.length >= 8;
+                }
+                textChanged(input);
+                validated != null ? validated!(isValid) : null;
+              },
+              validator: (input) {
+                if (input!.isEmpty) return null;
+                if (validatorText == null) return null;
+                bool isValid = (headline == 'Email' && isValidEmail(input)) ||
+                    (headline == 'Password' && input.length >= 8);
+                return isValid ? null : validatorText ?? '';
+              },
+              obscureText: isPassword,
+              style: EduPotDarkTextTheme.headline2(1),
+              keyboardType: TextInputType.text,
+              textInputAction: TextInputAction.done,
+              inputFormatters: [
+                FilteringTextInputFormatter.deny(RegExp('[\n]'))
+              ],
+              decoration: InputDecoration(
+                hintText: placeholder,
+                hintStyle: EduPotDarkTextTheme.headline2(0.5),
+                border: InputBorder.none,
+                contentPadding: const EdgeInsets.only(bottom: 2),
+              ),
             ),
           ),
         ),

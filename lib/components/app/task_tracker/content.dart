@@ -2,6 +2,7 @@ import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/widgets/common/description_text.dart';
 import 'package:edupot/widgets/common/hexagon.dart';
 import 'package:edupot/widgets/common/input_button.dart';
+import 'package:edupot/widgets/common/input_field.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -10,13 +11,16 @@ class Content {
   Widget getContent(
     int index, {
     required ExamContent examContent,
-    required taskContent,
+    required TaskContent taskContent,
+    required ProjectContent projectContent,
   }) {
     switch (index) {
       case 0:
         return _contentOne(examContent);
       case 1:
         return _contentTwo(taskContent);
+      case 2:
+        return contentThree(projectContent);
       default:
         return const SizedBox();
     }
@@ -126,6 +130,9 @@ class Content {
               asset: "assets/icons/calendar.svg",
               text: "Select Date",
             )),
+            const SizedBox(
+              width: 15,
+            ),
             Expanded(
                 child: InputButton(
               onPressed: content.onTime,
@@ -138,8 +145,73 @@ class Content {
     );
   }
 
-  Widget contentThree() {
-    return const SizedBox();
+  Widget contentThree(ProjectContent content) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: InputField(
+                headline: "Two letter title",
+                placeholder: "",
+                maxLength: 2,
+                textChanged: content.onTextChanged,
+              ),
+            ),
+            const SizedBox(
+              width: 15,
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const DescriptionText(text: "Assigned tasks"),
+                  InputButton(
+                    onPressed: () {},
+                    asset: "assets/icons/search.svg",
+                    text: "Task 1",
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 15,
+        ),
+        const DescriptionText(text: "Details"),
+        Row(
+          children: [
+            Expanded(
+                child: InputButton(
+              onPressed: content.onDate,
+              asset: "assets/icons/calendar.svg",
+              text: "Select Date",
+            )),
+            const SizedBox(
+              width: 15,
+            ),
+            Expanded(
+                child: InputButton(
+              onPressed: content.onTime,
+              asset: "assets/icons/clock_simple.svg",
+              text: "Select Time",
+            )),
+          ],
+        ),
+        const SizedBox(
+          height: 15,
+        ),
+        const DescriptionText(text: "Attachment"),
+        InputButton(
+          onPressed: content.onAttachment,
+          asset: "assets/icons/upload.svg",
+          asset2: "assets/icons/github.svg",
+          text: "Attach or Import notes",
+        ),
+      ],
+    );
   }
 }
 
@@ -168,5 +240,20 @@ class TaskContent {
     this.onProject,
     this.onDate,
     this.onTime,
+  });
+}
+
+class ProjectContent {
+  final void Function(String input) onTextChanged;
+
+  final void Function()? onDate;
+  final void Function()? onTime;
+  final void Function()? onAttachment;
+
+  const ProjectContent({
+    required this.onTextChanged,
+    this.onDate,
+    this.onTime,
+    this.onAttachment,
   });
 }

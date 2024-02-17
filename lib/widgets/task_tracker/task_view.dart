@@ -45,7 +45,12 @@ class TaskView extends StatelessWidget {
                     children: [
                       SvgPicture.asset(
                         "assets/icons/circle.svg",
-                        color: color,
+                        colorFilter: color != null
+                            ? ColorFilter.mode(
+                                color!,
+                                BlendMode.srcIn,
+                              )
+                            : null,
                       ),
                       const SizedBox(
                         width: 15,
