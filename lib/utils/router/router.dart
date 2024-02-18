@@ -9,6 +9,7 @@ import 'package:edupot/routes/auth/register_screen.dart';
 import 'package:edupot/routes/auth_wrapper.dart';
 import 'package:edupot/routes/onboarding/onboarding.dart';
 import 'package:edupot/routes/app/home_page.dart';
+import 'package:flutter/material.dart';
 
 part 'router.gr.dart';
 

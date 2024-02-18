@@ -58,10 +58,14 @@ class _TaskTrackerPageState extends State<TaskTrackerPage> {
           builder: (BuildContext context) {
             return TaskModal(
               onTask: () {
-                context.pushRoute(const AddTaskRoute());
+                context.pushRoute(AddTaskRoute(selectedCategory: 1));
               },
-              onExam: () {},
-              onProject: () {},
+              onExam: () {
+                context.pushRoute(AddTaskRoute(selectedCategory: 0));
+              },
+              onProject: () {
+                context.pushRoute(AddTaskRoute(selectedCategory: 2));
+              },
             );
           },
         );

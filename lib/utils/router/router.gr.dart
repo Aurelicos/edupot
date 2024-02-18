@@ -16,9 +16,13 @@ abstract class _$AppRouter extends RootStackRouter {
   @override
   final Map<String, PageFactory> pagesMap = {
     AddTaskRoute.name: (routeData) {
+      final args = routeData.argsAs<AddTaskRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const AddTaskPage(),
+        child: AddTaskPage(
+          key: args.key,
+          selectedCategory: args.selectedCategory,
+        ),
       );
     },
     AuthWrapperRoute.name: (routeData) {
@@ -80,16 +84,40 @@ abstract class _$AppRouter extends RootStackRouter {
 
 /// generated route for
 /// [AddTaskPage]
-class AddTaskRoute extends PageRouteInfo<void> {
-  const AddTaskRoute({List<PageRouteInfo>? children})
-      : super(
+class AddTaskRoute extends PageRouteInfo<AddTaskRouteArgs> {
+  AddTaskRoute({
+    Key? key,
+    required int selectedCategory,
+    List<PageRouteInfo>? children,
+  }) : super(
           AddTaskRoute.name,
+          args: AddTaskRouteArgs(
+            key: key,
+            selectedCategory: selectedCategory,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'AddTaskRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static const PageInfo<AddTaskRouteArgs> page =
+      PageInfo<AddTaskRouteArgs>(name);
+}
+
+class AddTaskRouteArgs {
+  const AddTaskRouteArgs({
+    this.key,
+    required this.selectedCategory,
+  });
+
+  final Key? key;
+
+  final int selectedCategory;
+
+  @override
+  String toString() {
+    return 'AddTaskRouteArgs{key: $key, selectedCategory: $selectedCategory}';
+  }
 }
 
 /// generated route for

@@ -12,7 +12,8 @@ import 'package:provider/provider.dart';
 
 @RoutePage()
 class AddTaskPage extends StatefulWidget {
-  const AddTaskPage({super.key});
+  final int selectedCategory;
+  const AddTaskPage({super.key, required this.selectedCategory});
 
   @override
   State<AddTaskPage> createState() => _AddTaskPageState();
@@ -34,6 +35,12 @@ class _AddTaskPageState extends State<AddTaskPage>
 
     _scaleAnimation =
         Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
+    print(widget.selectedCategory);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final provider = Provider.of<SelectionProvider>(context, listen: false);
+      provider.selectedIndex = widget.selectedCategory;
+      _animationController.forward();
+    });
   }
 
   @override
@@ -104,7 +111,7 @@ class _AddTaskPageState extends State<AddTaskPage>
                 height: 15,
               ),
               const DescriptionText(text: "Category"),
-              buildButtons(provider.selectedIndex, (int index) {
+              buildButtons(widget.selectedCategory, (int index) {
                 provider.selectedIndex = index;
                 _animationController.reset();
                 _animationController.forward();
