@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class TaskModal extends StatelessWidget {
-  final void Function()? onTask;
-  final void Function()? onExam;
-  final void Function()? onProject;
+  final void Function(int index)? onPressed;
 
-  const TaskModal({super.key, this.onTask, this.onExam, this.onProject});
+  const TaskModal({super.key, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +46,7 @@ class TaskModal extends StatelessWidget {
                       "assets/icons/check_simple.svg",
                       "Add single task",
                       "Create and manage a specific task, setting deadlines and priorities.",
-                      onTask),
+                      () => onPressed!(1)),
                   const SizedBox(
                     height: 20,
                   ),
@@ -57,7 +55,7 @@ class TaskModal extends StatelessWidget {
                     "assets/icons/note.svg",
                     "Add upcoming exam",
                     "Enter details of an upcoming exam including date, subject and notes.",
-                    onExam,
+                    () => onPressed!(0),
                   ),
                   const SizedBox(
                     height: 20,
@@ -67,7 +65,7 @@ class TaskModal extends StatelessWidget {
                     "assets/icons/rocket.svg",
                     "Add full project",
                     "Plan out a complete project, breaking it down into task, milestones and deadlines.",
-                    onProject,
+                    () => onPressed!(2),
                   ),
                 ],
               ),

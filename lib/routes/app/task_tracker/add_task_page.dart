@@ -4,6 +4,7 @@ import 'package:edupot/components/app/task_tracker/build_buttons.dart';
 import 'package:edupot/components/app/task_tracker/content.dart';
 import 'package:edupot/providers/selection_provider.dart';
 import 'package:edupot/utils/themes/theme.dart';
+import 'package:edupot/widgets/common/add_notes_modal.dart';
 import 'package:edupot/widgets/common/description_text.dart';
 import 'package:edupot/widgets/common/input_field.dart';
 import 'package:edupot/widgets/main_button.dart';
@@ -19,34 +20,17 @@ class AddTaskPage extends StatefulWidget {
   State<AddTaskPage> createState() => _AddTaskPageState();
 }
 
-class _AddTaskPageState extends State<AddTaskPage>
-    with SingleTickerProviderStateMixin {
+class _AddTaskPageState extends State<AddTaskPage> {
   String title = "Task";
-  late AnimationController _animationController;
-  late Animation<double> _scaleAnimation;
 
   @override
   void initState() {
     super.initState();
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 150),
-    );
 
-    _scaleAnimation =
-        Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
-    print(widget.selectedCategory);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final provider = Provider.of<SelectionProvider>(context, listen: false);
       provider.selectedIndex = widget.selectedCategory;
-      _animationController.forward();
     });
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
   }
 
   @override
@@ -54,8 +38,6 @@ class _AddTaskPageState extends State<AddTaskPage>
     final provider = context.watch<SelectionProvider>();
     Content content = Content();
 
-    _animationController.reset();
-    _animationController.forward();
     return PrimaryScaffold(
       navBar: false,
       child: SingleChildScrollView(
@@ -113,22 +95,39 @@ class _AddTaskPageState extends State<AddTaskPage>
               const DescriptionText(text: "Category"),
               buildButtons(widget.selectedCategory, (int index) {
                 provider.selectedIndex = index;
-                _animationController.reset();
-                _animationController.forward();
               }),
               const SizedBox(
                 height: 15,
               ),
-              SizeTransition(
-                sizeFactor: _scaleAnimation,
-                child: content.getContent(
-                  provider.selectedIndex,
-                  examContent: const ExamContent(),
-                  taskContent: const TaskContent(title: "SP"),
-                  projectContent: ProjectContent(
+              content.getContent(
+                provider.selectedIndex,
+                examContent: ExamContent(onAttachment: () {
+                  showModalBottomSheet(
+                    context: context,
+                    backgroundColor: EduPotColorTheme.primaryDark,
+                    builder: (BuildContext context) {
+                      return AddNotesModal(
+                        addNotes: () {},
+                        importNotes: () {},
+                      );
+                    },
+                  );
+                }),
+                taskContent: const TaskContent(title: "SP"),
+                projectContent: ProjectContent(
                     onTextChanged: (String value) {},
-                  ),
-                ),
+                    onAttachment: () {
+                      showModalBottomSheet(
+                        context: context,
+                        backgroundColor: EduPotColorTheme.primaryDark,
+                        builder: (BuildContext context) {
+                          return AddNotesModal(
+                            addNotes: () {},
+                            importNotes: () {},
+                          );
+                        },
+                      );
+                    }),
               ),
               const SizedBox(
                 height: 30,
