@@ -53,7 +53,7 @@ class Content {
           ],
         ),
         const SizedBox(
-          height: 15,
+          height: 5,
         ),
         const DescriptionText(text: "Attachment"),
         InputButton(
@@ -119,7 +119,7 @@ class Content {
           ],
         ),
         const SizedBox(
-          height: 15,
+          height: 5,
         ),
         const DescriptionText(text: "Details"),
         Row(
@@ -178,7 +178,7 @@ class Content {
           ],
         ),
         const SizedBox(
-          height: 15,
+          height: 5,
         ),
         const DescriptionText(text: "Details"),
         Row(
@@ -201,7 +201,7 @@ class Content {
           ],
         ),
         const SizedBox(
-          height: 15,
+          height: 5,
         ),
         const DescriptionText(text: "Attachment"),
         InputButton(

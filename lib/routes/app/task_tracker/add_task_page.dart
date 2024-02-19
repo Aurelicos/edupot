@@ -34,63 +34,78 @@ class _AddTaskPageState extends State<AddTaskPage> {
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
     final provider = context.watch<SelectionProvider>();
-    Content content = Content();
+    final content = Content();
 
     return PrimaryScaffold(
       navBar: false,
       child: SingleChildScrollView(
-        child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: MediaQuery.of(context).size.height * 0.07),
-              InkWell(
-                onTap: () => context.popRoute(),
-                child: const Icon(Icons.arrow_back_rounded,
-                    size: 32, color: Colors.white),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minHeight: MediaQuery.of(context).size.height,
+          ),
+          child: IntrinsicHeight(
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 45),
+                      InkWell(
+                        onTap: () => context.popRoute(),
+                        child: const Icon(Icons.arrow_back_rounded,
+                            size: 32, color: Colors.white),
+                      ),
+                      const SizedBox(height: 5),
+                      buildHeadline(title, context),
+                      const SizedBox(height: 5),
+                      buildInputField("Title", "My Task", (input) {
+                        setState(() => title = input.isEmpty ? "Task" : input);
+                      }),
+                      const SizedBox(height: 5),
+                      InputField(
+                        headline: "Description",
+                        placeholder:
+                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
+                        height: 100,
+                        maxLines: 3,
+                        textChanged: (String input) {},
+                      ),
+                      const SizedBox(height: 5),
+                      const DescriptionText(text: "Category"),
+                      buildButtons(widget.selectedCategory,
+                          (int index) => provider.selectedIndex = index),
+                      const SizedBox(height: 5),
+                      content.getContent(
+                        provider.selectedIndex,
+                        examContent: ExamContent(
+                            onAttachment: () => showNotesModal(context,
+                                addNotes: () {}, importNotes: () {})),
+                        taskContent: const TaskContent(title: "SP"),
+                        projectContent: ProjectContent(
+                            onTextChanged: (value) {},
+                            onAttachment: () => showNotesModal(context,
+                                addNotes: () {}, importNotes: () {})),
+                      ),
+                    ],
+                  ),
+                  const Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20, bottom: 10),
+                    child: MainButton(
+                      onTap: () {},
+                      child: Text("Submit",
+                          style: EduPotDarkTextTheme.headline2(1)),
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 15),
-              buildHeadline(title, context),
-              const SizedBox(height: 15),
-              buildInputField("Title", "My Task", (input) {
-                setState(() => title = input.isEmpty ? "Task" : input);
-              }),
-              const SizedBox(height: 15),
-              InputField(
-                headline: "Description",
-                placeholder:
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris gravida urna purus, eget mattis eros cursus lorem ipsum...",
-                height: 100,
-                maxLines: 3,
-                textChanged: (String input) {},
-              ),
-              const SizedBox(height: 15),
-              const DescriptionText(text: "Category"),
-              buildButtons(widget.selectedCategory,
-                  (int index) => provider.selectedIndex = index),
-              const SizedBox(height: 15),
-              content.getContent(
-                provider.selectedIndex,
-                examContent: ExamContent(
-                    onAttachment: () => showNotesModal(context,
-                        addNotes: () {}, importNotes: () {})),
-                taskContent: const TaskContent(title: "SP"),
-                projectContent: ProjectContent(
-                  onTextChanged: (value) {},
-                  onAttachment: () => showNotesModal(context,
-                      addNotes: () {}, importNotes: () {}),
-                ),
-              ),
-              const SizedBox(height: 30),
-              MainButton(
-                onTap: () {},
-                child: Text("Submit", style: EduPotDarkTextTheme.headline2(1)),
-              ),
-              const SizedBox(height: 15),
-            ],
+            ),
           ),
         ),
       ),
