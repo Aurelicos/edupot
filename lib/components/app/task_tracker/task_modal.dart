@@ -9,8 +9,9 @@ class TaskModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      child: Stack(
+    return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+      return Stack(
         children: [
           Positioned(
             top: 0,
@@ -31,6 +32,9 @@ class TaskModal extends StatelessWidget {
           Align(
             alignment: Alignment.center,
             child: Container(
+              height: constraints.maxHeight * 0.8 < 350
+                  ? 350
+                  : constraints.maxHeight * 0.8,
               margin: const EdgeInsets.symmetric(horizontal: 20),
               padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
               decoration: BoxDecoration(
@@ -39,6 +43,7 @@ class TaskModal extends StatelessWidget {
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   buildModalButtons(
@@ -72,8 +77,8 @@ class TaskModal extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
+      );
+    });
   }
 
   Widget buildModalButtons(BuildContext context, String iconPath, String title,
