@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 @RoutePage()
 class AddTaskPage extends StatefulWidget {
   final int selectedCategory;
+
   const AddTaskPage({super.key, required this.selectedCategory});
 
   @override
@@ -26,7 +27,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
   @override
   void initState() {
     super.initState();
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final provider = Provider.of<SelectionProvider>(context, listen: false);
       provider.selectedIndex = widget.selectedCategory;
@@ -46,41 +46,19 @@ class _AddTaskPageState extends State<AddTaskPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.07,
-              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.07),
               InkWell(
                 onTap: () => context.popRoute(),
-                child: const Icon(
-                  Icons.arrow_back_rounded,
-                  size: 32,
-                  color: Colors.white,
-                ),
+                child: const Icon(Icons.arrow_back_rounded,
+                    size: 32, color: Colors.white),
               ),
-              const SizedBox(
-                height: 15,
-              ),
+              const SizedBox(height: 15),
               buildHeadline(title, context),
-              const SizedBox(
-                height: 15,
-              ),
-              InputField(
-                headline: "Title",
-                placeholder: "My Task",
-                validatorText: "",
-                textChanged: (String input) {
-                  setState(() {
-                    if (input.isEmpty) {
-                      title = "Task";
-                    } else {
-                      title = input;
-                    }
-                  });
-                },
-              ),
-              const SizedBox(
-                height: 15,
-              ),
+              const SizedBox(height: 15),
+              buildInputField("Title", "My Task", (input) {
+                setState(() => title = input.isEmpty ? "Task" : input);
+              }),
+              const SizedBox(height: 15),
               InputField(
                 headline: "Description",
                 placeholder:
@@ -89,63 +67,55 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 maxLines: 3,
                 textChanged: (String input) {},
               ),
-              const SizedBox(
-                height: 15,
-              ),
+              const SizedBox(height: 15),
               const DescriptionText(text: "Category"),
-              buildButtons(widget.selectedCategory, (int index) {
-                provider.selectedIndex = index;
-              }),
-              const SizedBox(
-                height: 15,
-              ),
+              buildButtons(widget.selectedCategory,
+                  (int index) => provider.selectedIndex = index),
+              const SizedBox(height: 15),
               content.getContent(
                 provider.selectedIndex,
-                examContent: ExamContent(onAttachment: () {
-                  showModalBottomSheet(
-                    context: context,
-                    backgroundColor: EduPotColorTheme.primaryDark,
-                    builder: (BuildContext context) {
-                      return AddNotesModal(
-                        addNotes: () {},
-                        importNotes: () {},
-                      );
-                    },
-                  );
-                }),
+                examContent: ExamContent(
+                    onAttachment: () => showNotesModal(context,
+                        addNotes: () {}, importNotes: () {})),
                 taskContent: const TaskContent(title: "SP"),
                 projectContent: ProjectContent(
-                    onTextChanged: (String value) {},
-                    onAttachment: () {
-                      showModalBottomSheet(
-                        context: context,
-                        backgroundColor: EduPotColorTheme.primaryDark,
-                        builder: (BuildContext context) {
-                          return AddNotesModal(
-                            addNotes: () {},
-                            importNotes: () {},
-                          );
-                        },
-                      );
-                    }),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              MainButton(
-                onTap: () {},
-                child: Text(
-                  "Submit",
-                  style: EduPotDarkTextTheme.headline2(1),
+                  onTextChanged: (value) {},
+                  onAttachment: () => showNotesModal(context,
+                      addNotes: () {}, importNotes: () {}),
                 ),
               ),
-              const SizedBox(
-                height: 20,
+              const SizedBox(height: 30),
+              MainButton(
+                onTap: () {},
+                child: Text("Submit", style: EduPotDarkTextTheme.headline2(1)),
               ),
+              const SizedBox(height: 15),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget buildInputField(
+          String headline, String placeholder, Function(String)? onChanged) =>
+      InputField(
+        headline: headline,
+        placeholder: placeholder,
+        validatorText: "",
+        textChanged: onChanged ?? (String input) {},
+      );
+
+  void showNotesModal(
+    BuildContext context, {
+    required void Function() addNotes,
+    required void Function() importNotes,
+  }) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: EduPotColorTheme.primaryDark,
+      builder: (BuildContext context) =>
+          AddNotesModal(addNotes: addNotes, importNotes: importNotes),
     );
   }
 }

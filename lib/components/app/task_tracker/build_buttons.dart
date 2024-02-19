@@ -8,29 +8,36 @@ Widget buildButtons(int index, void Function(int) onChange) {
     onChange: onChange,
     gradient: EduPotColorTheme.mainItemGradient,
     index: index,
-    dropdownButtonStyle: TaskDropdownButtonStyle(
-      height: 56,
-      width: double.infinity,
-      elevation: 1,
-      gradient: EduPotColorTheme.mainItemGradient,
-      borderRadius: BorderRadius.circular(7),
-    ),
-    dropdownStyle: TaskDropdownStyle(
-      elevation: 1,
-      padding: const EdgeInsets.all(5),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(7),
-      ),
-    ),
-    items: [
-      '📝 Exam',
-      '💻 Task',
-      '🗂️ Project',
-    ]
-        .asMap()
-        .entries
-        .map(
-          (item) => TaskDropdownItem<int>(
+    dropdownButtonStyle: createDropdownButtonStyle(),
+    dropdownStyle: createDropdownStyle(),
+    items: createDropdownItems(),
+  );
+}
+
+TaskDropdownButtonStyle createDropdownButtonStyle() {
+  return TaskDropdownButtonStyle(
+    height: 56,
+    width: double.infinity,
+    elevation: 1,
+    gradient: EduPotColorTheme.mainItemGradient,
+    borderRadius: BorderRadius.circular(7),
+  );
+}
+
+TaskDropdownStyle createDropdownStyle() {
+  return TaskDropdownStyle(
+    elevation: 1,
+    padding: const EdgeInsets.all(5),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7)),
+  );
+}
+
+List<TaskDropdownItem<int>> createDropdownItems() {
+  const tasks = ['📝 Exam', '💻 Task', '🗂️ Project'];
+  return tasks
+      .asMap()
+      .entries
+      .map((item) => TaskDropdownItem<int>(
             gradient: EduPotColorTheme.mainItemGradient,
             value: item.key + 1,
             child: Padding(
@@ -40,10 +47,8 @@ Widget buildButtons(int index, void Function(int) onChange) {
                 style: EduPotDarkTextTheme.headline2(1),
               ),
             ),
-          ),
-        )
-        .toList(),
-  );
+          ))
+      .toList();
 }
 
 Widget buildHeadline(String title, BuildContext context) {
@@ -53,23 +58,18 @@ Widget buildHeadline(String title, BuildContext context) {
     children: [
       Text(
         formatText(
-          title,
-          context,
-          EduPotDarkTextTheme.headline1.copyWith(fontSize: 32),
-          MediaQuery.of(context).size.width * 0.75,
-        ),
-        style: EduPotDarkTextTheme.headline1.copyWith(
-          fontSize: 32,
-        ),
+            title,
+            context,
+            EduPotDarkTextTheme.headline1.copyWith(fontSize: 32),
+            MediaQuery.of(context).size.width * 0.75),
+        style: EduPotDarkTextTheme.headline1.copyWith(fontSize: 32),
       ),
       SvgPicture.asset(
         "assets/icons/circle_big.svg",
         width: 32,
         height: 32,
         colorFilter: const ColorFilter.mode(
-          EduPotColorTheme.examsOrange,
-          BlendMode.srcIn,
-        ),
+            EduPotColorTheme.examsOrange, BlendMode.srcIn),
       ),
     ],
   );
@@ -101,4 +101,18 @@ String formatText(
   }
 
   return input;
+}
+
+int findTruncationIndex(String input, TextStyle textStyle, double maxWidth) {
+  for (int i = input.length; i > 0; i--) {
+    TextPainter painter = TextPainter(
+      textDirection: TextDirection.ltr,
+      text: TextSpan(text: "${input.substring(0, i)}...", style: textStyle),
+    );
+    painter.layout();
+    if (painter.width <= maxWidth) {
+      return i;
+    }
+  }
+  return input.length;
 }
