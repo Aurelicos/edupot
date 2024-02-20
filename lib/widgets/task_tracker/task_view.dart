@@ -1,78 +1,65 @@
+import 'package:edupot/models/exam.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class TaskView extends StatelessWidget {
   final String title;
-  final List<dynamic> array;
   final Color? color;
+  final List<dynamic> entry;
   const TaskView({
     super.key,
     this.color,
+    required this.entry,
     required this.title,
-    required this.array,
   });
 
   @override
   Widget build(BuildContext context) {
-    List<dynamic> sortedArray = List.from(array)
-      ..sort((a, b) => a["finalDate"].compareTo(b["finalDate"]));
-
-    return sortedArray.isNotEmpty
+    entry.sort((a, b) => a.finalDate.compareTo(b.finalDate));
+    return entry.isNotEmpty
         ? Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(
-                height: 25,
-              ),
-              Text(
-                title,
-                style: EduPotDarkTextTheme.headline4,
-              ),
-              for (int i = 0; i < sortedArray.length; i++)
-                Container(
-                  margin: const EdgeInsets.only(top: 10),
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 15,
-                    horizontal: 20,
-                  ),
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: EduPotColorTheme.primaryBlueDark,
-                  ),
-                  child: Row(
-                    children: [
-                      SvgPicture.asset(
-                        "assets/icons/circle.svg",
-                        colorFilter: color != null
-                            ? ColorFilter.mode(
-                                color!,
-                                BlendMode.srcIn,
-                              )
-                            : null,
-                      ),
-                      const SizedBox(
-                        width: 15,
-                      ),
-                      Text(
-                        sortedArray[i]["title"],
-                        style: EduPotDarkTextTheme.headline2(1),
-                      ),
-                      const Spacer(),
-                      Text(
-                        formatDate(sortedArray[i]["finalDate"])["finalDate"],
-                        style: EduPotDarkTextTheme.headline2(1).copyWith(
-                          color: getColorForDays(formatDate(
-                              sortedArray[i]["finalDate"])["daysUntil"]),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+              const SizedBox(height: 25),
+              Text(title, style: EduPotDarkTextTheme.headline4),
+              ...entry.map((entry) => buildEntryItem(context, entry)),
             ],
           )
         : const SizedBox();
+  }
+
+  Widget buildEntryItem(BuildContext context, ExamModel exam) {
+    Map<String, dynamic> formattedDate = formatDate(exam.finalDate);
+
+    return Container(
+      margin: const EdgeInsets.only(top: 10),
+      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: EduPotColorTheme.primaryBlueDark,
+      ),
+      child: Row(
+        children: [
+          SvgPicture.asset(
+            "assets/icons/circle.svg",
+            colorFilter: color != null
+                ? ColorFilter.mode(color!, BlendMode.srcIn)
+                : null,
+          ),
+          const SizedBox(width: 15),
+          Text(exam.title, style: EduPotDarkTextTheme.headline2(1)),
+          const Spacer(),
+          Text(
+            formattedDate["finalDate"],
+            style: EduPotDarkTextTheme.headline2(1).copyWith(
+              color: getColorForDays(formattedDate["daysUntil"]),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Color getColorForDays(int daysUntil) {

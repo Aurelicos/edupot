@@ -1,3 +1,4 @@
+import 'package:edupot/providers/entry_provider.dart';
 import 'package:edupot/providers/navbar_provider.dart';
 import 'package:edupot/providers/selection_provider.dart';
 import 'package:edupot/providers/user_provider.dart';
@@ -27,7 +28,8 @@ class App extends StatelessWidget {
       providers: [
         ChangeNotifierProvider.value(value: UserProvider()),
         ChangeNotifierProvider.value(value: NavbarProvider()),
-        ChangeNotifierProvider.value(value: SelectionProvider())
+        ChangeNotifierProvider.value(value: SelectionProvider()),
+        ChangeNotifierProvider.value(value: EntryProvider())
       ],
       child: MaterialApp.router(
         title: 'EduPot',
