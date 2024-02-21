@@ -28,6 +28,12 @@ class _AddTaskPageState extends State<AddTaskPage> {
     "My Project",
   ];
 
+  List<Color> colorsPalete = [
+    EduPotColorTheme.examsOrange,
+    EduPotColorTheme.tasksPurple,
+    EduPotColorTheme.projectBlue,
+  ];
+
   String title = "";
   String simpleTitle = "MP";
 
@@ -67,7 +73,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                         child: const Icon(Icons.arrow_back_rounded,
                             size: 32, color: Colors.white),
                       ),
-                      const SizedBox(height: 5),
+                      const SizedBox(height: 15),
                       buildHeadline(
                         title.isEmpty
                             ? headlines[provider.selectedIndex]
@@ -75,8 +81,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
                         context,
                         isProject: provider.selectedIndex == 2,
                         hexagonText: simpleTitle.toUpperCase(),
+                        color: colorsPalete[provider.selectedIndex],
                       ),
-                      const SizedBox(height: 5),
+                      const SizedBox(height: 15),
                       buildInputField(
                           "Title", headlines[provider.selectedIndex], (input) {
                         setState(() => title = input);
@@ -92,7 +99,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                       ),
                       const SizedBox(height: 5),
                       const DescriptionText(text: "Category"),
-                      buildButtons(widget.selectedCategory,
+                      buildButtons(provider.selectedIndex,
                           (int index) => provider.selectedIndex = index),
                       const SizedBox(height: 5),
                       content.getContent(

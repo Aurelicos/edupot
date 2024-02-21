@@ -53,7 +53,7 @@ List<TaskDropdownItem<int>> createDropdownItems() {
 }
 
 Widget buildHeadline(String title, BuildContext context,
-    {bool isProject = false, String hexagonText = "MP"}) {
+    {bool isProject = false, String hexagonText = "MP", required Color color}) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     crossAxisAlignment: CrossAxisAlignment.center,
@@ -88,8 +88,7 @@ Widget buildHeadline(String title, BuildContext context,
         "assets/icons/circle_big.svg",
         width: 32,
         height: 32,
-        colorFilter: const ColorFilter.mode(
-            EduPotColorTheme.examsOrange, BlendMode.srcIn),
+        colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
       ),
     ],
   );
