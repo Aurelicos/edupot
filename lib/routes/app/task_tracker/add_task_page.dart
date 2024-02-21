@@ -53,80 +53,84 @@ class _AddTaskPageState extends State<AddTaskPage> {
 
     return PrimaryScaffold(
       navBar: false,
-      child: SingleChildScrollView(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minHeight: MediaQuery.of(context).size.height,
-          ),
-          child: IntrinsicHeight(
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 45),
-                      InkWell(
-                        onTap: () => context.popRoute(),
-                        child: const Icon(Icons.arrow_back_rounded,
-                            size: 32, color: Colors.white),
-                      ),
-                      const SizedBox(height: 15),
-                      buildHeadline(
-                        title.isEmpty
-                            ? headlines[provider.selectedIndex]
-                            : title,
-                        context,
-                        isProject: provider.selectedIndex == 2,
-                        hexagonText: simpleTitle.toUpperCase(),
-                        color: colorsPalete[provider.selectedIndex],
-                      ),
-                      const SizedBox(height: 15),
-                      buildInputField(
-                          "Title", headlines[provider.selectedIndex], (input) {
-                        setState(() => title = input);
-                      }),
-                      const SizedBox(height: 5),
-                      InputField(
-                        headline: "Descriptrion",
-                        placeholder:
-                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
-                        height: 100,
-                        maxLines: 3,
-                        textChanged: (String input) {},
-                      ),
-                      const SizedBox(height: 5),
-                      const DescriptionText(text: "Category"),
-                      buildButtons(provider.selectedIndex,
-                          (int index) => provider.selectedIndex = index),
-                      const SizedBox(height: 5),
-                      content.getContent(
-                        provider.selectedIndex,
-                        examContent: ExamContent(
-                            onAttachment: () => showNotesModal(context,
-                                addNotes: () {}, importNotes: () {})),
-                        taskContent: const TaskContent(title: "SP"),
-                        projectContent: ProjectContent(
-                            onTextChanged: (value) {
-                              setState(() => simpleTitle = value);
-                            },
-                            onAttachment: () => showNotesModal(context,
-                                addNotes: () {}, importNotes: () {})),
-                      ),
-                    ],
-                  ),
-                  const Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20, bottom: 10),
-                    child: MainButton(
-                      onTap: () {},
-                      child: Text("Submit",
-                          style: EduPotDarkTextTheme.headline2(1)),
+      child: SafeArea(
+        child: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: MediaQuery.of(context).size.height -
+                  MediaQuery.of(context).padding.top,
+            ),
+            child: IntrinsicHeight(
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 15),
+                        InkWell(
+                          onTap: () => context.popRoute(),
+                          child: const Icon(Icons.arrow_back_rounded,
+                              size: 32, color: Colors.white),
+                        ),
+                        const SizedBox(height: 15),
+                        buildHeadline(
+                          title.isEmpty
+                              ? headlines[provider.selectedIndex]
+                              : title,
+                          context,
+                          isProject: provider.selectedIndex == 2,
+                          hexagonText: simpleTitle.toUpperCase(),
+                          color: colorsPalete[provider.selectedIndex],
+                        ),
+                        const SizedBox(height: 15),
+                        buildInputField(
+                            "Title", headlines[provider.selectedIndex],
+                            (input) {
+                          setState(() => title = input);
+                        }),
+                        const SizedBox(height: 5),
+                        InputField(
+                          headline: "Descriptrion",
+                          placeholder:
+                              "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
+                          height: 100,
+                          maxLines: 3,
+                          textChanged: (String input) {},
+                        ),
+                        const SizedBox(height: 5),
+                        const DescriptionText(text: "Category"),
+                        buildButtons(provider.selectedIndex,
+                            (int index) => provider.selectedIndex = index),
+                        const SizedBox(height: 5),
+                        content.getContent(
+                          provider.selectedIndex,
+                          examContent: ExamContent(
+                              onAttachment: () => showNotesModal(context,
+                                  addNotes: () {}, importNotes: () {})),
+                          taskContent: const TaskContent(title: "SP"),
+                          projectContent: ProjectContent(
+                              onTextChanged: (value) {
+                                setState(() => simpleTitle = value);
+                              },
+                              onAttachment: () => showNotesModal(context,
+                                  addNotes: () {}, importNotes: () {})),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
+                    const Spacer(),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20, bottom: 10),
+                      child: MainButton(
+                        onTap: () {},
+                        child: Text("Submit",
+                            style: EduPotDarkTextTheme.headline2(1)),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
