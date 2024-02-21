@@ -22,7 +22,14 @@ class AddTaskPage extends StatefulWidget {
 }
 
 class _AddTaskPageState extends State<AddTaskPage> {
-  String title = "Task";
+  List<String> headlines = [
+    "My Exam",
+    "My Task",
+    "My Project",
+  ];
+
+  String title = "";
+  String simpleTitle = "MP";
 
   @override
   void initState() {
@@ -33,7 +40,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
     });
   }
 
-  @override
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<SelectionProvider>();
@@ -62,14 +68,22 @@ class _AddTaskPageState extends State<AddTaskPage> {
                             size: 32, color: Colors.white),
                       ),
                       const SizedBox(height: 5),
-                      buildHeadline(title, context),
+                      buildHeadline(
+                        title.isEmpty
+                            ? headlines[provider.selectedIndex]
+                            : title,
+                        context,
+                        isProject: provider.selectedIndex == 2,
+                        hexagonText: simpleTitle.toUpperCase(),
+                      ),
                       const SizedBox(height: 5),
-                      buildInputField("Title", "My Task", (input) {
-                        setState(() => title = input.isEmpty ? "Task" : input);
+                      buildInputField(
+                          "Title", headlines[provider.selectedIndex], (input) {
+                        setState(() => title = input);
                       }),
                       const SizedBox(height: 5),
                       InputField(
-                        headline: "Description",
+                        headline: "Descriptrion",
                         placeholder:
                             "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
                         height: 100,
@@ -88,7 +102,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                 addNotes: () {}, importNotes: () {})),
                         taskContent: const TaskContent(title: "SP"),
                         projectContent: ProjectContent(
-                            onTextChanged: (value) {},
+                            onTextChanged: (value) {
+                              setState(() => simpleTitle = value);
+                            },
                             onAttachment: () => showNotesModal(context,
                                 addNotes: () {}, importNotes: () {})),
                       ),

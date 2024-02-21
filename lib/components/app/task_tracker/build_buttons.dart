@@ -1,4 +1,5 @@
 import 'package:edupot/utils/themes/theme.dart';
+import 'package:edupot/widgets/common/hexagon.dart';
 import 'package:edupot/widgets/task_tracker/task_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -51,18 +52,37 @@ List<TaskDropdownItem<int>> createDropdownItems() {
       .toList();
 }
 
-Widget buildHeadline(String title, BuildContext context) {
+Widget buildHeadline(String title, BuildContext context,
+    {bool isProject = false, String hexagonText = "MP"}) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
-      Text(
-        formatText(
-            title,
-            context,
-            EduPotDarkTextTheme.headline1.copyWith(fontSize: 32),
-            MediaQuery.of(context).size.width * 0.75),
-        style: EduPotDarkTextTheme.headline1.copyWith(fontSize: 32),
+      Row(
+        children: [
+          isProject
+              ? Row(
+                  children: [
+                    Hexagon(
+                      title: hexagonText,
+                      height: 42,
+                      width: 42,
+                      fontSize: 18,
+                    ),
+                    const SizedBox(width: 10)
+                  ],
+                )
+              : const SizedBox(),
+          Text(
+            formatText(
+                title,
+                context,
+                EduPotDarkTextTheme.headline1.copyWith(fontSize: 32),
+                MediaQuery.of(context).size.width * 0.75 -
+                    (isProject ? 42 : 0)),
+            style: EduPotDarkTextTheme.headline1.copyWith(fontSize: 32),
+          ),
+        ],
       ),
       SvgPicture.asset(
         "assets/icons/circle_big.svg",

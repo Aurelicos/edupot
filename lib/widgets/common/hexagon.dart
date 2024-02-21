@@ -7,8 +7,11 @@ class Hexagon extends StatelessWidget {
   final double height;
   final double width;
 
+  final double? fontSize;
+
   const Hexagon({
     super.key,
+    this.fontSize,
     required this.title,
     required this.height,
     required this.width,
@@ -28,7 +31,7 @@ class Hexagon extends StatelessWidget {
           title,
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: height * 0.5,
+            fontSize: fontSize ?? height * 0.5,
             fontWeight: FontWeight.w900,
           ),
         ),
