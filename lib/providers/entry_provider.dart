@@ -13,11 +13,15 @@ class EntryProvider extends ChangeNotifier {
   List<ExamModel> get exams => _exams;
   List<TaskModel> get tasks => _tasks;
 
-  Future<bool> fetchEntries(String userId, {bool forceRefresh = false}) async {
+  Future<Map<String, bool>> fetchEntries(String userId,
+      {bool forceRefresh = false}) async {
     if (!forceRefresh &&
         _lastFetchTime != null &&
         DateTime.now().difference(_lastFetchTime!).inMinutes < 15) {
-      return true;
+      return {
+        "cached": true,
+        "success": true,
+      };
     }
 
     try {
@@ -33,14 +37,20 @@ class EntryProvider extends ChangeNotifier {
       _lastFetchTime = DateTime.now();
 
       notifyListeners();
-      return true;
+      return {
+        "cached": false,
+        "success": true,
+      };
     } catch (e) {
       log(e.toString(),
           name: "Error Fetching Entries",
           level: 2000,
           error: e,
           stackTrace: StackTrace.current);
-      return false;
+      return {
+        "cached": false,
+        "success": false,
+      };
     }
   }
 }
