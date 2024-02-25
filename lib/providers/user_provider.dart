@@ -108,4 +108,12 @@ class UserProvider extends ChangeNotifier {
       };
     }
   }
+
+  Future<void> clearUser() async {
+    _user = null;
+    _email = null;
+    _firstName = null;
+    _lastName = null;
+    _displayName = null;
+  }
 }

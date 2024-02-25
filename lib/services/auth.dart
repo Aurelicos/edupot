@@ -1,8 +1,9 @@
 import 'package:edupot/providers/user_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-class AuthService {
+class AuthService extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Stream<User?> get authStateChanges => _auth.authStateChanges();
@@ -65,5 +66,6 @@ class AuthService {
     if (currentUser?.providerData[0].providerId == 'google.com') {
       await googleSignIn.signOut();
     }
+    notifyListeners();
   }
 }

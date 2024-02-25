@@ -53,9 +53,7 @@ class _TaskTrackerPageState extends State<TaskTrackerPage> {
         entryProvider
             .fetchExams(userProvider.user!.uid ?? "")
             .then((bool value) {
-          setState(() {
-            _isLoading = false;
-          });
+          _isLoading = false;
         });
       });
     });

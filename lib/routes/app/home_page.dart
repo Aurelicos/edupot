@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:edupot/providers/navbar_provider.dart';
 import 'package:edupot/providers/user_provider.dart';
 import 'package:edupot/routes/app/task_tracker/task_tracker_page.dart';
 import 'package:edupot/routes/splash_screen.dart';
@@ -29,6 +30,10 @@ class _HomePageState extends State<HomePage> {
       if (user == null && mounted) {
         context.replaceRoute(const RegisterRoute());
       }
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final provider = Provider.of<NavbarProvider>(context, listen: false);
+      provider.selectedIndex = 1;
     });
   }
 
