@@ -43,25 +43,19 @@ class EduPotColorTheme {
 
   static const lightGrayCardGradient = LinearGradient(
     transform: GradientRotation(pi / 2),
-    colors: [
-      Color.fromRGBO(165, 175, 196, 0.6),
-      Color.fromRGBO(109, 123, 152, 0.6)
-    ],
+    colors: [Color(0x99A5AFC4), Color(0x996D7B98)],
   );
 
   static const purpleCardGradient = LinearGradient(
     transform: GradientRotation(pi / 2),
-    colors: [
-      Color.fromRGBO(101, 78, 163, 0.4),
-      Color.fromRGBO(234, 175, 200, 0.4)
-    ],
+    colors: [Color(0x66654EA3), Color(0x66EAAFC8)],
   );
 
   static const darkGrayCardGradient = LinearGradient(
     transform: GradientRotation(pi / 2),
     colors: [
-      Color.fromRGBO(0, 0, 0, 0.4),
-      Color.fromRGBO(255, 255, 255, 0.1),
+      Color(0x66000000),
+      Color(0x18FFFFFF),
     ],
   );
 
@@ -69,8 +63,8 @@ class EduPotColorTheme {
     begin: Alignment(0.76, -0.66),
     end: Alignment(-0.76, 0.66),
     colors: [
-      Color.fromRGBO(255, 201, 44, 1),
-      Color.fromRGBO(253, 147, 113, 1),
+      Color(0xFFFFC92C),
+      Color(0xFFFD9371),
     ],
   );
 
@@ -79,6 +73,22 @@ class EduPotColorTheme {
       Color(0xFF313346),
       Color(0XFF54566E),
     ],
+  );
+
+  static const shimmerGradient = LinearGradient(
+    colors: [
+      Color(0xFF1E203B),
+      Color(0xFF171930),
+      Color(0xFF1E203B),
+    ],
+    stops: [
+      0.1,
+      0.3,
+      0.4,
+    ],
+    begin: Alignment(-1.0, -0.3),
+    end: Alignment(1.0, 0.3),
+    tileMode: TileMode.clamp,
   );
 }
 

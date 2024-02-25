@@ -1,40 +1,59 @@
 import 'package:edupot/models/exam.dart';
+import 'package:edupot/models/task.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class TaskView extends StatelessWidget {
-  final String title;
   final Color? color;
   final List<dynamic> entry;
+  final bool isTask;
   const TaskView({
     super.key,
     this.color,
+    this.isTask = false,
     required this.entry,
-    required this.title,
   });
 
   @override
   Widget build(BuildContext context) {
-    entry.sort((a, b) => a.finalDate.compareTo(b.finalDate));
+    entry.sort((a, b) {
+      DateTime dateA =
+          isTask ? (a as TaskModel).finalDate : (a as ExamModel).finalDate;
+      DateTime dateB =
+          isTask ? (b as TaskModel).finalDate : (b as ExamModel).finalDate;
+      return dateA.compareTo(dateB);
+    });
     return entry.isNotEmpty
         ? Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 25),
-              Text(title, style: EduPotDarkTextTheme.headline4),
-              ...entry.map((entry) => buildEntryItem(context, entry)),
+              for (var item in entry) buildEntryItem(context, item),
             ],
           )
         : const SizedBox();
   }
 
-  Widget buildEntryItem(BuildContext context, ExamModel exam) {
-    Map<String, dynamic> formattedDate = formatDate(exam.finalDate);
+  Widget buildEntryItem(BuildContext context, dynamic item) {
+    String title;
+    DateTime finalDate;
+
+    if (item is ExamModel) {
+      title = item.title;
+      finalDate = item.finalDate;
+    } else if (item is TaskModel) {
+      title = item.title;
+      finalDate = item.finalDate;
+    } else {
+      throw Exception('Unknown item type');
+    }
+
+    Map<String, dynamic> formattedDate = formatDate(finalDate);
 
     return Container(
       margin: const EdgeInsets.only(top: 10),
-      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+      height: 54,
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
@@ -49,7 +68,7 @@ class TaskView extends StatelessWidget {
                 : null,
           ),
           const SizedBox(width: 15),
-          Text(exam.title, style: EduPotDarkTextTheme.headline2(1)),
+          Text(title, style: EduPotDarkTextTheme.headline2(1)),
           const Spacer(),
           Text(
             formattedDate["finalDate"],
