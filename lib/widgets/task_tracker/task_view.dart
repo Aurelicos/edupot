@@ -1,5 +1,7 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:edupot/models/entries/exam.dart';
 import 'package:edupot/models/entries/task.dart';
+import 'package:edupot/utils/router/router.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -53,30 +55,42 @@ class TaskView extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(top: 10),
       height: 54,
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: EduPotColorTheme.primaryBlueDark,
-      ),
-      child: Row(
-        children: [
-          SvgPicture.asset(
-            "assets/icons/circle.svg",
-            colorFilter: color != null
-                ? ColorFilter.mode(color!, BlendMode.srcIn)
-                : null,
+      child: TextButton(
+        onPressed: () {
+          if (item is ExamModel) {
+            context.pushRoute(AddTaskRoute(selectedCategory: 0, exam: item));
+          } else if (item is TaskModel) {
+            context.pushRoute(AddTaskRoute(selectedCategory: 1, task: item));
+          }
+        },
+        style: ButtonStyle(
+          padding: MaterialStateProperty.all<EdgeInsets>(
+              const EdgeInsets.symmetric(horizontal: 20)),
+          backgroundColor: MaterialStateProperty.all<Color>(
+              EduPotColorTheme.primaryBlueDark),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           ),
-          const SizedBox(width: 15),
-          Text(title, style: EduPotDarkTextTheme.headline2(1)),
-          const Spacer(),
-          Text(
-            formattedDate["finalDate"],
-            style: EduPotDarkTextTheme.headline2(1).copyWith(
-              color: getColorForDays(formattedDate["daysUntil"]),
+        ),
+        child: Row(
+          children: [
+            SvgPicture.asset(
+              "assets/icons/circle.svg",
+              colorFilter: color != null
+                  ? ColorFilter.mode(color!, BlendMode.srcIn)
+                  : null,
             ),
-          ),
-        ],
+            const SizedBox(width: 15),
+            Text(title, style: EduPotDarkTextTheme.headline2(1)),
+            const Spacer(),
+            Text(
+              formattedDate["finalDate"],
+              style: EduPotDarkTextTheme.headline2(1).copyWith(
+                color: getColorForDays(formattedDate["daysUntil"]),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -22,6 +22,9 @@ abstract class _$AppRouter extends RootStackRouter {
         child: AddTaskPage(
           key: args.key,
           selectedCategory: args.selectedCategory,
+          exam: args.exam,
+          task: args.task,
+          project: args.project,
         ),
       );
     },
@@ -88,12 +91,18 @@ class AddTaskRoute extends PageRouteInfo<AddTaskRouteArgs> {
   AddTaskRoute({
     Key? key,
     required int selectedCategory,
+    ExamModel? exam,
+    TaskModel? task,
+    ProjectModel? project,
     List<PageRouteInfo>? children,
   }) : super(
           AddTaskRoute.name,
           args: AddTaskRouteArgs(
             key: key,
             selectedCategory: selectedCategory,
+            exam: exam,
+            task: task,
+            project: project,
           ),
           initialChildren: children,
         );
@@ -108,15 +117,24 @@ class AddTaskRouteArgs {
   const AddTaskRouteArgs({
     this.key,
     required this.selectedCategory,
+    this.exam,
+    this.task,
+    this.project,
   });
 
   final Key? key;
 
   final int selectedCategory;
 
+  final ExamModel? exam;
+
+  final TaskModel? task;
+
+  final ProjectModel? project;
+
   @override
   String toString() {
-    return 'AddTaskRouteArgs{key: $key, selectedCategory: $selectedCategory}';
+    return 'AddTaskRouteArgs{key: $key, selectedCategory: $selectedCategory, exam: $exam, task: $task, project: $project}';
   }
 }
 

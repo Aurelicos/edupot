@@ -11,6 +11,7 @@ class EduPotColorTheme {
   static const examsOrange = Color(0xFFF18C27);
   static const tasksPurple = Color(0xFFBB476C);
   static const projectBlue = Color(0xFF4886E8);
+  static const greyBorder = Color(0xFFA5AFC4);
 
   static const mainItemGradient = LinearGradient(
     begin: Alignment(1.00, 0.00),
@@ -89,6 +90,23 @@ class EduPotColorTheme {
     begin: Alignment(-1.0, -0.3),
     end: Alignment(1.0, 0.3),
     tileMode: TileMode.clamp,
+  );
+
+  static const timeGradient = LinearGradient(
+    colors: [
+      Color(0xff272943),
+      Color(0x02272943),
+      Color(0xff272943),
+    ],
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    stops: [0, 0.5, 1],
+  );
+
+  static const timeSuggestGradient = LinearGradient(
+    begin: Alignment(-0.68, -0.74),
+    end: Alignment(0.68, 0.74),
+    colors: [Color(0x66A5AFC4), Color(0x666D7B98)],
   );
 }
 

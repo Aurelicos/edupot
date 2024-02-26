@@ -17,6 +17,8 @@ class InputField extends StatelessWidget {
   final int? maxLines;
   final double? height;
 
+  final String? initialValue;
+
   const InputField({
     super.key,
     required this.headline,
@@ -28,6 +30,7 @@ class InputField extends StatelessWidget {
     this.maxLength,
     this.maxLines = 1,
     this.height,
+    this.initialValue,
   });
 
   @override
@@ -55,6 +58,7 @@ class InputField extends StatelessWidget {
             child: TextFormField(
               maxLength: maxLength,
               maxLines: maxLines,
+              initialValue: initialValue,
               autovalidateMode: AutovalidateMode.onUserInteraction,
               onChanged: (input) {
                 bool isValid = false;
