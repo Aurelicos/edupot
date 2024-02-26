@@ -1,5 +1,6 @@
 import 'package:edupot/providers/entry_provider.dart';
 import 'package:edupot/providers/navbar_provider.dart';
+import 'package:edupot/providers/project_provider.dart';
 import 'package:edupot/providers/selection_provider.dart';
 import 'package:edupot/providers/user_provider.dart';
 import 'package:edupot/utils/themes/theme.dart';
@@ -33,7 +34,8 @@ class App extends StatelessWidget {
         ChangeNotifierProvider.value(value: UserProvider()),
         ChangeNotifierProvider.value(value: NavbarProvider()),
         ChangeNotifierProvider.value(value: SelectionProvider()),
-        ChangeNotifierProvider.value(value: EntryProvider())
+        ChangeNotifierProvider.value(value: EntryProvider()),
+        ChangeNotifierProvider.value(value: ProjectProvider()),
       ],
       child: MaterialApp.router(
         title: 'EduPot',

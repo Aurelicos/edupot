@@ -3,6 +3,7 @@ import 'package:edupot/components/app/primary_scaffold.dart';
 import 'package:edupot/components/app/task_tracker/task_modal.dart';
 import 'package:edupot/components/auth/clickable_text.dart';
 import 'package:edupot/providers/entry_provider.dart';
+import 'package:edupot/providers/project_provider.dart';
 import 'package:edupot/providers/user_provider.dart';
 import 'package:edupot/utils/common/shimmer.dart';
 import 'package:edupot/utils/router/router.dart';
@@ -42,6 +43,10 @@ class _TaskTrackerPageState extends State<TaskTrackerPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final userProvider = context.read<UserProvider>();
       final entryProvider = context.read<EntryProvider>();
+      final projectProvider = context.read<ProjectProvider>();
+
+      projectProvider.fetchProjects(userProvider.user!.uid ?? "");
+
       entryProvider.fetchEntries(userProvider.user!.uid ?? "").then((value) {
         if (value["cached"] == true) {
           setState(() => _isLoading = false);

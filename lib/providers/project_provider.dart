@@ -1,19 +1,17 @@
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:edupot/models/entries/exam.dart';
-import 'package:edupot/models/entries/task.dart';
+import 'package:edupot/models/projects/entry_project.dart';
+import 'package:edupot/models/projects/project.dart';
 import 'package:flutter/material.dart';
 
-class EntryProvider extends ChangeNotifier {
+class ProjectProvider extends ChangeNotifier {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
-  List<ExamModel> _exams = [];
-  List<TaskModel> _tasks = [];
+  List<ProjectModel> _projects = [];
   DateTime? _lastFetchTime;
 
-  List<ExamModel> get exams => _exams;
-  List<TaskModel> get tasks => _tasks;
+  List<ProjectModel> get projects => _projects;
 
-  Future<Map<String, bool>> fetchEntries(String userId,
+  Future<Map<String, bool>> fetchProjects(String userId,
       {bool forceRefresh = false}) async {
     if (!forceRefresh &&
         _lastFetchTime != null &&
@@ -25,15 +23,19 @@ class EntryProvider extends ChangeNotifier {
     }
 
     try {
-      final examsFuture =
-          _db.collection('entry').doc(userId).collection("exams").get();
-      final tasksFuture =
-          _db.collection('entry').doc(userId).collection("tasks").get();
+      final projectsFuture = await _db.collection('entry').doc(userId).get();
+      final projectsList = EntryProjectModel.fromDoc(projectsFuture);
 
-      final results = await Future.wait([examsFuture, tasksFuture]);
+      final List<ProjectModel> temporaryProjects = [];
 
-      _exams = results[0].docs.map((doc) => ExamModel.fromDoc(doc)!).toList();
-      _tasks = results[1].docs.map((doc) => TaskModel.fromDoc(doc)!).toList();
+      for (DocumentReference<Map<String, dynamic>> projectRef
+          in projectsList!.projects) {
+        final projectData = ProjectModel.fromDoc(await projectRef.get());
+        temporaryProjects.add(projectData!);
+      }
+
+      _projects = temporaryProjects;
+
       _lastFetchTime = DateTime.now();
 
       notifyListeners();
@@ -42,6 +44,7 @@ class EntryProvider extends ChangeNotifier {
         "success": true,
       };
     } catch (e) {
+      print(e);
       log(e.toString(),
           name: "Error Fetching Entries",
           level: 2000,

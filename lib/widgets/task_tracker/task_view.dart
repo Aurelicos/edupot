@@ -1,5 +1,5 @@
-import 'package:edupot/models/exam.dart';
-import 'package:edupot/models/task.dart';
+import 'package:edupot/models/entries/exam.dart';
+import 'package:edupot/models/entries/task.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
