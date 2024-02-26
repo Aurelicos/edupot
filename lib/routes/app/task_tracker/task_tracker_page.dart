@@ -80,36 +80,41 @@ class _TaskTrackerPageState extends State<TaskTrackerPage> {
           child: LayoutBuilder(builder: (context, constraints) {
             return SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
-              child: Container(
-                height: constraints.maxHeight,
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.045,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Task Tracker',
-                          style: EduPotDarkTextTheme.headline1,
-                        ),
-                        SizedBox(
-                          width: 45,
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: SvgPicture.asset("assets/icons/search.svg"),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: constraints.maxHeight,
+                ),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.045,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'Task Tracker',
+                            style: EduPotDarkTextTheme.headline1,
                           ),
-                        )
-                      ],
-                    ),
-                    ProjectView(
-                      itemArray: array,
-                    ),
-                    _isLoading ? _loadingUI() : _buildContent(context),
-                  ],
+                          SizedBox(
+                            width: 45,
+                            child: GestureDetector(
+                              onTap: () {},
+                              child:
+                                  SvgPicture.asset("assets/icons/search.svg"),
+                            ),
+                          )
+                        ],
+                      ),
+                      ProjectView(
+                        itemArray: array,
+                      ),
+                      _isLoading ? _loadingUI() : _buildContent(context),
+                    ],
+                  ),
                 ),
               ),
             );
@@ -138,24 +143,27 @@ class _TaskTrackerPageState extends State<TaskTrackerPage> {
   }
 
   Widget _buildLoading() {
-    return Shimmer(
-      linearGradient: EduPotColorTheme.shimmerGradient,
-      child: Column(
-        children: [
-          for (int i = 0; i < 2; i++)
-            ShimmerLoading(
-              isLoading: true,
-              child: Container(
-                width: double.infinity,
-                margin: const EdgeInsets.only(top: 10),
-                height: 54,
-                decoration: BoxDecoration(
-                  color: EduPotColorTheme.primaryBlueDark,
-                  borderRadius: BorderRadius.circular(10),
+    return SizedBox(
+      height: 128,
+      child: Shimmer(
+        linearGradient: EduPotColorTheme.shimmerGradient,
+        child: Column(
+          children: [
+            for (int i = 0; i < 2; i++)
+              ShimmerLoading(
+                isLoading: true,
+                child: Container(
+                  width: double.infinity,
+                  margin: const EdgeInsets.only(top: 10),
+                  height: 54,
+                  decoration: BoxDecoration(
+                    color: EduPotColorTheme.primaryBlueDark,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }
