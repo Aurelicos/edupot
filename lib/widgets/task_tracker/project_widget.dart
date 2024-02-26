@@ -1,3 +1,4 @@
+import 'package:edupot/models/projects/project.dart';
 import 'package:edupot/utils/common/time_format.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/widgets/common/hexagon.dart';
@@ -6,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class ProjectWidget extends StatelessWidget {
-  final List<dynamic> itemArray;
+  final List<ProjectModel> itemArray;
   const ProjectWidget({super.key, required this.itemArray});
 
   @override
@@ -40,7 +41,7 @@ class ProjectWidget extends StatelessWidget {
                   Row(
                     children: [
                       Hexagon(
-                        title: itemArray[index]["iconTitle"],
+                        title: itemArray[index].iconTitle,
                         height: 28,
                         width: 28,
                       ),
@@ -48,7 +49,7 @@ class ProjectWidget extends StatelessWidget {
                         width: 10,
                       ),
                       Text(
-                        itemArray[index]["title"],
+                        itemArray[index].name,
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 22,
@@ -79,7 +80,7 @@ class ProjectWidget extends StatelessWidget {
                         width: 5,
                       ),
                       Text(
-                        formatTime(itemArray[index]["finalDate"]),
+                        formatTime(itemArray[index].finalDate),
                         style: EduPotDarkTextTheme.headline2(0.6),
                       ),
                       const SizedBox(
@@ -94,12 +95,15 @@ class ProjectWidget extends StatelessWidget {
                         width: 5,
                       ),
                       Text(
-                        "${itemArray[index]["tasks"].length} Tasks",
+                        "${itemArray[index].tasks.length} Tasks",
                         style: EduPotDarkTextTheme.headline2(0.6),
                       ),
                     ],
                   ),
-                  indicator(10, 7),
+                  indicator(
+                    itemArray[index].tasks.length,
+                    itemArray[index].finished,
+                  ),
                 ],
               ),
             ),

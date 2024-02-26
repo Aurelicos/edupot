@@ -15,7 +15,7 @@ class ProjectProvider extends ChangeNotifier {
       {bool forceRefresh = false}) async {
     if (!forceRefresh &&
         _lastFetchTime != null &&
-        DateTime.now().difference(_lastFetchTime!).inMinutes < 15) {
+        DateTime.now().difference(_lastFetchTime!).inHours < 2) {
       return {
         "cached": true,
         "success": true,
@@ -44,7 +44,6 @@ class ProjectProvider extends ChangeNotifier {
         "success": true,
       };
     } catch (e) {
-      print(e);
       log(e.toString(),
           name: "Error Fetching Entries",
           level: 2000,

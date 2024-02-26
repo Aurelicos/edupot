@@ -1,10 +1,11 @@
+import 'package:edupot/models/projects/project.dart';
 import 'package:edupot/utils/common/time_format.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/widgets/common/hexagon.dart';
 import 'package:flutter/material.dart';
 
 class GridProject extends StatelessWidget {
-  final List<dynamic> itemArray;
+  final List<ProjectModel> itemArray;
   const GridProject({super.key, required this.itemArray});
 
   @override
@@ -49,7 +50,7 @@ class GridProject extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Hexagon(
-                    title: itemArray[i]["iconTitle"],
+                    title: itemArray[i].iconTitle,
                     height: 24,
                     width: 24,
                   ),
@@ -57,7 +58,7 @@ class GridProject extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        formatTitle(itemArray[i]["title"]),
+                        formatTitle(itemArray[i].name),
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 20,
@@ -65,7 +66,7 @@ class GridProject extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        formatTime(itemArray[i]["finalDate"]),
+                        formatTime(itemArray[i].finalDate),
                         style: EduPotDarkTextTheme.headline2(0.6).copyWith(
                           fontSize: 14,
                         ),
@@ -73,7 +74,7 @@ class GridProject extends StatelessWidget {
                     ],
                   ),
                   Text(
-                    "${itemArray[i]["finished"]} out of ${itemArray[i]["tasks"].length}",
+                    "${itemArray[i].finished} out of ${itemArray[i].tasks.length}",
                     style: EduPotDarkTextTheme.headline3,
                   ),
                 ],

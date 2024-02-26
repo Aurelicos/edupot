@@ -1,10 +1,11 @@
+import 'package:edupot/models/projects/project.dart';
 import 'package:edupot/utils/common/time_format.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class ListProject extends StatelessWidget {
-  final List<dynamic> itemArray;
+  final List<ProjectModel> itemArray;
   const ListProject({super.key, required this.itemArray});
 
   @override
@@ -59,7 +60,7 @@ class ListProject extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        formatTitle(itemArray[i]["title"]),
+                        formatTitle(itemArray[i].name),
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 20,
@@ -93,7 +94,7 @@ class ListProject extends StatelessWidget {
                         width: 5,
                       ),
                       Text(
-                        formatTime(itemArray[i]["finalDate"]),
+                        formatTime(itemArray[i].finalDate),
                         style: EduPotDarkTextTheme.headline2(0.6).copyWith(
                           fontSize: 14,
                         ),
@@ -114,7 +115,7 @@ class ListProject extends StatelessWidget {
                         width: 5,
                       ),
                       Text(
-                        "${itemArray[i]["finished"]} out of ${itemArray[i]["tasks"].length}",
+                        "${itemArray[i].finished} out of ${itemArray[i].tasks.length}",
                         style: EduPotDarkTextTheme.headline3,
                       ),
                     ],

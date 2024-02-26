@@ -1,10 +1,11 @@
+import 'package:edupot/models/projects/project.dart';
 import 'package:edupot/widgets/task_tracker/grid_project.dart';
 import 'package:edupot/widgets/task_tracker/list_project.dart';
 import 'package:edupot/widgets/task_tracker/project_widget.dart';
 import 'package:flutter/material.dart';
 
 class ProjectView extends StatefulWidget {
-  final List<dynamic> itemArray;
+  final List<ProjectModel> itemArray;
   const ProjectView({super.key, required this.itemArray});
 
   @override
@@ -14,7 +15,7 @@ class ProjectView extends StatefulWidget {
 class _ProjectViewState extends State<ProjectView> {
   @override
   Widget build(BuildContext context) {
-    if (widget.itemArray.length <= 2) {
+    if (widget.itemArray.length <= 2 && widget.itemArray.isNotEmpty) {
       return ProjectWidget(
         itemArray: widget.itemArray,
       );

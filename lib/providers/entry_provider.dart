@@ -17,7 +17,7 @@ class EntryProvider extends ChangeNotifier {
       {bool forceRefresh = false}) async {
     if (!forceRefresh &&
         _lastFetchTime != null &&
-        DateTime.now().difference(_lastFetchTime!).inMinutes < 15) {
+        DateTime.now().difference(_lastFetchTime!).inHours < 2) {
       return {
         "cached": true,
         "success": true,

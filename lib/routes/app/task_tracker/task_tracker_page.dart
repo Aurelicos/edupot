@@ -1,11 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:edupot/components/app/primary_scaffold.dart';
+import 'package:edupot/components/app/task_tracker/loading_content.dart';
 import 'package:edupot/components/app/task_tracker/task_modal.dart';
 import 'package:edupot/components/auth/clickable_text.dart';
 import 'package:edupot/providers/entry_provider.dart';
 import 'package:edupot/providers/project_provider.dart';
 import 'package:edupot/providers/user_provider.dart';
-import 'package:edupot/utils/common/shimmer.dart';
 import 'package:edupot/utils/router/router.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/widgets/task_tracker/project_view.dart';
@@ -23,18 +23,7 @@ class TaskTrackerPage extends StatefulWidget {
 }
 
 class _TaskTrackerPageState extends State<TaskTrackerPage> {
-  bool _isLoading = true;
-
-  List array = [
-    {
-      "title": "Muster Projekt Beispiel",
-      "description": "Description 1",
-      "finalDate": DateTime.parse("2022-01-22 22:18:04Z"),
-      "tasks": ["Task 1", "Task 2", "Task 3", "Task 4", "Task 5"],
-      "finished": 3,
-      "iconTitle": "SP"
-    },
-  ];
+  final List<bool> _isLoading = [true, true];
 
   @override
   void initState() {
@@ -45,14 +34,22 @@ class _TaskTrackerPageState extends State<TaskTrackerPage> {
       final entryProvider = context.read<EntryProvider>();
       final projectProvider = context.read<ProjectProvider>();
 
-      projectProvider.fetchProjects(userProvider.user!.uid ?? "");
+      projectProvider.fetchProjects(userProvider.user!.uid ?? "").then((value) {
+        if (value["cached"] == true) {
+          setState(() => _isLoading[0] = false);
+        } else {
+          Future.delayed(const Duration(milliseconds: 500), () {
+            setState(() => _isLoading[0] = false);
+          });
+        }
+      });
 
       entryProvider.fetchEntries(userProvider.user!.uid ?? "").then((value) {
         if (value["cached"] == true) {
-          setState(() => _isLoading = false);
+          setState(() => _isLoading[1] = false);
         } else {
           Future.delayed(const Duration(milliseconds: 500), () {
-            setState(() => _isLoading = false);
+            setState(() => _isLoading[1] = false);
           });
         }
       });
@@ -62,6 +59,8 @@ class _TaskTrackerPageState extends State<TaskTrackerPage> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final projectProvider =
+        Provider.of<ProjectProvider>(context, listen: false);
 
     return PrimaryScaffold(
       onPressed: () => modal(),
@@ -71,14 +70,22 @@ class _TaskTrackerPageState extends State<TaskTrackerPage> {
           backgroundColor: EduPotColorTheme.primaryDark,
           onRefresh: () async {
             setState(() {
-              _isLoading = true;
+              _isLoading.setAll(0, [true, true]);
             });
             final entryProvider = context.read<EntryProvider>();
+            final projectProvider = context.read<ProjectProvider>();
+            projectProvider
+                .fetchProjects(userProvider.user!.uid ?? "", forceRefresh: true)
+                .then((value) {
+              Future.delayed(const Duration(milliseconds: 500), () {
+                setState(() => _isLoading[0] = false);
+              });
+            });
             entryProvider
                 .fetchEntries(userProvider.user!.uid ?? "", forceRefresh: true)
                 .then((value) {
               Future.delayed(const Duration(milliseconds: 500), () {
-                setState(() => _isLoading = false);
+                setState(() => _isLoading[1] = false);
               });
             });
           },
@@ -114,60 +121,20 @@ class _TaskTrackerPageState extends State<TaskTrackerPage> {
                           )
                         ],
                       ),
-                      ProjectView(
-                        itemArray: array,
-                      ),
-                      _isLoading ? _loadingUI() : _buildContent(context),
+                      _isLoading.every((element) => element == true)
+                          ? projectLoadingUI()
+                          : ProjectView(
+                              itemArray: projectProvider.projects,
+                            ),
+                      _isLoading.every((element) => element == true)
+                          ? loadingUI()
+                          : _buildContent(context),
                     ],
                   ),
                 ),
               ),
             );
           }),
-        ),
-      ),
-    );
-  }
-
-  Widget _loadingUI() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.only(top: 25),
-          child: Text("Exams", style: EduPotDarkTextTheme.headline4),
-        ),
-        _buildLoading(),
-        const Padding(
-          padding: EdgeInsets.only(top: 25),
-          child: Text("Tasks", style: EduPotDarkTextTheme.headline4),
-        ),
-        _buildLoading(),
-      ],
-    );
-  }
-
-  Widget _buildLoading() {
-    return SizedBox(
-      height: 128,
-      child: Shimmer(
-        linearGradient: EduPotColorTheme.shimmerGradient,
-        child: Column(
-          children: [
-            for (int i = 0; i < 2; i++)
-              ShimmerLoading(
-                isLoading: true,
-                child: Container(
-                  width: double.infinity,
-                  margin: const EdgeInsets.only(top: 10),
-                  height: 54,
-                  decoration: BoxDecoration(
-                    color: EduPotColorTheme.primaryBlueDark,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-          ],
         ),
       ),
     );
