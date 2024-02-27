@@ -43,8 +43,7 @@ class _CustomCheckboxState extends State<CustomCheckbox> {
         child: Center(
           child: Text(
             widget.content,
-            style: EduPotDarkTextTheme
-                .headline3, // Use your actual text style here
+            style: EduPotDarkTextTheme.headline3,
           ),
         ),
       ),

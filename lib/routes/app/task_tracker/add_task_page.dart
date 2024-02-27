@@ -51,6 +51,13 @@ class _AddTaskPageState extends State<AddTaskPage> {
 
   String title = "";
   String simpleTitle = "MP";
+  DateTime time = DateTime(
+    DateTime.now().year,
+    DateTime.now().month,
+    DateTime.now().day,
+    12,
+    30,
+  );
 
   @override
   void initState() {
@@ -141,6 +148,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
                         content.getContent(
                           provider.selectedIndex,
                           examContent: ExamContent(
+                            timeText:
+                                "${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}",
                             onAttachment: () => showNotesModal(
                               context,
                               addNotes: () {},
@@ -212,7 +221,13 @@ class _AddTaskPageState extends State<AddTaskPage> {
         isScrollControlled: true,
         backgroundColor: EduPotColorTheme.primaryDark,
         builder: (BuildContext context) {
-          return const SelectTimeModal();
+          return SelectTimeModal(
+            selectedTime: (DateTime selectedTime) {
+              setState(() {
+                time = selectedTime;
+              });
+            },
+          );
         });
   }
 }

@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class SelectTimeModal extends StatefulWidget {
-  const SelectTimeModal({super.key});
+  final void Function(DateTime time) selectedTime;
+  const SelectTimeModal({super.key, required this.selectedTime});
 
   @override
   State<SelectTimeModal> createState() => _SelectTimeModalState();
@@ -16,6 +17,8 @@ class SelectTimeModal extends StatefulWidget {
 class _SelectTimeModalState extends State<SelectTimeModal> {
   int selected = 0;
   List<String> times = ["Selection", "14:00", "18:00", "8:00"];
+  int hours = 12;
+  int minutes = 30;
 
   @override
   Widget build(BuildContext context) {
@@ -73,17 +76,33 @@ class _SelectTimeModalState extends State<SelectTimeModal> {
                   Row(
                     children: [
                       WheelList(
-                        onItemChanged: (int value) {},
+                        onItemChanged: (int value) {
+                          setState(() {
+                            hours = value;
+                          });
+                        },
+                        initialItem: selected == 0
+                            ? 12
+                            : int.parse(times[selected].split(":")[0]),
+                        childCount: 24,
                       ),
                       Text(
                         ":",
                         style: TextStyle(
-                          fontSize: 50, // Larger font size for the center item
+                          fontSize: 50,
                           color: Colors.white.withOpacity(0.4),
                         ),
                       ),
                       WheelList(
-                        onItemChanged: (int value) {},
+                        onItemChanged: (int value) {
+                          setState(() {
+                            minutes = value;
+                          });
+                        },
+                        initialItem: selected == 0
+                            ? 30
+                            : int.parse(times[selected].split(":")[1]),
+                        childCount: 60,
                       ),
                     ],
                   ),
@@ -99,7 +118,16 @@ class _SelectTimeModalState extends State<SelectTimeModal> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: MainButton(
-                onTap: () {},
+                onTap: () {
+                  widget.selectedTime(DateTime(
+                    DateTime.now().year,
+                    DateTime.now().month,
+                    DateTime.now().day,
+                    hours,
+                    minutes,
+                  ));
+                  context.popRoute();
+                },
                 child: Text(
                   "Done",
                   style: EduPotDarkTextTheme.headline2(1),

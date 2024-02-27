@@ -2,7 +2,14 @@ import 'package:flutter/material.dart';
 
 class WheelList extends StatefulWidget {
   final void Function(int index) onItemChanged;
-  const WheelList({super.key, required this.onItemChanged});
+  final int initialItem;
+  final int childCount;
+  const WheelList({
+    super.key,
+    required this.onItemChanged,
+    required this.childCount,
+    this.initialItem = 0,
+  });
 
   @override
   State<WheelList> createState() => _WheelListState();
@@ -10,12 +17,23 @@ class WheelList extends StatefulWidget {
 
 class _WheelListState extends State<WheelList> {
   late FixedExtentScrollController _controller;
-  int _centerIndex = 0;
+  late int _centerIndex;
 
   @override
   void initState() {
     super.initState();
-    _controller = FixedExtentScrollController();
+    _controller = FixedExtentScrollController(initialItem: widget.initialItem);
+    _centerIndex = widget.initialItem;
+  }
+
+  @override
+  void didUpdateWidget(covariant WheelList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initialItem != oldWidget.initialItem) {
+      _controller.animateToItem(widget.initialItem,
+          duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+      _centerIndex = widget.initialItem;
+    }
   }
 
   @override
@@ -24,8 +42,8 @@ class _WheelListState extends State<WheelList> {
       alignment: Alignment.center,
       children: [
         SizedBox(
-          width: 100, // Adjust as needed
-          height: 175, // Adjust based on your design
+          width: 100,
+          height: 175,
           child: ListWheelScrollView.useDelegate(
             onSelectedItemChanged: (index) {
               setState(() {
@@ -34,12 +52,12 @@ class _WheelListState extends State<WheelList> {
               });
             },
             controller: _controller,
-            itemExtent: 65, // Adjust as needed
+            itemExtent: 65,
             perspective: 0.005,
             diameterRatio: 2,
             physics: const FixedExtentScrollPhysics(),
             childDelegate: ListWheelChildBuilderDelegate(
-              childCount: 24, // Adjust based on your needs
+              childCount: widget.childCount,
               builder: (context, index) {
                 return buildNumbers(index == _centerIndex, index);
               },
@@ -49,7 +67,6 @@ class _WheelListState extends State<WheelList> {
         Positioned.fill(
           child: IgnorePointer(
             child: Container(
-              // Gradient overlay
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
@@ -85,7 +102,7 @@ class _WheelListState extends State<WheelList> {
         child: Padding(
           padding: padding,
           child: Text(
-            hours.toString(),
+            hours.toString().length == 1 ? "0$hours" : hours.toString(),
             style: textStyle,
           ),
         ),

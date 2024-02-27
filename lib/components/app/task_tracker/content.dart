@@ -47,7 +47,7 @@ class Content {
               child: InputButton(
                 onPressed: examContent.onTime,
                 asset: "assets/icons/clock_simple.svg",
-                text: "Select Time",
+                text: examContent.timeText,
               ),
             ),
           ],
@@ -220,10 +220,13 @@ class ExamContent {
   final void Function()? onTime;
   final void Function()? onAttachment;
 
+  final String timeText;
+
   const ExamContent({
     this.onDate,
     this.onTime,
     this.onAttachment,
+    required this.timeText,
   });
 }
 
