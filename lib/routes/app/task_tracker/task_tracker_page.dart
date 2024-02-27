@@ -141,8 +141,10 @@ class _TaskTrackerPageState extends State<TaskTrackerPage> {
   }
 
   Widget _buildContent(BuildContext context) {
-    List<dynamic> exams = Provider.of<EntryProvider>(context).exams;
-    List<dynamic> tasks = Provider.of<EntryProvider>(context).tasks;
+    List<dynamic> exams =
+        Provider.of<EntryProvider>(context, listen: true).exams;
+    List<dynamic> tasks =
+        Provider.of<EntryProvider>(context, listen: true).tasks;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -188,8 +190,8 @@ class _TaskTrackerPageState extends State<TaskTrackerPage> {
       backgroundColor: EduPotColorTheme.primaryDark,
       builder: (BuildContext context) {
         return TaskModal(
-          onPressed: (int index) =>
-              context.pushRoute(AddTaskRoute(selectedCategory: index)),
+          onPressed: (int index) => context.pushRoute(
+              AddTaskRoute(selectedCategory: index, modalContext: context)),
         );
       },
     );

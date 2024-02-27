@@ -6,7 +6,10 @@ import 'package:edupot/components/app/task_tracker/content_helper.dart';
 import 'package:edupot/models/entries/exam.dart';
 import 'package:edupot/models/entries/task.dart';
 import 'package:edupot/models/projects/project.dart';
+import 'package:edupot/providers/entry_provider.dart';
 import 'package:edupot/providers/selection_provider.dart';
+import 'package:edupot/providers/user_provider.dart';
+import 'package:edupot/services/entry.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/widgets/common/description_text.dart';
 import 'package:edupot/widgets/common/input_field.dart';
@@ -17,6 +20,7 @@ import 'package:provider/provider.dart';
 @RoutePage()
 class AddTaskPage extends StatefulWidget {
   final int selectedCategory;
+  final BuildContext? modalContext;
 
   final ExamModel? exam;
   final TaskModel? task;
@@ -26,6 +30,7 @@ class AddTaskPage extends StatefulWidget {
   const AddTaskPage({
     super.key,
     required this.selectedCategory,
+    this.modalContext,
     this.exam,
     this.task,
     this.project,
@@ -38,6 +43,8 @@ class AddTaskPage extends StatefulWidget {
 class _AddTaskPageState extends State<AddTaskPage> {
   String title = "";
   String simpleTitle = "MP";
+
+  String description = "";
 
   DateTime time = DateTime(
     DateTime.now().year,
@@ -52,6 +59,10 @@ class _AddTaskPageState extends State<AddTaskPage> {
     super.initState();
     title =
         widget.exam?.title ?? widget.task?.title ?? widget.project?.name ?? "";
+    time = widget.exam?.finalDate ??
+        widget.task?.finalDate ??
+        widget.project?.finalDate ??
+        time;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final provider = Provider.of<SelectionProvider>(context, listen: false);
       provider.selectedIndex = widget.selectedCategory;
@@ -61,6 +72,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<SelectionProvider>();
+    final userProvider = context.watch<UserProvider>();
+    final entryProvider = context.watch<EntryProvider>();
     final Content content = Content();
 
     return PrimaryScaffold(
@@ -112,7 +125,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
                               "Lorem ipsum dolor sit amet, consectetur adipiscing elit...",
                           height: 100,
                           maxLines: 3,
-                          textChanged: (String input) {},
+                          textChanged: (String input) =>
+                              setState(() => description = input),
                           initialValue: widget.exam?.description ??
                               widget.task?.description ??
                               widget.project?.description,
@@ -177,7 +191,24 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     Padding(
                       padding: const EdgeInsets.only(top: 20, bottom: 10),
                       child: MainButton(
-                        onTap: () {},
+                        onTap: () {
+                          if (provider.selectedIndex == 0) {
+                            widget.modalContext?.popRoute();
+                            final model = ExamModel(
+                              title: title,
+                              description: description,
+                              finalDate: time,
+                            );
+                            EntryService()
+                                .createExam(userProvider.user!.uid ?? "", model)
+                                .then((value) {
+                              entryProvider
+                                  .fetchEntries(userProvider.user!.uid ?? "",
+                                      forceRefresh: true)
+                                  .then((value) => context.popRoute());
+                            });
+                          }
+                        },
                         child: Text("Submit",
                             style: EduPotDarkTextTheme.headline2(1)),
                       ),
