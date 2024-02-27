@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:edupot/components/tasks/time_checbox.dart';
-import 'package:edupot/components/tasks/wheel_list.dart';
+import 'package:edupot/components/app/task_tracker/time_checbox.dart';
+import 'package:edupot/components/common/wheel_list.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/widgets/main_button.dart';
 import 'package:flutter/material.dart';

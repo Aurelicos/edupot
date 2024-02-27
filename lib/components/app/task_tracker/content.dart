@@ -37,7 +37,7 @@ class Content {
               child: InputButton(
                 onPressed: examContent.onDate,
                 asset: "assets/icons/calendar.svg",
-                text: "Select Date",
+                text: examContent.dateText,
               ),
             ),
             const SizedBox(
@@ -128,7 +128,7 @@ class Content {
                 child: InputButton(
               onPressed: content.onDate,
               asset: "assets/icons/calendar.svg",
-              text: "Select Date",
+              text: content.dateText,
             )),
             const SizedBox(
               width: 15,
@@ -137,7 +137,7 @@ class Content {
                 child: InputButton(
               onPressed: content.onTime,
               asset: "assets/icons/clock_simple.svg",
-              text: "Select Time",
+              text: content.timeText,
             )),
           ],
         ),
@@ -187,7 +187,7 @@ class Content {
                 child: InputButton(
               onPressed: content.onDate,
               asset: "assets/icons/calendar.svg",
-              text: "Select Date",
+              text: content.dateText,
             )),
             const SizedBox(
               width: 15,
@@ -196,7 +196,7 @@ class Content {
                 child: InputButton(
               onPressed: content.onTime,
               asset: "assets/icons/clock_simple.svg",
-              text: "Select Time",
+              text: content.timeText,
             )),
           ],
         ),
@@ -221,17 +221,22 @@ class ExamContent {
   final void Function()? onAttachment;
 
   final String timeText;
+  final String dateText;
 
   const ExamContent({
     this.onDate,
     this.onTime,
     this.onAttachment,
     required this.timeText,
+    required this.dateText,
   });
 }
 
 class TaskContent {
   final String title;
+  final String timeText;
+  final String dateText;
+
   final void Function()? onAttachment;
   final void Function()? onProject;
   final void Function()? onDate;
@@ -239,6 +244,8 @@ class TaskContent {
 
   const TaskContent({
     required this.title,
+    required this.timeText,
+    required this.dateText,
     this.onAttachment,
     this.onProject,
     this.onDate,
@@ -248,6 +255,8 @@ class TaskContent {
 
 class ProjectContent {
   final void Function(String input) onTextChanged;
+  final String timeText;
+  final String dateText;
 
   final void Function()? onDate;
   final void Function()? onTime;
@@ -255,6 +264,8 @@ class ProjectContent {
 
   const ProjectContent({
     required this.onTextChanged,
+    required this.timeText,
+    required this.dateText,
     this.onDate,
     this.onTime,
     this.onAttachment,

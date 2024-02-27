@@ -2,13 +2,12 @@ import 'package:auto_route/auto_route.dart';
 import 'package:edupot/components/app/primary_scaffold.dart';
 import 'package:edupot/components/app/task_tracker/build_buttons.dart';
 import 'package:edupot/components/app/task_tracker/content.dart';
-import 'package:edupot/components/tasks/select_time_modal.dart';
+import 'package:edupot/components/app/task_tracker/content_helper.dart';
 import 'package:edupot/models/entries/exam.dart';
 import 'package:edupot/models/entries/task.dart';
 import 'package:edupot/models/projects/project.dart';
 import 'package:edupot/providers/selection_provider.dart';
 import 'package:edupot/utils/themes/theme.dart';
-import 'package:edupot/widgets/common/add_notes_modal.dart';
 import 'package:edupot/widgets/common/description_text.dart';
 import 'package:edupot/widgets/common/input_field.dart';
 import 'package:edupot/widgets/main_button.dart';
@@ -37,20 +36,9 @@ class AddTaskPage extends StatefulWidget {
 }
 
 class _AddTaskPageState extends State<AddTaskPage> {
-  List<String> headlines = [
-    "My Exam",
-    "My Task",
-    "My Project",
-  ];
-
-  List<Color> colorsPalete = [
-    EduPotColorTheme.examsOrange,
-    EduPotColorTheme.tasksPurple,
-    EduPotColorTheme.projectBlue,
-  ];
-
   String title = "";
   String simpleTitle = "MP";
+
   DateTime time = DateTime(
     DateTime.now().year,
     DateTime.now().month,
@@ -148,25 +136,38 @@ class _AddTaskPageState extends State<AddTaskPage> {
                         content.getContent(
                           provider.selectedIndex,
                           examContent: ExamContent(
-                            timeText:
-                                "${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}",
+                            timeText: _selectedTime(),
+                            dateText: _selectedDate(),
                             onAttachment: () => showNotesModal(
                               context,
                               addNotes: () {},
                               importNotes: () {},
                             ),
-                            onTime: () => timeModal(context),
+                            onTime: () => timeModal(context, time,
+                                (date) => setState(() => time = date)),
+                            onDate: () => buildDatePicker(context, time,
+                                (date) => setState(() => time = date)),
                           ),
                           taskContent: TaskContent(
+                            timeText: _selectedTime(),
+                            dateText: _selectedDate(),
                             title: "SP",
-                            onTime: () => timeModal(context),
+                            onTime: () => timeModal(context, time,
+                                (date) => setState(() => time = date)),
+                            onDate: () => buildDatePicker(context, time,
+                                (date) => setState(() => time = date)),
                           ),
                           projectContent: ProjectContent(
+                              timeText: _selectedTime(),
+                              dateText: _selectedDate(),
                               onTextChanged: (value) {
                                 setState(
                                     () => simpleTitle = value.toUpperCase());
                               },
-                              onTime: () => timeModal(context),
+                              onTime: () => timeModal(context, time,
+                                  (date) => setState(() => time = date)),
+                              onDate: () => buildDatePicker(context, time,
+                                  (date) => setState(() => time = date)),
                               onAttachment: () => showNotesModal(context,
                                   addNotes: () {}, importNotes: () {})),
                         ),
@@ -191,43 +192,11 @@ class _AddTaskPageState extends State<AddTaskPage> {
     );
   }
 
-  Widget buildInputField(
-          String headline, String placeholder, Function(String)? onChanged,
-          {String? initialValue}) =>
-      InputField(
-        headline: headline,
-        placeholder: placeholder,
-        validatorText: "",
-        textChanged: onChanged ?? (String input) {},
-        initialValue: initialValue,
-      );
-
-  void showNotesModal(
-    BuildContext context, {
-    required void Function() addNotes,
-    required void Function() importNotes,
-  }) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: EduPotColorTheme.primaryDark,
-      builder: (BuildContext context) =>
-          AddNotesModal(addNotes: addNotes, importNotes: importNotes),
-    );
+  String _selectedDate() {
+    return "${time.day}/${time.month}/${time.year}";
   }
 
-  void timeModal(BuildContext context) {
-    showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        backgroundColor: EduPotColorTheme.primaryDark,
-        builder: (BuildContext context) {
-          return SelectTimeModal(
-            selectedTime: (DateTime selectedTime) {
-              setState(() {
-                time = selectedTime;
-              });
-            },
-          );
-        });
+  String _selectedTime() {
+    return "${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}";
   }
 }
