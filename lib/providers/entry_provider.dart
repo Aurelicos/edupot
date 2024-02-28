@@ -34,6 +34,7 @@ class EntryProvider extends ChangeNotifier {
 
       _exams = results[0].docs.map((doc) => ExamModel.fromDoc(doc)!).toList();
       _tasks = results[1].docs.map((doc) => TaskModel.fromDoc(doc)!).toList();
+
       _lastFetchTime = DateTime.now();
 
       notifyListeners();

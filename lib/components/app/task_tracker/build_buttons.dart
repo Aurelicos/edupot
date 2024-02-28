@@ -53,7 +53,10 @@ List<TaskDropdownItem<int>> createDropdownItems() {
 }
 
 Widget buildHeadline(String title, BuildContext context,
-    {bool isProject = false, String hexagonText = "MP", required Color color}) {
+    {bool isProject = false,
+    String hexagonText = "MP",
+    required Color color,
+    void Function()? onDelete}) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     crossAxisAlignment: CrossAxisAlignment.center,
@@ -84,12 +87,20 @@ Widget buildHeadline(String title, BuildContext context,
           ),
         ],
       ),
-      SvgPicture.asset(
-        "assets/icons/circle_big.svg",
-        width: 32,
-        height: 32,
-        colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
-      ),
+      onDelete != null
+          ? GestureDetector(
+              onTap: onDelete,
+              child: SvgPicture.asset(
+                "assets/icons/bin.svg",
+                colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+              ),
+            )
+          : SvgPicture.asset(
+              "assets/icons/circle_big.svg",
+              width: 32,
+              height: 32,
+              colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+            ),
     ],
   );
 }

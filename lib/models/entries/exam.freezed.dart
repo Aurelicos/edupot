@@ -20,7 +20,7 @@ ExamModel _$ExamModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ExamModel {
-  String? get uid => throw _privateConstructorUsedError;
+  String? get id => throw _privateConstructorUsedError;
   int? get priority => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
@@ -38,7 +38,7 @@ abstract class $ExamModelCopyWith<$Res> {
       _$ExamModelCopyWithImpl<$Res, ExamModel>;
   @useResult
   $Res call(
-      {String? uid,
+      {String? id,
       int? priority,
       String title,
       String description,
@@ -58,16 +58,16 @@ class _$ExamModelCopyWithImpl<$Res, $Val extends ExamModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? uid = freezed,
+    Object? id = freezed,
     Object? priority = freezed,
     Object? title = null,
     Object? description = null,
     Object? finalDate = null,
   }) {
     return _then(_value.copyWith(
-      uid: freezed == uid
-          ? _value.uid
-          : uid // ignore: cast_nullable_to_non_nullable
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
               as String?,
       priority: freezed == priority
           ? _value.priority
@@ -98,7 +98,7 @@ abstract class _$$ExamModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String? uid,
+      {String? id,
       int? priority,
       String title,
       String description,
@@ -116,16 +116,16 @@ class __$$ExamModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? uid = freezed,
+    Object? id = freezed,
     Object? priority = freezed,
     Object? title = null,
     Object? description = null,
     Object? finalDate = null,
   }) {
     return _then(_$ExamModelImpl(
-      uid: freezed == uid
-          ? _value.uid
-          : uid // ignore: cast_nullable_to_non_nullable
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
               as String?,
       priority: freezed == priority
           ? _value.priority
@@ -151,7 +151,7 @@ class __$$ExamModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ExamModelImpl with DiagnosticableTreeMixin implements _ExamModel {
   const _$ExamModelImpl(
-      {this.uid,
+      {this.id,
       this.priority,
       required this.title,
       required this.description,
@@ -161,7 +161,7 @@ class _$ExamModelImpl with DiagnosticableTreeMixin implements _ExamModel {
       _$$ExamModelImplFromJson(json);
 
   @override
-  final String? uid;
+  final String? id;
   @override
   final int? priority;
   @override
@@ -173,7 +173,7 @@ class _$ExamModelImpl with DiagnosticableTreeMixin implements _ExamModel {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ExamModel(uid: $uid, priority: $priority, title: $title, description: $description, finalDate: $finalDate)';
+    return 'ExamModel(id: $id, priority: $priority, title: $title, description: $description, finalDate: $finalDate)';
   }
 
   @override
@@ -181,7 +181,7 @@ class _$ExamModelImpl with DiagnosticableTreeMixin implements _ExamModel {
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'ExamModel'))
-      ..add(DiagnosticsProperty('uid', uid))
+      ..add(DiagnosticsProperty('id', id))
       ..add(DiagnosticsProperty('priority', priority))
       ..add(DiagnosticsProperty('title', title))
       ..add(DiagnosticsProperty('description', description))
@@ -193,7 +193,7 @@ class _$ExamModelImpl with DiagnosticableTreeMixin implements _ExamModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ExamModelImpl &&
-            (identical(other.uid, uid) || other.uid == uid) &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.priority, priority) ||
                 other.priority == priority) &&
             (identical(other.title, title) || other.title == title) &&
@@ -206,7 +206,7 @@ class _$ExamModelImpl with DiagnosticableTreeMixin implements _ExamModel {
   @JsonKey(ignore: true)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, uid, priority, title, description, finalDate);
+      Object.hash(runtimeType, id, priority, title, description, finalDate);
 
   @JsonKey(ignore: true)
   @override
@@ -224,7 +224,7 @@ class _$ExamModelImpl with DiagnosticableTreeMixin implements _ExamModel {
 
 abstract class _ExamModel implements ExamModel {
   const factory _ExamModel(
-      {final String? uid,
+      {final String? id,
       final int? priority,
       required final String title,
       required final String description,
@@ -234,7 +234,7 @@ abstract class _ExamModel implements ExamModel {
       _$ExamModelImpl.fromJson;
 
   @override
-  String? get uid;
+  String? get id;
   @override
   int? get priority;
   @override

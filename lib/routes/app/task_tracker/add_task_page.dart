@@ -57,8 +57,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
   @override
   void initState() {
     super.initState();
-    title =
-        widget.exam?.title ?? widget.task?.title ?? widget.project?.name ?? "";
     time = widget.exam?.finalDate ??
         widget.task?.finalDate ??
         widget.project?.finalDate ??
@@ -66,6 +64,14 @@ class _AddTaskPageState extends State<AddTaskPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final provider = Provider.of<SelectionProvider>(context, listen: false);
       provider.selectedIndex = widget.selectedCategory;
+      title = widget.exam?.title ??
+          widget.task?.title ??
+          widget.project?.name ??
+          headlines[provider.selectedIndex];
+      description = widget.exam?.description ??
+          widget.task?.description ??
+          widget.project?.description ??
+          "";
     });
   }
 
@@ -109,6 +115,25 @@ class _AddTaskPageState extends State<AddTaskPage> {
                           isProject: provider.selectedIndex == 2,
                           hexagonText: simpleTitle,
                           color: colorsPalete[provider.selectedIndex],
+                          onDelete: widget.exam != null ||
+                                  widget.task != null ||
+                                  widget.project != null
+                              ? () {
+                                  if (widget.exam != null) {
+                                    EntryService()
+                                        .deleteExam(
+                                            userProvider.user!.uid ?? "",
+                                            widget.exam!.id ?? "")
+                                        .then((value) {
+                                      entryProvider
+                                          .fetchEntries(
+                                              userProvider.user!.uid ?? "",
+                                              forceRefresh: true)
+                                          .then((value) => context.popRoute());
+                                    });
+                                  }
+                                }
+                              : null,
                         ),
                         const SizedBox(height: 15),
                         buildInputField(
@@ -194,18 +219,32 @@ class _AddTaskPageState extends State<AddTaskPage> {
                         onTap: () {
                           if (provider.selectedIndex == 0) {
                             widget.modalContext?.popRoute();
-                            final model = ExamModel(
-                              title: title,
-                              description: description,
-                              finalDate: time,
-                            );
+                            ExamModel model;
+                            if (widget.exam != null) {
+                              model = widget.exam!.copyWith(
+                                title: title,
+                                description: description,
+                                finalDate: time,
+                              );
+                            } else {
+                              model = ExamModel(
+                                title: title,
+                                description: description,
+                                finalDate: time,
+                              );
+                            }
                             EntryService()
-                                .createExam(userProvider.user!.uid ?? "", model)
+                                .setExam(userProvider.user!.uid ?? "", model,
+                                    update: widget.exam != null)
                                 .then((value) {
                               entryProvider
                                   .fetchEntries(userProvider.user!.uid ?? "",
                                       forceRefresh: true)
-                                  .then((value) => context.popRoute());
+                                  .then(
+                                (value) {
+                                  mounted ? context.popRoute() : null;
+                                },
+                              );
                             });
                           }
                         },

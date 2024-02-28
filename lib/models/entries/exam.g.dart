@@ -8,7 +8,7 @@ part of 'exam.dart';
 
 _$ExamModelImpl _$$ExamModelImplFromJson(Map<String, dynamic> json) =>
     _$ExamModelImpl(
-      uid: json['uid'] as String?,
+      id: json['id'] as String?,
       priority: json['priority'] as int?,
       title: json['title'] as String,
       description: json['description'] as String,
@@ -17,7 +17,7 @@ _$ExamModelImpl _$$ExamModelImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$ExamModelImplToJson(_$ExamModelImpl instance) =>
     <String, dynamic>{
-      'uid': instance.uid,
+      'id': instance.id,
       'priority': instance.priority,
       'title': instance.title,
       'description': instance.description,

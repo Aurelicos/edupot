@@ -8,7 +8,7 @@ part 'exam.g.dart';
 @freezed
 class ExamModel with _$ExamModel {
   const factory ExamModel({
-    String? uid,
+    String? id,
     int? priority,
     required String title,
     required String description,
@@ -22,7 +22,7 @@ class ExamModel with _$ExamModel {
     final DateTime finalDate = timestamp.toDate();
 
     return ExamModel(
-      uid: document.id,
+      id: document.id,
       title: data["title"],
       description: data["description"],
       finalDate: finalDate,
