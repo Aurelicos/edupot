@@ -20,7 +20,7 @@ ProjectModel _$ProjectModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ProjectModel {
-  String? get uid => throw _privateConstructorUsedError;
+  String? get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
   DateTime get finalDate => throw _privateConstructorUsedError;
@@ -41,7 +41,7 @@ abstract class $ProjectModelCopyWith<$Res> {
       _$ProjectModelCopyWithImpl<$Res, ProjectModel>;
   @useResult
   $Res call(
-      {String? uid,
+      {String? id,
       String name,
       String description,
       DateTime finalDate,
@@ -63,7 +63,7 @@ class _$ProjectModelCopyWithImpl<$Res, $Val extends ProjectModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? uid = freezed,
+    Object? id = freezed,
     Object? name = null,
     Object? description = null,
     Object? finalDate = null,
@@ -72,9 +72,9 @@ class _$ProjectModelCopyWithImpl<$Res, $Val extends ProjectModel>
     Object? tasks = null,
   }) {
     return _then(_value.copyWith(
-      uid: freezed == uid
-          ? _value.uid
-          : uid // ignore: cast_nullable_to_non_nullable
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
               as String?,
       name: null == name
           ? _value.name
@@ -113,7 +113,7 @@ abstract class _$$ProjectModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String? uid,
+      {String? id,
       String name,
       String description,
       DateTime finalDate,
@@ -133,7 +133,7 @@ class __$$ProjectModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? uid = freezed,
+    Object? id = freezed,
     Object? name = null,
     Object? description = null,
     Object? finalDate = null,
@@ -142,9 +142,9 @@ class __$$ProjectModelImplCopyWithImpl<$Res>
     Object? tasks = null,
   }) {
     return _then(_$ProjectModelImpl(
-      uid: freezed == uid
-          ? _value.uid
-          : uid // ignore: cast_nullable_to_non_nullable
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
               as String?,
       name: null == name
           ? _value.name
@@ -178,7 +178,7 @@ class __$$ProjectModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ProjectModelImpl with DiagnosticableTreeMixin implements _ProjectModel {
   const _$ProjectModelImpl(
-      {this.uid,
+      {this.id,
       required this.name,
       required this.description,
       required this.finalDate,
@@ -191,7 +191,7 @@ class _$ProjectModelImpl with DiagnosticableTreeMixin implements _ProjectModel {
       _$$ProjectModelImplFromJson(json);
 
   @override
-  final String? uid;
+  final String? id;
   @override
   final String name;
   @override
@@ -212,7 +212,7 @@ class _$ProjectModelImpl with DiagnosticableTreeMixin implements _ProjectModel {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ProjectModel(uid: $uid, name: $name, description: $description, finalDate: $finalDate, finished: $finished, iconTitle: $iconTitle, tasks: $tasks)';
+    return 'ProjectModel(id: $id, name: $name, description: $description, finalDate: $finalDate, finished: $finished, iconTitle: $iconTitle, tasks: $tasks)';
   }
 
   @override
@@ -220,7 +220,7 @@ class _$ProjectModelImpl with DiagnosticableTreeMixin implements _ProjectModel {
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'ProjectModel'))
-      ..add(DiagnosticsProperty('uid', uid))
+      ..add(DiagnosticsProperty('id', id))
       ..add(DiagnosticsProperty('name', name))
       ..add(DiagnosticsProperty('description', description))
       ..add(DiagnosticsProperty('finalDate', finalDate))
@@ -234,7 +234,7 @@ class _$ProjectModelImpl with DiagnosticableTreeMixin implements _ProjectModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ProjectModelImpl &&
-            (identical(other.uid, uid) || other.uid == uid) &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.description, description) ||
                 other.description == description) &&
@@ -249,15 +249,8 @@ class _$ProjectModelImpl with DiagnosticableTreeMixin implements _ProjectModel {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      uid,
-      name,
-      description,
-      finalDate,
-      finished,
-      iconTitle,
-      const DeepCollectionEquality().hash(_tasks));
+  int get hashCode => Object.hash(runtimeType, id, name, description, finalDate,
+      finished, iconTitle, const DeepCollectionEquality().hash(_tasks));
 
   @JsonKey(ignore: true)
   @override
@@ -275,7 +268,7 @@ class _$ProjectModelImpl with DiagnosticableTreeMixin implements _ProjectModel {
 
 abstract class _ProjectModel implements ProjectModel {
   const factory _ProjectModel(
-      {final String? uid,
+      {final String? id,
       required final String name,
       required final String description,
       required final DateTime finalDate,
@@ -287,7 +280,7 @@ abstract class _ProjectModel implements ProjectModel {
       _$ProjectModelImpl.fromJson;
 
   @override
-  String? get uid;
+  String? get id;
   @override
   String get name;
   @override

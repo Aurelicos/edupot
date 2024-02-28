@@ -8,7 +8,7 @@ part 'project.g.dart';
 @freezed
 class ProjectModel with _$ProjectModel {
   const factory ProjectModel({
-    String? uid,
+    String? id,
     required String name,
     required String description,
     required DateTime finalDate,
@@ -24,7 +24,7 @@ class ProjectModel with _$ProjectModel {
     final DateTime finalDate = timestamp.toDate();
 
     return ProjectModel(
-      uid: document.id,
+      id: document.id,
       name: data["name"],
       description: data["description"],
       finalDate: finalDate,

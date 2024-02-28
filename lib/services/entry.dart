@@ -1,33 +1,44 @@
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edupot/models/entries/exam.dart';
+import 'package:edupot/models/entries/task.dart';
 import 'package:flutter/material.dart';
 
 class EntryService extends ChangeNotifier {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  Future<dynamic> setExam(String userId, ExamModel data, {bool? update}) async {
+  Future<dynamic> setEntry(String userId, dynamic data, String entryType,
+      {bool? update}) async {
     try {
-      if (update == true) {
-        await _db
-            .collection('entry')
-            .doc(userId)
-            .collection("exams")
-            .doc(data.id)
-            .update(ExamModel.toDoc(data));
-        return true;
+      DocumentReference docRef;
+      Map<String, dynamic> dataMap;
+
+      if (entryType == 'exam') {
+        dataMap = ExamModel.toDoc(data);
+      } else if (entryType == 'task') {
+        dataMap = TaskModel.toDoc(data);
       } else {
-        await _db
+        throw 'Unsupported entry type';
+      }
+
+      if (update == true) {
+        docRef = _db
             .collection('entry')
             .doc(userId)
-            .collection("exams")
-            .add(ExamModel.toDoc(data));
-        return true;
+            .collection('${entryType}s')
+            .doc(data.id);
+        await docRef.update(dataMap);
+      } else {
+        docRef = await _db
+            .collection('entry')
+            .doc(userId)
+            .collection('${entryType}s')
+            .add(dataMap);
       }
+      return true;
     } catch (e) {
       log(e.toString(),
-          name: "Error Creating Exam",
+          name: "Error Creating/Updating $entryType",
           error: e,
           level: 2000,
           stackTrace: StackTrace.current);
@@ -35,18 +46,19 @@ class EntryService extends ChangeNotifier {
     }
   }
 
-  Future<dynamic> deleteExam(String userId, String examId) async {
+  Future<dynamic> deleteEntry(
+      String userId, String entryId, String entryType) async {
     try {
       await _db
           .collection('entry')
           .doc(userId)
-          .collection("exams")
-          .doc(examId)
+          .collection('${entryType}s')
+          .doc(entryId)
           .delete();
       return true;
     } catch (e) {
       log(e.toString(),
-          name: "Error Deleting Exam",
+          name: "Error Deleting $entryType",
           error: e,
           level: 2000,
           stackTrace: StackTrace.current);

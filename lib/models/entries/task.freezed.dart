@@ -20,7 +20,7 @@ TaskModel _$TaskModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$TaskModel {
-  String? get uid => throw _privateConstructorUsedError;
+  String? get id => throw _privateConstructorUsedError;
   dynamic get assignedProject => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
@@ -38,7 +38,7 @@ abstract class $TaskModelCopyWith<$Res> {
       _$TaskModelCopyWithImpl<$Res, TaskModel>;
   @useResult
   $Res call(
-      {String? uid,
+      {String? id,
       dynamic assignedProject,
       String title,
       String description,
@@ -58,16 +58,16 @@ class _$TaskModelCopyWithImpl<$Res, $Val extends TaskModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? uid = freezed,
+    Object? id = freezed,
     Object? assignedProject = freezed,
     Object? title = null,
     Object? description = null,
     Object? finalDate = null,
   }) {
     return _then(_value.copyWith(
-      uid: freezed == uid
-          ? _value.uid
-          : uid // ignore: cast_nullable_to_non_nullable
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
               as String?,
       assignedProject: freezed == assignedProject
           ? _value.assignedProject
@@ -98,7 +98,7 @@ abstract class _$$TaskModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String? uid,
+      {String? id,
       dynamic assignedProject,
       String title,
       String description,
@@ -116,16 +116,16 @@ class __$$TaskModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? uid = freezed,
+    Object? id = freezed,
     Object? assignedProject = freezed,
     Object? title = null,
     Object? description = null,
     Object? finalDate = null,
   }) {
     return _then(_$TaskModelImpl(
-      uid: freezed == uid
-          ? _value.uid
-          : uid // ignore: cast_nullable_to_non_nullable
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
               as String?,
       assignedProject: freezed == assignedProject
           ? _value.assignedProject
@@ -151,7 +151,7 @@ class __$$TaskModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$TaskModelImpl with DiagnosticableTreeMixin implements _TaskModel {
   const _$TaskModelImpl(
-      {this.uid,
+      {this.id,
       this.assignedProject,
       required this.title,
       required this.description,
@@ -161,7 +161,7 @@ class _$TaskModelImpl with DiagnosticableTreeMixin implements _TaskModel {
       _$$TaskModelImplFromJson(json);
 
   @override
-  final String? uid;
+  final String? id;
   @override
   final dynamic assignedProject;
   @override
@@ -173,7 +173,7 @@ class _$TaskModelImpl with DiagnosticableTreeMixin implements _TaskModel {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'TaskModel(uid: $uid, assignedProject: $assignedProject, title: $title, description: $description, finalDate: $finalDate)';
+    return 'TaskModel(id: $id, assignedProject: $assignedProject, title: $title, description: $description, finalDate: $finalDate)';
   }
 
   @override
@@ -181,7 +181,7 @@ class _$TaskModelImpl with DiagnosticableTreeMixin implements _TaskModel {
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'TaskModel'))
-      ..add(DiagnosticsProperty('uid', uid))
+      ..add(DiagnosticsProperty('id', id))
       ..add(DiagnosticsProperty('assignedProject', assignedProject))
       ..add(DiagnosticsProperty('title', title))
       ..add(DiagnosticsProperty('description', description))
@@ -193,7 +193,7 @@ class _$TaskModelImpl with DiagnosticableTreeMixin implements _TaskModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$TaskModelImpl &&
-            (identical(other.uid, uid) || other.uid == uid) &&
+            (identical(other.id, id) || other.id == id) &&
             const DeepCollectionEquality()
                 .equals(other.assignedProject, assignedProject) &&
             (identical(other.title, title) || other.title == title) &&
@@ -207,7 +207,7 @@ class _$TaskModelImpl with DiagnosticableTreeMixin implements _TaskModel {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      uid,
+      id,
       const DeepCollectionEquality().hash(assignedProject),
       title,
       description,
@@ -229,7 +229,7 @@ class _$TaskModelImpl with DiagnosticableTreeMixin implements _TaskModel {
 
 abstract class _TaskModel implements TaskModel {
   const factory _TaskModel(
-      {final String? uid,
+      {final String? id,
       final dynamic assignedProject,
       required final String title,
       required final String description,
@@ -239,7 +239,7 @@ abstract class _TaskModel implements TaskModel {
       _$TaskModelImpl.fromJson;
 
   @override
-  String? get uid;
+  String? get id;
   @override
   dynamic get assignedProject;
   @override

@@ -8,7 +8,7 @@ part of 'task.dart';
 
 _$TaskModelImpl _$$TaskModelImplFromJson(Map<String, dynamic> json) =>
     _$TaskModelImpl(
-      uid: json['uid'] as String?,
+      id: json['id'] as String?,
       assignedProject: json['assignedProject'],
       title: json['title'] as String,
       description: json['description'] as String,
@@ -17,7 +17,7 @@ _$TaskModelImpl _$$TaskModelImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$TaskModelImplToJson(_$TaskModelImpl instance) =>
     <String, dynamic>{
-      'uid': instance.uid,
+      'id': instance.id,
       'assignedProject': instance.assignedProject,
       'title': instance.title,
       'description': instance.description,

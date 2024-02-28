@@ -8,7 +8,7 @@ part of 'project.dart';
 
 _$ProjectModelImpl _$$ProjectModelImplFromJson(Map<String, dynamic> json) =>
     _$ProjectModelImpl(
-      uid: json['uid'] as String?,
+      id: json['id'] as String?,
       name: json['name'] as String,
       description: json['description'] as String,
       finalDate: DateTime.parse(json['finalDate'] as String),
@@ -19,7 +19,7 @@ _$ProjectModelImpl _$$ProjectModelImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$ProjectModelImplToJson(_$ProjectModelImpl instance) =>
     <String, dynamic>{
-      'uid': instance.uid,
+      'id': instance.id,
       'name': instance.name,
       'description': instance.description,
       'finalDate': instance.finalDate.toIso8601String(),

@@ -8,7 +8,7 @@ part 'task.g.dart';
 @freezed
 class TaskModel with _$TaskModel {
   const factory TaskModel({
-    String? uid,
+    String? id,
     dynamic assignedProject,
     required String title,
     required String description,
@@ -22,7 +22,7 @@ class TaskModel with _$TaskModel {
     final DateTime finalDate = timestamp.toDate();
 
     return TaskModel(
-      uid: document.id,
+      id: document.id,
       title: data["title"],
       description: data["description"],
       finalDate: finalDate,

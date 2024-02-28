@@ -119,18 +119,24 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                   widget.task != null ||
                                   widget.project != null
                               ? () {
+                                  String? id;
+                                  String type = "";
+
                                   if (widget.exam != null) {
-                                    EntryService()
-                                        .deleteExam(
-                                            userProvider.user!.uid ?? "",
-                                            widget.exam!.id ?? "")
-                                        .then((value) {
-                                      entryProvider
-                                          .fetchEntries(
-                                              userProvider.user!.uid ?? "",
-                                              forceRefresh: true)
-                                          .then((value) => context.popRoute());
-                                    });
+                                    id = widget.exam!.id;
+                                    type = "exam";
+                                  } else if (widget.task != null) {
+                                    id = widget.task!.id;
+                                    type = "task";
+                                  }
+
+                                  if (id != null) {
+                                    deleteAndFetchEntries(
+                                      id,
+                                      type,
+                                      entryProvider: entryProvider,
+                                      userProvider: userProvider,
+                                    );
                                   }
                                 }
                               : null,
@@ -217,36 +223,42 @@ class _AddTaskPageState extends State<AddTaskPage> {
                       padding: const EdgeInsets.only(top: 20, bottom: 10),
                       child: MainButton(
                         onTap: () {
-                          if (provider.selectedIndex == 0) {
-                            widget.modalContext?.popRoute();
-                            ExamModel model;
-                            if (widget.exam != null) {
-                              model = widget.exam!.copyWith(
-                                title: title,
-                                description: description,
-                                finalDate: time,
-                              );
-                            } else {
-                              model = ExamModel(
-                                title: title,
-                                description: description,
-                                finalDate: time,
-                              );
-                            }
-                            EntryService()
-                                .setExam(userProvider.user!.uid ?? "", model,
-                                    update: widget.exam != null)
-                                .then((value) {
-                              entryProvider
-                                  .fetchEntries(userProvider.user!.uid ?? "",
-                                      forceRefresh: true)
-                                  .then(
-                                (value) {
-                                  mounted ? context.popRoute() : null;
-                                },
-                              );
-                            });
-                          }
+                          final entryType =
+                              provider.selectedIndex == 0 ? "exam" : "task";
+
+                          final model = provider.selectedIndex == 0
+                              ? (widget.exam != null
+                                  ? widget.exam!.copyWith(
+                                      title: title,
+                                      description: description,
+                                      finalDate: time)
+                                  : ExamModel(
+                                      title: title,
+                                      description: description,
+                                      finalDate: time))
+                              : (widget.task != null
+                                  ? widget.task!.copyWith(
+                                      title: title,
+                                      description: description,
+                                      finalDate: time)
+                                  : TaskModel(
+                                      title: title,
+                                      description: description,
+                                      finalDate: time));
+
+                          final uid = userProvider.user?.uid ?? "";
+                          widget.modalContext?.popRoute();
+
+                          EntryService()
+                              .setEntry(uid, model, entryType,
+                                  update: provider.selectedIndex == 0
+                                      ? widget.exam != null
+                                      : widget.task != null)
+                              .then((_) => entryProvider.fetchEntries(uid,
+                                  forceRefresh: true))
+                              .then((_) {
+                            if (mounted) context.popRoute();
+                          });
                         },
                         child: Text("Submit",
                             style: EduPotDarkTextTheme.headline2(1)),
@@ -268,5 +280,20 @@ class _AddTaskPageState extends State<AddTaskPage> {
 
   String _selectedTime() {
     return "${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}";
+  }
+
+  void deleteAndFetchEntries(
+    String id,
+    String type, {
+    required UserProvider userProvider,
+    required EntryProvider entryProvider,
+  }) {
+    EntryService()
+        .deleteEntry(userProvider.user!.uid ?? "", id, type)
+        .then((value) {
+      entryProvider
+          .fetchEntries(userProvider.user!.uid ?? "", forceRefresh: true)
+          .then((value) => context.popRoute());
+    });
   }
 }
