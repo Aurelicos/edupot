@@ -172,9 +172,12 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                 children: [
                                   const DescriptionText(text: "Category"),
                                   buildButtons(
-                                      widget.selectedCategory,
-                                      (int index) =>
-                                          provider.selectedIndex = index),
+                                    widget.selectedCategory,
+                                    (int index) => setState(() {
+                                      provider.selectedIndex = index;
+                                      title = headlines[provider.selectedIndex];
+                                    }),
+                                  ),
                                 ],
                               ),
                         const SizedBox(height: 5),
