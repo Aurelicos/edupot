@@ -1,8 +1,7 @@
-import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/widgets/common/description_text.dart';
-import 'package:edupot/widgets/common/hexagon.dart';
 import 'package:edupot/widgets/common/input_button.dart';
 import 'package:edupot/widgets/common/input_field.dart';
+import 'package:edupot/widgets/common/list_dropdown.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -88,31 +87,12 @@ class Content {
             const SizedBox(
               width: 15,
             ),
-            Expanded(
+            const Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const DescriptionText(text: "Assigned to project"),
-                  InputButton(
-                    onPressed: content.onProject,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Hexagon(
-                          title: content.title,
-                          height: 24,
-                          width: 24,
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          "Student Project",
-                          style: EduPotDarkTextTheme.headline2(1),
-                        ),
-                      ],
-                    ),
-                  ),
+                  DescriptionText(text: "Assigned to project"),
+                  CustomSearchDropdown(),
                 ],
               ),
             )

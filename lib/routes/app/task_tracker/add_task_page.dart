@@ -239,15 +239,17 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                       title: title,
                                       description: description,
                                       finalDate: time))
-                              : (widget.task != null
-                                  ? widget.task!.copyWith(
-                                      title: title,
-                                      description: description,
-                                      finalDate: time)
-                                  : TaskModel(
-                                      title: title,
-                                      description: description,
-                                      finalDate: time));
+                              : provider.selectedIndex == 1
+                                  ? (widget.task != null
+                                      ? widget.task!.copyWith(
+                                          title: title,
+                                          description: description,
+                                          finalDate: time)
+                                      : TaskModel(
+                                          title: title,
+                                          description: description,
+                                          finalDate: time))
+                                  : null;
 
                           final uid = userProvider.user?.uid ?? "";
                           widget.modalContext?.popRoute();
