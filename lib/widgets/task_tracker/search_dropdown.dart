@@ -1,51 +1,52 @@
-import 'package:edupot/utils/themes/theme.dart';
-import 'package:edupot/widgets/common/input_button.dart';
 import 'package:flutter/material.dart';
+import 'package:edupot/utils/themes/theme.dart';
+import 'package:edupot/widgets/common/hexagon.dart';
 
-class TaskDropdown<T> extends StatefulWidget {
+class SearchDropdown extends StatefulWidget {
   final void Function(int) onChange;
-  final List<TaskDropdownItem<T>> items;
-  final TaskDropdownStyle dropdownStyle;
-  final TaskDropdownButtonStyle dropdownButtonStyle;
+  final List<SearchDropdownItem> items;
+  final List<String> itemList;
+  final SearchDropdownStyle dropdownStyle;
+  final SearchDropdownButtonStyle dropdownButtonStyle;
   final Icon? icon;
   final bool hideIcon;
   final bool leadingIcon;
   final LinearGradient? gradient;
-  final int? index;
 
-  const TaskDropdown({
+  const SearchDropdown({
     super.key,
     this.hideIcon = false,
     required this.items,
     required this.onChange,
-    this.dropdownStyle = const TaskDropdownStyle(),
-    this.dropdownButtonStyle = const TaskDropdownButtonStyle(),
+    required this.itemList,
+    this.dropdownStyle = const SearchDropdownStyle(),
+    this.dropdownButtonStyle = const SearchDropdownButtonStyle(),
     this.icon,
     this.leadingIcon = false,
     this.gradient,
-    this.index,
   });
 
   @override
-  State<TaskDropdown> createState() => _TaskDropdownState();
+  State<SearchDropdown> createState() => _SearchDropdownState();
 }
 
-class _TaskDropdownState<T> extends State<TaskDropdown<T>>
+class _SearchDropdownState extends State<SearchDropdown>
     with TickerProviderStateMixin {
   final LayerLink _layerLink = LayerLink();
   final ScrollController _scrollController =
       ScrollController(initialScrollOffset: 0);
   late OverlayEntry _overlayEntry;
   bool _isOpen = false;
-  int _currentIndex = -1;
+  int _currentIndex = 0;
   late AnimationController _animationController;
   late Animation<double> _expandAnimation;
   late Animation<double> _rotateAnimation;
+  final TextEditingController _searchController = TextEditingController();
+  List<SearchDropdownItem> _filteredItems = [];
 
   @override
   void initState() {
     super.initState();
-    _currentIndex = widget.index ?? -1;
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 200),
@@ -60,6 +61,25 @@ class _TaskDropdownState<T> extends State<TaskDropdown<T>>
         curve: Curves.easeInOut,
       ),
     );
+    _filteredItems = widget.items;
+    _searchController.addListener(_onSearchChanged);
+  }
+
+  void _onSearchChanged() {
+    final searchText = _searchController.text.toLowerCase();
+    setState(() {
+      _filteredItems = widget.items.where((item) {
+        final itemText =
+            widget.itemList[widget.items.indexOf(item)].toLowerCase();
+        return itemText.contains(searchText);
+      }).toList();
+    });
+
+    if (_isOpen) {
+      _overlayEntry.remove();
+      _overlayEntry = _createOverlayEntry();
+      Overlay.of(context).insert(_overlayEntry);
+    }
   }
 
   @override
@@ -67,20 +87,32 @@ class _TaskDropdownState<T> extends State<TaskDropdown<T>>
     var style = widget.dropdownButtonStyle;
     return CompositedTransformTarget(
       link: _layerLink,
-      child: InputButton(
-        onPressed: _toggleDropdown,
+      child: Container(
+        height: 56,
+        decoration: BoxDecoration(
+          gradient: widget.gradient,
+          borderRadius: style.borderRadius,
+        ),
         child: Row(
           mainAxisAlignment:
               style.mainAxisAlignment ?? MainAxisAlignment.spaceBetween,
           children: [
+            const Padding(
+              padding: EdgeInsets.only(left: 10),
+              child: Hexagon(title: "SP", height: 24, width: 24),
+            ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(
-                  left: 5,
+                padding: const EdgeInsets.only(left: 5),
+                child: TextFormField(
+                  controller: _searchController,
+                  style: EduPotDarkTextTheme.headline2(1),
+                  onTap: _toggleDropdown,
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.only(left: 5),
+                  ),
                 ),
-                child: widget.items.isNotEmpty
-                    ? (widget.items[_currentIndex == -1 ? 0 : _currentIndex])
-                    : Container(),
               ),
             ),
             if (!widget.hideIcon)
@@ -158,22 +190,27 @@ class _TaskDropdownState<T> extends State<TaskDropdown<T>>
                             thumbColor: widget.dropdownStyle.scrollbarColor ??
                                 Colors.grey,
                             controller: _scrollController,
-                            child: ListView(
+                            child: ListView.builder(
                               padding: widget.dropdownStyle.padding ??
                                   EdgeInsets.zero,
                               shrinkWrap: true,
                               controller: _scrollController,
-                              children:
-                                  widget.items.asMap().entries.map((item) {
+                              itemCount: _filteredItems.length,
+                              itemBuilder: (context, index) {
                                 return InkWell(
                                   onTap: () {
-                                    setState(() => _currentIndex = item.key);
-                                    widget.onChange(item.key);
-                                    _toggleDropdown();
+                                    setState(() {
+                                      _currentIndex = widget.items
+                                          .indexOf(_filteredItems[index]);
+                                      widget.onChange(_currentIndex);
+                                      _toggleDropdown();
+                                      _searchController.text =
+                                          _filteredItems[index].id;
+                                    });
                                   },
-                                  child: item.value,
+                                  child: _filteredItems[index],
                                 );
-                              }).toList(),
+                              },
                             ),
                           ),
                         ),
@@ -189,28 +226,35 @@ class _TaskDropdownState<T> extends State<TaskDropdown<T>>
     );
   }
 
-  void _toggleDropdown({bool close = false}) async {
+  void _toggleDropdown({bool close = false}) {
     if (_isOpen || close) {
-      await _animationController.reverse();
       _overlayEntry.remove();
+      _animationController.reverse();
       setState(() => _isOpen = false);
     } else {
       _overlayEntry = _createOverlayEntry();
       Overlay.of(context).insert(_overlayEntry);
-      setState(() => _isOpen = true);
       _animationController.forward();
+      setState(() => _isOpen = true);
     }
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    _searchController.dispose();
+    super.dispose();
   }
 }
 
-class TaskDropdownItem<T> extends StatelessWidget {
-  final T? value;
+class SearchDropdownItem extends StatelessWidget {
   final Widget child;
+  final String id;
 
-  const TaskDropdownItem({
+  const SearchDropdownItem({
     super.key,
-    this.value,
     required this.child,
+    required this.id,
   });
 
   @override
@@ -221,7 +265,7 @@ class TaskDropdownItem<T> extends StatelessWidget {
   }
 }
 
-class TaskDropdownButtonStyle {
+class SearchDropdownButtonStyle {
   final MainAxisAlignment? mainAxisAlignment;
   final ShapeBorder? shape;
   final double elevation;
@@ -234,7 +278,7 @@ class TaskDropdownButtonStyle {
   final LinearGradient? gradient;
   final BorderRadius? borderRadius;
 
-  const TaskDropdownButtonStyle({
+  const SearchDropdownButtonStyle({
     this.mainAxisAlignment,
     this.backgroundColor,
     this.primaryColor,
@@ -249,7 +293,7 @@ class TaskDropdownButtonStyle {
   });
 }
 
-class TaskDropdownStyle {
+class SearchDropdownStyle {
   final double? elevation;
   final Color? color;
   final EdgeInsets? padding;
@@ -259,7 +303,7 @@ class TaskDropdownStyle {
   final Offset? offset;
   final double? width;
 
-  const TaskDropdownStyle({
+  const SearchDropdownStyle({
     this.constraints,
     this.offset,
     this.width,

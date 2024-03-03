@@ -1,10 +1,9 @@
+import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/widgets/common/description_text.dart';
 import 'package:edupot/widgets/common/input_button.dart';
 import 'package:edupot/widgets/common/input_field.dart';
-import 'package:edupot/widgets/common/list_dropdown.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:edupot/widgets/task_tracker/search_dropdown.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class Content {
   Widget getContent(
@@ -87,12 +86,21 @@ class Content {
             const SizedBox(
               width: 15,
             ),
-            const Expanded(
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  DescriptionText(text: "Assigned to project"),
-                  CustomSearchDropdown(),
+                  const DescriptionText(text: "Assigned to project"),
+                  SearchDropdown(
+                    itemList: const ['Exam', 'Task', 'Project'],
+                    gradient: EduPotColorTheme.mainItemGradient,
+                    dropdownButtonStyle: SearchDropdownButtonStyle(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    hideIcon: true,
+                    items: _createDropdownItems(),
+                    onChange: (value) {},
+                  )
                 ],
               ),
             )
@@ -123,6 +131,26 @@ class Content {
         ),
       ],
     );
+  }
+
+  List<SearchDropdownItem> _createDropdownItems() {
+    const items = ['Exam', 'Task', 'Project'];
+    return items
+        .asMap()
+        .entries
+        .map(
+          (item) => SearchDropdownItem(
+            id: item.value,
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Text(
+                item.value,
+                style: EduPotDarkTextTheme.headline2(1),
+              ),
+            ),
+          ),
+        )
+        .toList();
   }
 
   Widget contentThree(ProjectContent content) {
