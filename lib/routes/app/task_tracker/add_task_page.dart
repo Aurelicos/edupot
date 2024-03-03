@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edupot/components/app/primary_scaffold.dart';
 import 'package:edupot/components/app/task_tracker/build_buttons.dart';
 import 'package:edupot/components/app/task_tracker/content.dart';
@@ -54,6 +55,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
     30,
   );
 
+  DocumentReference? assignedProject;
+
   @override
   void initState() {
     super.initState();
@@ -72,6 +75,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
           widget.task?.description ??
           widget.project?.description ??
           "";
+      assignedProject = widget.task?.assignedProject;
     });
   }
 
@@ -197,14 +201,26 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                 (date) => setState(() => time = date)),
                           ),
                           taskContent: TaskContent(
-                            timeText: _selectedTime(),
-                            dateText: _selectedDate(),
-                            title: "SP",
-                            onTime: () => timeModal(context, time,
-                                (date) => setState(() => time = date)),
-                            onDate: () => buildDatePicker(context, time,
-                                (date) => setState(() => time = date)),
-                          ),
+                              timeText: _selectedTime(),
+                              dateText: _selectedDate(),
+                              title: "SP",
+                              onTime: () => timeModal(context, time,
+                                  (date) => setState(() => time = date)),
+                              onDate: () => buildDatePicker(context, time,
+                                  (date) => setState(() => time = date)),
+                              context: context,
+                              docId: widget.task?.assignedProject?.id,
+                              onProject: (String id) {
+                                setState(() {
+                                  if (id.isEmpty) {
+                                    assignedProject = null;
+                                  } else {
+                                    assignedProject = FirebaseFirestore.instance
+                                        .collection("projects")
+                                        .doc(id);
+                                  }
+                                });
+                              }),
                           projectContent: ProjectContent(
                               timeText: _selectedTime(),
                               dateText: _selectedDate(),
@@ -244,11 +260,15 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                       ? widget.task!.copyWith(
                                           title: title,
                                           description: description,
-                                          finalDate: time)
+                                          finalDate: time,
+                                          assignedProject: assignedProject,
+                                        )
                                       : TaskModel(
                                           title: title,
                                           description: description,
-                                          finalDate: time))
+                                          finalDate: time,
+                                          assignedProject: assignedProject,
+                                        ))
                                   : null;
 
                           final uid = userProvider.user?.uid ?? "";

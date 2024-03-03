@@ -3,22 +3,26 @@ import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/widgets/common/hexagon.dart';
 
 class SearchDropdown extends StatefulWidget {
-  final void Function(int) onChange;
+  final void Function(String) onChange;
   final List<SearchDropdownItem> items;
-  final List<String> itemList;
   final SearchDropdownStyle dropdownStyle;
   final SearchDropdownButtonStyle dropdownButtonStyle;
+  final String? hexagonTitle;
   final Icon? icon;
+  final String? placeholder;
   final bool hideIcon;
   final bool leadingIcon;
   final LinearGradient? gradient;
+  final String? initialSelection;
 
   const SearchDropdown({
     super.key,
     this.hideIcon = false,
+    this.placeholder,
     required this.items,
     required this.onChange,
-    required this.itemList,
+    this.initialSelection,
+    this.hexagonTitle,
     this.dropdownStyle = const SearchDropdownStyle(),
     this.dropdownButtonStyle = const SearchDropdownButtonStyle(),
     this.icon,
@@ -33,16 +37,14 @@ class SearchDropdown extends StatefulWidget {
 class _SearchDropdownState extends State<SearchDropdown>
     with TickerProviderStateMixin {
   final LayerLink _layerLink = LayerLink();
-  final ScrollController _scrollController =
-      ScrollController(initialScrollOffset: 0);
   late OverlayEntry _overlayEntry;
   bool _isOpen = false;
-  int _currentIndex = 0;
   late AnimationController _animationController;
   late Animation<double> _expandAnimation;
   late Animation<double> _rotateAnimation;
   final TextEditingController _searchController = TextEditingController();
   List<SearchDropdownItem> _filteredItems = [];
+  final FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
@@ -62,6 +64,15 @@ class _SearchDropdownState extends State<SearchDropdown>
       ),
     );
     _filteredItems = widget.items;
+
+    // Adjust the handling of initialSelection
+    if (widget.initialSelection != null) {
+      final initialItem = widget.items.firstWhere(
+        (item) => item.id == widget.initialSelection,
+      );
+      _searchController.text = initialItem.name;
+    }
+
     _searchController.addListener(_onSearchChanged);
   }
 
@@ -70,7 +81,7 @@ class _SearchDropdownState extends State<SearchDropdown>
     setState(() {
       _filteredItems = widget.items.where((item) {
         final itemText =
-            widget.itemList[widget.items.indexOf(item)].toLowerCase();
+            widget.items[widget.items.indexOf(item)].name.toLowerCase();
         return itemText.contains(searchText);
       }).toList();
     });
@@ -87,51 +98,68 @@ class _SearchDropdownState extends State<SearchDropdown>
     var style = widget.dropdownButtonStyle;
     return CompositedTransformTarget(
       link: _layerLink,
-      child: Container(
-        height: 56,
-        decoration: BoxDecoration(
-          gradient: widget.gradient,
-          borderRadius: style.borderRadius,
-        ),
-        child: Row(
-          mainAxisAlignment:
-              style.mainAxisAlignment ?? MainAxisAlignment.spaceBetween,
-          children: [
-            const Padding(
-              padding: EdgeInsets.only(left: 10),
-              child: Hexagon(title: "SP", height: 24, width: 24),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 5),
-                child: TextFormField(
-                  controller: _searchController,
-                  style: EduPotDarkTextTheme.headline2(1),
-                  onTap: _toggleDropdown,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.only(left: 5),
+      child: InkWell(
+        onTap: () {
+          _focusNode.requestFocus();
+          _searchController.text = "";
+          widget.onChange("");
+          _toggleDropdown();
+        },
+        child: Container(
+          height: 56,
+          decoration: BoxDecoration(
+            gradient: widget.gradient,
+            borderRadius: style.borderRadius,
+          ),
+          child: Row(
+            mainAxisAlignment:
+                style.mainAxisAlignment ?? MainAxisAlignment.spaceBetween,
+            children: [
+              if (widget.hexagonTitle != null)
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Hexagon(
+                      title: widget.hexagonTitle!, height: 24, width: 24),
+                ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 5),
+                  child: TextFormField(
+                    focusNode: _focusNode,
+                    controller: _searchController,
+                    style: EduPotDarkTextTheme.headline2(1),
+                    onTap: () {
+                      _searchController.text = "";
+                      widget.onChange("");
+                      _toggleDropdown();
+                    },
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      contentPadding: const EdgeInsets.only(left: 5),
+                      hintText: widget.placeholder,
+                      hintStyle: EduPotDarkTextTheme.headline2(1),
+                    ),
                   ),
                 ),
               ),
-            ),
-            if (!widget.hideIcon)
-              Padding(
-                padding: const EdgeInsets.only(right: 20),
-                child: RotationTransition(
-                  turns: _rotateAnimation,
-                  child: widget.icon ??
-                      const RotatedBox(
-                        quarterTurns: 3,
-                        child: Icon(
-                          Icons.arrow_back_ios_rounded,
-                          size: 18,
-                          color: Colors.white,
+              if (!widget.hideIcon)
+                Padding(
+                  padding: const EdgeInsets.only(right: 20),
+                  child: RotationTransition(
+                    turns: _rotateAnimation,
+                    child: widget.icon ??
+                        const RotatedBox(
+                          quarterTurns: 3,
+                          child: Icon(
+                            Icons.arrow_back_ios_rounded,
+                            size: 18,
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
+                  ),
                 ),
-              ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -185,32 +213,46 @@ class _SearchDropdownState extends State<SearchDropdown>
                             gradient: widget.gradient,
                             borderRadius: BorderRadius.circular(7),
                           ),
-                          child: RawScrollbar(
-                            thumbVisibility: true,
-                            thumbColor: widget.dropdownStyle.scrollbarColor ??
-                                Colors.grey,
-                            controller: _scrollController,
-                            child: ListView.builder(
-                              padding: widget.dropdownStyle.padding ??
-                                  EdgeInsets.zero,
-                              shrinkWrap: true,
-                              controller: _scrollController,
-                              itemCount: _filteredItems.length,
-                              itemBuilder: (context, index) {
-                                return InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      _currentIndex = widget.items
-                                          .indexOf(_filteredItems[index]);
-                                      widget.onChange(_currentIndex);
-                                      _toggleDropdown();
-                                      _searchController.text =
-                                          _filteredItems[index].id;
-                                    });
-                                  },
-                                  child: _filteredItems[index],
-                                );
-                              },
+                          child: Padding(
+                            padding:
+                                widget.dropdownStyle.padding ?? EdgeInsets.zero,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                for (var i = 0;
+                                    i < _filteredItems.length && i < 3;
+                                    i++)
+                                  InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        final text = _filteredItems[i].name;
+                                        widget.onChange(_filteredItems[i].id);
+                                        _searchController.text = text;
+                                        _toggleDropdown(close: true);
+                                      });
+                                      _focusNode.unfocus();
+                                    },
+                                    child: _filteredItems[i],
+                                  ),
+                                if (_filteredItems.length > 3)
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      for (int i = 0; i < 3; i++)
+                                        Container(
+                                          margin: const EdgeInsets.only(
+                                              right: 4, bottom: 15),
+                                          width: 4,
+                                          height: 4,
+                                          decoration: ShapeDecoration(
+                                            color:
+                                                Colors.white.withOpacity(0.4),
+                                            shape: const OvalBorder(),
+                                          ),
+                                        )
+                                    ],
+                                  ),
+                              ],
                             ),
                           ),
                         ),
@@ -243,6 +285,7 @@ class _SearchDropdownState extends State<SearchDropdown>
   void dispose() {
     _animationController.dispose();
     _searchController.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 }
@@ -250,19 +293,29 @@ class _SearchDropdownState extends State<SearchDropdown>
 class SearchDropdownItem extends StatelessWidget {
   final Widget child;
   final String id;
+  final String name;
 
   const SearchDropdownItem({
     super.key,
     required this.child,
     required this.id,
+    required this.name,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
+      width: double.infinity,
       child: child,
     );
   }
+}
+
+String formatText(String text, int length) {
+  if (text.length > length) {
+    return "${text.substring(0, length - 1)}...";
+  }
+  return text;
 }
 
 class SearchDropdownButtonStyle {

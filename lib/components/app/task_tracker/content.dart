@@ -1,9 +1,11 @@
-import 'package:edupot/utils/themes/theme.dart';
+import 'package:edupot/components/app/task_tracker/assigned_projects.dart';
+import 'package:edupot/providers/project_provider.dart';
 import 'package:edupot/widgets/common/description_text.dart';
 import 'package:edupot/widgets/common/input_button.dart';
 import 'package:edupot/widgets/common/input_field.dart';
-import 'package:edupot/widgets/task_tracker/search_dropdown.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 
 class Content {
   Widget getContent(
@@ -65,6 +67,7 @@ class Content {
   }
 
   Widget _contentTwo(TaskContent content) {
+    final projectProvider = Provider.of<ProjectProvider>(content.context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -83,27 +86,18 @@ class Content {
                 ],
               ),
             ),
-            const SizedBox(
-              width: 15,
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const DescriptionText(text: "Assigned to project"),
-                  SearchDropdown(
-                    itemList: const ['Exam', 'Task', 'Project'],
-                    gradient: EduPotColorTheme.mainItemGradient,
-                    dropdownButtonStyle: SearchDropdownButtonStyle(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    hideIcon: true,
-                    items: _createDropdownItems(),
-                    onChange: (value) {},
-                  )
-                ],
+            if (projectProvider.projects.isNotEmpty)
+              const SizedBox(
+                width: 15,
               ),
-            )
+            if (projectProvider.projects.isNotEmpty)
+              Expanded(
+                child: AssignedProjects(
+                  title: "Assigned to project",
+                  onIdChange: (value) => content.onProject(value),
+                  id: content.docId,
+                ),
+              )
           ],
         ),
         const SizedBox(
@@ -131,26 +125,6 @@ class Content {
         ),
       ],
     );
-  }
-
-  List<SearchDropdownItem> _createDropdownItems() {
-    const items = ['Exam', 'Task', 'Project'];
-    return items
-        .asMap()
-        .entries
-        .map(
-          (item) => SearchDropdownItem(
-            id: item.value,
-            child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Text(
-                item.value,
-                style: EduPotDarkTextTheme.headline2(1),
-              ),
-            ),
-          ),
-        )
-        .toList();
   }
 
   Widget contentThree(ProjectContent content) {
@@ -244,9 +218,11 @@ class TaskContent {
   final String title;
   final String timeText;
   final String dateText;
+  final BuildContext context;
+  final String? docId;
 
   final void Function()? onAttachment;
-  final void Function()? onProject;
+  final void Function(String) onProject;
   final void Function()? onDate;
   final void Function()? onTime;
 
@@ -254,8 +230,10 @@ class TaskContent {
     required this.title,
     required this.timeText,
     required this.dateText,
+    required this.context,
+    required this.onProject,
+    this.docId,
     this.onAttachment,
-    this.onProject,
     this.onDate,
     this.onTime,
   });
