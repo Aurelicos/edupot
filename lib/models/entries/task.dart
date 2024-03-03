@@ -3,13 +3,12 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/foundation.dart';
 
 part 'task.freezed.dart';
-part 'task.g.dart';
 
 @freezed
 class TaskModel with _$TaskModel {
   const factory TaskModel({
     String? id,
-    dynamic assignedProject,
+    DocumentReference? assignedProject,
     required String title,
     required String description,
     required DateTime finalDate,
@@ -38,7 +37,4 @@ class TaskModel with _$TaskModel {
       "assignedProject": taskModel.assignedProject,
     };
   }
-
-  factory TaskModel.fromJson(Map<String, dynamic> json) =>
-      _$TaskModelFromJson(json);
 }

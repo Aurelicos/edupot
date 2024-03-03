@@ -9,13 +9,13 @@ Widget buildButtons(int index, void Function(int) onChange) {
     onChange: onChange,
     gradient: EduPotColorTheme.mainItemGradient,
     index: index,
-    dropdownButtonStyle: createDropdownButtonStyle(),
-    dropdownStyle: createDropdownStyle(),
-    items: createDropdownItems(),
+    dropdownButtonStyle: _createDropdownButtonStyle(),
+    dropdownStyle: _createDropdownStyle(),
+    items: _createDropdownItems(),
   );
 }
 
-TaskDropdownButtonStyle createDropdownButtonStyle() {
+TaskDropdownButtonStyle _createDropdownButtonStyle() {
   return TaskDropdownButtonStyle(
     height: 56,
     width: double.infinity,
@@ -25,7 +25,7 @@ TaskDropdownButtonStyle createDropdownButtonStyle() {
   );
 }
 
-TaskDropdownStyle createDropdownStyle() {
+TaskDropdownStyle _createDropdownStyle() {
   return TaskDropdownStyle(
     elevation: 1,
     padding: const EdgeInsets.all(5),
@@ -33,13 +33,12 @@ TaskDropdownStyle createDropdownStyle() {
   );
 }
 
-List<TaskDropdownItem<int>> createDropdownItems() {
+List<TaskDropdownItem<int>> _createDropdownItems() {
   const tasks = ['📝 Exam', '💻 Task', '🗂️ Project'];
   return tasks
       .asMap()
       .entries
       .map((item) => TaskDropdownItem<int>(
-            gradient: EduPotColorTheme.mainItemGradient,
             value: item.key + 1,
             child: Padding(
               padding: const EdgeInsets.all(15.0),

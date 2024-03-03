@@ -1,3 +1,5 @@
+import 'package:edupot/utils/themes/theme.dart';
+import 'package:edupot/widgets/common/input_button.dart';
 import 'package:flutter/material.dart';
 
 class TaskDropdown<T> extends StatefulWidget {
@@ -65,52 +67,39 @@ class _TaskDropdownState<T> extends State<TaskDropdown<T>>
     var style = widget.dropdownButtonStyle;
     return CompositedTransformTarget(
       link: _layerLink,
-      child: Container(
-        width: style.width,
-        height: style.height,
-        padding: style.padding,
-        decoration: BoxDecoration(
-          color: style.backgroundColor,
-          gradient: widget.gradient,
-          borderRadius: style.borderRadius,
-        ),
-        child: InkWell(
-          onTap: _toggleDropdown,
-          child: Row(
-            mainAxisAlignment:
-                style.mainAxisAlignment ?? MainAxisAlignment.spaceBetween,
-            textDirection:
-                widget.leadingIcon ? TextDirection.rtl : TextDirection.ltr,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    left: 5,
-                  ),
-                  child: widget.items.isNotEmpty
-                      ? (widget.items[_currentIndex == -1 ? 0 : _currentIndex])
-                      : Container(),
+      child: InputButton(
+        onPressed: _toggleDropdown,
+        child: Row(
+          mainAxisAlignment:
+              style.mainAxisAlignment ?? MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  left: 5,
+                ),
+                child: widget.items.isNotEmpty
+                    ? (widget.items[_currentIndex == -1 ? 0 : _currentIndex])
+                    : Container(),
+              ),
+            ),
+            if (!widget.hideIcon)
+              Padding(
+                padding: const EdgeInsets.only(right: 20),
+                child: RotationTransition(
+                  turns: _rotateAnimation,
+                  child: widget.icon ??
+                      const RotatedBox(
+                        quarterTurns: 3,
+                        child: Icon(
+                          Icons.arrow_back_ios_rounded,
+                          size: 18,
+                          color: Colors.white,
+                        ),
+                      ),
                 ),
               ),
-              if (!widget.hideIcon)
-                Padding(
-                  padding: const EdgeInsets.only(right: 20),
-                  child: RotationTransition(
-                    turns: _rotateAnimation,
-                    child: widget.icon ??
-                        const RotatedBox(
-                          quarterTurns: 3,
-                          child: Icon(
-                            Icons.arrow_back_ios_rounded,
-                            size: 18,
-                            color: Colors.white,
-                          ),
-                        ),
-                  ),
-                ),
-            ],
-          ),
+          ],
         ),
       ),
     );
@@ -142,7 +131,7 @@ class _TaskDropdownState<T> extends State<TaskDropdown<T>>
                   showWhenUnlinked: false,
                   child: Material(
                     elevation: widget.dropdownStyle.elevation ?? 0,
-                    color: Colors.transparent,
+                    color: EduPotColorTheme.primaryDark,
                     shape: widget.dropdownStyle.shape,
                     child: SizeTransition(
                       axisAlignment: 1,
@@ -217,23 +206,16 @@ class _TaskDropdownState<T> extends State<TaskDropdown<T>>
 class TaskDropdownItem<T> extends StatelessWidget {
   final T? value;
   final Widget child;
-  final Gradient? gradient;
 
   const TaskDropdownItem({
     super.key,
     this.value,
     required this.child,
-    this.gradient,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        gradient: gradient ??
-            const LinearGradient(
-                colors: [Colors.transparent, Colors.transparent]),
-      ),
       child: child,
     );
   }
