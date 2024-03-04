@@ -1,5 +1,7 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:edupot/models/projects/project.dart';
 import 'package:edupot/utils/common/time_format.dart';
+import 'package:edupot/utils/router/router.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/widgets/common/hexagon.dart';
 import 'package:flutter/material.dart';
@@ -32,52 +34,72 @@ class GridProject extends StatelessWidget {
           shrinkWrap: true,
           itemCount: itemArray.length,
           itemBuilder: (context, i) {
-            return Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-              decoration: BoxDecoration(
-                gradient: gradientList[i % 4],
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 10,
-                    offset: Offset(0, 5),
+            return TextButton(
+              onPressed: () => context.pushRoute(AddTaskRoute(
+                selectedCategory: 2,
+                project: itemArray[i],
+              )),
+              style: ButtonStyle(
+                padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero),
+                backgroundColor:
+                    MaterialStateProperty.all<Color>(Colors.transparent),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
                   ),
-                ],
+                ),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Hexagon(
-                    title: itemArray[i].iconTitle,
-                    height: 24,
-                    width: 24,
-                  ),
-                  Column(
+              child: Ink(
+                decoration: BoxDecoration(
+                  gradient: gradientList[i % 4],
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 10,
+                      offset: Offset(0, 5),
+                    ),
+                  ],
+                ),
+                child: Container(
+                  width: double.infinity,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        formatTitle(itemArray[i].name),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w700,
-                        ),
+                      Hexagon(
+                        title: itemArray[i].iconTitle,
+                        height: 24,
+                        width: 24,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            formatTitle(itemArray[i].name),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          Text(
+                            formatTime(itemArray[i].finalDate),
+                            style: EduPotDarkTextTheme.headline2(0.6).copyWith(
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
                       ),
                       Text(
-                        formatTime(itemArray[i].finalDate),
-                        style: EduPotDarkTextTheme.headline2(0.6).copyWith(
-                          fontSize: 14,
-                        ),
+                        "${itemArray[i].finished} out of ${itemArray[i].tasks.length}",
+                        style: EduPotDarkTextTheme.headline3,
                       ),
                     ],
                   ),
-                  Text(
-                    "${itemArray[i].finished} out of ${itemArray[i].tasks.length}",
-                    style: EduPotDarkTextTheme.headline3,
-                  ),
-                ],
+                ),
               ),
             );
           },

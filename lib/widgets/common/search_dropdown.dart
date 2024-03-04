@@ -65,7 +65,6 @@ class _SearchDropdownState extends State<SearchDropdown>
     );
     _filteredItems = widget.items;
 
-    // Adjust the handling of initialSelection
     if (widget.initialSelection != null) {
       final initialItem = widget.items.firstWhere(
         (item) => item.id == widget.initialSelection,

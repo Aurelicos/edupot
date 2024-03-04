@@ -1,5 +1,7 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:edupot/models/projects/project.dart';
 import 'package:edupot/utils/common/time_format.dart';
+import 'package:edupot/utils/router/router.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -26,103 +28,125 @@ class ListProject extends StatelessWidget {
             right: 16,
             top: 15,
           ),
-          width: 225,
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          decoration: BoxDecoration(
-            gradient: gradientList[i % 4],
-            borderRadius: BorderRadius.circular(15),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 10,
-                offset: Offset(0, 5),
+          child: TextButton(
+            onPressed: () => context.pushRoute(AddTaskRoute(
+              selectedCategory: 2,
+              project: itemArray[i],
+            )),
+            style: ButtonStyle(
+              padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero),
+              backgroundColor:
+                  MaterialStateProperty.all<Color>(Colors.transparent),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
               ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(right: 15),
-                    height: 55,
-                    width: 5,
-                    decoration: BoxDecoration(
-                      gradient: EduPotColorTheme.orangeGradient,
-                      borderRadius: BorderRadius.circular(5),
-                    ),
+            ),
+            child: Ink(
+              decoration: BoxDecoration(
+                gradient: gradientList[i % 4],
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 10,
+                    offset: Offset(0, 5),
                   ),
-                  SizedBox(
-                    width: 150,
-                    height: 55,
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        formatTitle(itemArray[i].name),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
+                ],
+              ),
+              child: Container(
+                width: 225,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(right: 15),
+                          height: 55,
+                          width: 5,
+                          decoration: BoxDecoration(
+                            gradient: EduPotColorTheme.orangeGradient,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: Divider(
-                      color: Colors.white.withOpacity(0.2),
-                      thickness: 1,
-                    ),
-                  ),
-                ],
-              ),
-              Column(
-                children: [
-                  Row(
-                    children: [
-                      SvgPicture.asset(
-                        "assets/icons/clock.svg",
-                        height: 18,
-                        width: 18,
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      Text(
-                        formatTime(itemArray[i].finalDate),
-                        style: EduPotDarkTextTheme.headline2(0.6).copyWith(
-                          fontSize: 14,
+                        SizedBox(
+                          width: 150,
+                          height: 55,
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              formatTitle(itemArray[i].name),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Row(
-                    children: [
-                      SvgPicture.asset(
-                        "assets/icons/check.svg",
-                        height: 18,
-                        width: 18,
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      Text(
-                        "${itemArray[i].finished} out of ${itemArray[i].tasks.length}",
-                        style: EduPotDarkTextTheme.headline3,
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Divider(
+                            color: Colors.white.withOpacity(0.2),
+                            thickness: 1,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        Row(
+                          children: [
+                            SvgPicture.asset(
+                              "assets/icons/clock.svg",
+                              height: 18,
+                              width: 18,
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              formatTime(itemArray[i].finalDate),
+                              style:
+                                  EduPotDarkTextTheme.headline2(0.6).copyWith(
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Row(
+                          children: [
+                            SvgPicture.asset(
+                              "assets/icons/check.svg",
+                              height: 18,
+                              width: 18,
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              "${itemArray[i].finished} out of ${itemArray[i].tasks.length}",
+                              style: EduPotDarkTextTheme.headline3,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ],
+            ),
           ),
         );
       },
