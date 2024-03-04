@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/widgets/common/hexagon.dart';
+import 'package:flutter_svg/svg.dart';
 
 class SearchDropdown extends StatefulWidget {
   final void Function(String) onChange;
@@ -45,6 +46,7 @@ class _SearchDropdownState extends State<SearchDropdown>
   final TextEditingController _searchController = TextEditingController();
   List<SearchDropdownItem> _filteredItems = [];
   final FocusNode _focusNode = FocusNode();
+  bool initial = true;
 
   @override
   void initState() {
@@ -73,22 +75,32 @@ class _SearchDropdownState extends State<SearchDropdown>
     }
 
     _searchController.addListener(_onSearchChanged);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_filteredItems.isNotEmpty && !initial) {
+        _toggleDropdown();
+      }
+    });
   }
 
   void _onSearchChanged() {
     final searchText = _searchController.text.toLowerCase();
     setState(() {
       _filteredItems = widget.items.where((item) {
-        final itemText =
-            widget.items[widget.items.indexOf(item)].name.toLowerCase();
+        final itemText = item.name.toLowerCase();
         return itemText.contains(searchText);
       }).toList();
     });
 
-    if (_isOpen) {
-      _overlayEntry.remove();
-      _overlayEntry = _createOverlayEntry();
-      Overlay.of(context).insert(_overlayEntry);
+    if (_filteredItems.isNotEmpty) {
+      if (!_isOpen) {
+        _toggleDropdown();
+      } else {
+        _overlayEntry.remove();
+        _overlayEntry = _createOverlayEntry();
+        Overlay.of(context).insert(_overlayEntry);
+      }
+    } else if (_isOpen) {
+      _toggleDropdown(close: true);
     }
   }
 
@@ -103,6 +115,7 @@ class _SearchDropdownState extends State<SearchDropdown>
           _searchController.text = "";
           widget.onChange("");
           _toggleDropdown();
+          initial = false;
         },
         child: Container(
           height: 56,
@@ -114,12 +127,23 @@ class _SearchDropdownState extends State<SearchDropdown>
             mainAxisAlignment:
                 style.mainAxisAlignment ?? MainAxisAlignment.spaceBetween,
             children: [
-              if (widget.hexagonTitle != null)
-                Padding(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: Hexagon(
-                      title: widget.hexagonTitle!, height: 24, width: 24),
-                ),
+              widget.hexagonTitle != null
+                  ? Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Hexagon(
+                        title: widget.hexagonTitle!,
+                        height: 24,
+                        width: 24,
+                      ),
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.only(left: 15),
+                      child: SvgPicture.asset(
+                        "assets/icons/search.svg",
+                        height: 18,
+                        width: 18,
+                      ),
+                    ),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(left: 5),
@@ -130,7 +154,10 @@ class _SearchDropdownState extends State<SearchDropdown>
                     onTap: () {
                       _searchController.text = "";
                       widget.onChange("");
-                      _toggleDropdown();
+                      if (!_isOpen && _filteredItems.isNotEmpty) {
+                        _toggleDropdown();
+                      }
+                      initial = false;
                     },
                     decoration: InputDecoration(
                       border: InputBorder.none,

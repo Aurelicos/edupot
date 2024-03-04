@@ -76,6 +76,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
           widget.project?.description ??
           "";
       assignedProject = widget.task?.assignedProject;
+      simpleTitle = widget.project?.iconTitle ?? "MP";
     });
   }
 
@@ -117,7 +118,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                               : title,
                           context,
                           isProject: provider.selectedIndex == 2,
-                          hexagonText: simpleTitle,
+                          hexagonText: widget.project?.iconTitle ?? simpleTitle,
                           color: colorsPalete[provider.selectedIndex],
                           onDelete: widget.exam != null ||
                                   widget.task != null ||
@@ -203,7 +204,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
                           taskContent: TaskContent(
                               timeText: _selectedTime(),
                               dateText: _selectedDate(),
-                              title: "SP",
                               onTime: () => timeModal(context, time,
                                   (date) => setState(() => time = date)),
                               onDate: () => buildDatePicker(context, time,
@@ -222,6 +222,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                 });
                               }),
                           projectContent: ProjectContent(
+                              iconTitle:
+                                  widget.project?.iconTitle ?? simpleTitle,
                               timeText: _selectedTime(),
                               dateText: _selectedDate(),
                               onTextChanged: (value) {

@@ -38,7 +38,7 @@ class _AssignedProjectsState extends State<AssignedProjects> {
               ? projectProvider.projects
                   .firstWhere((element) => element.id == selectedItemId)
                   .iconTitle
-              : "MP",
+              : null,
           placeholder: "Choose project",
           gradient: EduPotColorTheme.mainItemGradient,
           dropdownButtonStyle: SearchDropdownButtonStyle(

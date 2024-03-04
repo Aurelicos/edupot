@@ -139,6 +139,7 @@ class Content {
                 placeholder: "",
                 maxLength: 2,
                 textChanged: content.onTextChanged,
+                initialValue: content.iconTitle,
               ),
             ),
             const SizedBox(
@@ -215,7 +216,6 @@ class ExamContent {
 }
 
 class TaskContent {
-  final String title;
   final String timeText;
   final String dateText;
   final BuildContext context;
@@ -227,7 +227,6 @@ class TaskContent {
   final void Function()? onTime;
 
   const TaskContent({
-    required this.title,
     required this.timeText,
     required this.dateText,
     required this.context,
@@ -243,6 +242,7 @@ class ProjectContent {
   final void Function(String input) onTextChanged;
   final String timeText;
   final String dateText;
+  final String iconTitle;
 
   final void Function()? onDate;
   final void Function()? onTime;
@@ -252,6 +252,7 @@ class ProjectContent {
     required this.onTextChanged,
     required this.timeText,
     required this.dateText,
+    required this.iconTitle,
     this.onDate,
     this.onTime,
     this.onAttachment,
