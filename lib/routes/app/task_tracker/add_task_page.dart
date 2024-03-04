@@ -271,7 +271,23 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                           finalDate: time,
                                           assignedProject: assignedProject,
                                         ))
-                                  : null;
+                                  : provider.selectedIndex == 2
+                                      ? (widget.project != null
+                                          ? widget.project!.copyWith(
+                                              name: title,
+                                              description: description,
+                                              finalDate: time,
+                                              iconTitle: simpleTitle,
+                                            )
+                                          : ProjectModel(
+                                              name: title,
+                                              description: description,
+                                              finalDate: time,
+                                              finished: 0,
+                                              iconTitle: simpleTitle,
+                                              tasks: [],
+                                            ))
+                                      : null;
 
                           final uid = userProvider.user?.uid ?? "";
                           widget.modalContext?.popRoute();
