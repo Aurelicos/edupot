@@ -8,6 +8,7 @@ import 'package:edupot/models/entries/exam.dart';
 import 'package:edupot/models/entries/task.dart';
 import 'package:edupot/models/projects/project.dart';
 import 'package:edupot/providers/entry_provider.dart';
+import 'package:edupot/providers/project_provider.dart';
 import 'package:edupot/providers/selection_provider.dart';
 import 'package:edupot/providers/user_provider.dart';
 import 'package:edupot/services/entry.dart';
@@ -85,6 +86,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
     final provider = context.watch<SelectionProvider>();
     final userProvider = context.watch<UserProvider>();
     final entryProvider = context.watch<EntryProvider>();
+    final projectProvider = context.watch<ProjectProvider>();
     final Content content = Content();
 
     return PrimaryScaffold(
@@ -292,16 +294,27 @@ class _AddTaskPageState extends State<AddTaskPage> {
                           final uid = userProvider.user?.uid ?? "";
                           widget.modalContext?.popRoute();
 
-                          EntryService()
-                              .setEntry(uid, model, entryType,
-                                  update: provider.selectedIndex == 0
-                                      ? widget.exam != null
-                                      : widget.task != null)
-                              .then((_) => entryProvider.fetchEntries(uid,
-                                  forceRefresh: true))
-                              .then((_) {
-                            if (mounted) context.popRoute();
-                          });
+                          if (model is ProjectModel) {
+                            EntryService()
+                                .setProject(model,
+                                    update: widget.project != null)
+                                .then((value) => projectProvider
+                                    .fetchProjects(uid, forceRefresh: true))
+                                .then((_) {
+                              if (mounted) context.popRoute();
+                            });
+                          } else {
+                            EntryService()
+                                .setEntry(uid, model, entryType,
+                                    update: provider.selectedIndex == 0
+                                        ? widget.exam != null
+                                        : widget.task != null)
+                                .then((_) => entryProvider.fetchEntries(uid,
+                                    forceRefresh: true))
+                                .then((_) {
+                              if (mounted) context.popRoute();
+                            });
+                          }
                         },
                         child: Text("Submit",
                             style: EduPotDarkTextTheme.headline2(1)),
