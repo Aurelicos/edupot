@@ -1,4 +1,5 @@
 import 'package:edupot/components/app/task_tracker/assigned_projects.dart';
+import 'package:edupot/components/app/task_tracker/assigned_tasks.dart';
 import 'package:edupot/providers/project_provider.dart';
 import 'package:edupot/widgets/common/description_text.dart';
 import 'package:edupot/widgets/common/input_button.dart';
@@ -145,20 +146,11 @@ class Content {
             const SizedBox(
               width: 15,
             ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const DescriptionText(text: "Assigned tasks"),
-                  InputButton(
-                    onPressed: () {},
-                    asset: "assets/icons/search.svg",
-                    text: "Task 1",
-                  ),
-                ],
-              ),
-            ),
           ],
+        ),
+        AssignedTasks(
+          title: "Assigned task",
+          onIdChange: (value) => (),
         ),
         const SizedBox(
           height: 5,
