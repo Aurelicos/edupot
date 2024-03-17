@@ -228,7 +228,7 @@ class _LoginPageState extends State<LoginPage> {
                           firstText: "I'm a new user. ",
                           clickableText: "Registration",
                           onPressed: () {
-                            context.popRoute(const RegisterRoute());
+                            context.maybePop(const RegisterRoute());
                           },
                         ),
                       ),

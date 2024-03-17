@@ -109,7 +109,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                       children: [
                         const SizedBox(height: 15),
                         InkWell(
-                          onTap: () => context.popRoute(),
+                          onTap: () => context.maybePop(),
                           child: const Icon(Icons.arrow_back_rounded,
                               size: 32, color: Colors.white),
                         ),
@@ -292,7 +292,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                       : null;
 
                           final uid = userProvider.user?.uid ?? "";
-                          widget.modalContext?.popRoute();
+                          widget.modalContext?.maybePop();
 
                           if (model is ProjectModel) {
                             EntryService()
@@ -301,7 +301,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                 .then((value) => projectProvider
                                     .fetchProjects(uid, forceRefresh: true))
                                 .then((_) {
-                              if (mounted) context.popRoute();
+                              if (mounted) context.maybePop();
                             });
                           } else {
                             EntryService()
@@ -312,7 +312,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                 .then((_) => entryProvider.fetchEntries(uid,
                                     forceRefresh: true))
                                 .then((_) {
-                              if (mounted) context.popRoute();
+                              if (mounted) context.maybePop();
                             });
                           }
                         },
@@ -349,7 +349,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
         .then((value) {
       entryProvider
           .fetchEntries(userProvider.user!.uid ?? "", forceRefresh: true)
-          .then((value) => context.popRoute());
+          .then((value) => context.maybePop());
     });
   }
 }

@@ -1,14 +1,13 @@
-import 'package:flutter/material.dart';
+import 'package:edupot/components/common/overlay.dart';
 import 'package:edupot/utils/themes/theme.dart';
-import 'package:edupot/widgets/common/hexagon.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class MultiSelectDropdown extends StatefulWidget {
   final void Function(String) onChange;
-  final List<SearchDropdownItem> items;
+  final List<MultiSelectDropdownItem> items;
   final MultiSelectDropdownStyle dropdownStyle;
-  final SearchDropdownButtonStyle dropdownButtonStyle;
-  final String? hexagonTitle;
+  final MultiSelectDropdownButtonStyle dropdownButtonStyle;
   final Icon? icon;
   final String? placeholder;
   final bool hideIcon;
@@ -23,11 +22,10 @@ class MultiSelectDropdown extends StatefulWidget {
     required this.items,
     required this.onChange,
     this.initialSelection,
-    this.hexagonTitle,
     this.dropdownStyle = const MultiSelectDropdownStyle(),
-    this.dropdownButtonStyle = const SearchDropdownButtonStyle(),
-    this.icon,
+    this.dropdownButtonStyle = const MultiSelectDropdownButtonStyle(),
     this.leadingIcon = false,
+    this.icon,
     this.gradient,
   });
 
@@ -44,9 +42,11 @@ class _MultiSelectDropdownState extends State<MultiSelectDropdown>
   late Animation<double> _expandAnimation;
   late Animation<double> _rotateAnimation;
   final TextEditingController _searchController = TextEditingController();
-  List<SearchDropdownItem> _filteredItems = [];
+  List<MultiSelectDropdownItem> _filteredItems = [];
   final FocusNode _focusNode = FocusNode();
   bool initial = true;
+  List<bool?> selected = [];
+  List<Item> selectedItems = [];
 
   @override
   void initState() {
@@ -74,34 +74,12 @@ class _MultiSelectDropdownState extends State<MultiSelectDropdown>
       _searchController.text = initialItem.name;
     }
 
-    _searchController.addListener(_onSearchChanged);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_filteredItems.isNotEmpty && !initial) {
         _toggleDropdown();
       }
     });
-  }
-
-  void _onSearchChanged() {
-    final searchText = _searchController.text.toLowerCase();
-    setState(() {
-      _filteredItems = widget.items.where((item) {
-        final itemText = item.name.toLowerCase();
-        return itemText.contains(searchText);
-      }).toList();
-    });
-
-    if (_filteredItems.isNotEmpty) {
-      if (!_isOpen) {
-        _toggleDropdown();
-      } else {
-        _overlayEntry.remove();
-        _overlayEntry = _createOverlayEntry();
-        Overlay.of(context).insert(_overlayEntry);
-      }
-    } else if (_isOpen) {
-      _toggleDropdown(close: true);
-    }
+    selected = List.filled(widget.items.length, false);
   }
 
   @override
@@ -127,47 +105,46 @@ class _MultiSelectDropdownState extends State<MultiSelectDropdown>
             mainAxisAlignment:
                 style.mainAxisAlignment ?? MainAxisAlignment.spaceBetween,
             children: [
-              widget.hexagonTitle != null
-                  ? Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: Hexagon(
-                        title: widget.hexagonTitle!,
-                        height: 24,
-                        width: 24,
-                      ),
-                    )
-                  : Padding(
-                      padding: const EdgeInsets.only(left: 15),
-                      child: SvgPicture.asset(
-                        "assets/icons/search.svg",
-                        height: 18,
-                        width: 18,
-                      ),
-                    ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 5),
-                  child: TextFormField(
-                    focusNode: _focusNode,
-                    controller: _searchController,
-                    style: EduPotDarkTextTheme.headline2(1),
-                    onTap: () {
-                      _searchController.text = "";
-                      widget.onChange("");
-                      if (!_isOpen && _filteredItems.isNotEmpty) {
-                        _toggleDropdown();
-                      }
-                      initial = false;
-                    },
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      contentPadding: const EdgeInsets.only(left: 5),
-                      hintText: widget.placeholder,
-                      hintStyle: EduPotDarkTextTheme.headline2(1),
-                    ),
-                  ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: SvgPicture.asset(
+                  "assets/icons/assign.svg",
+                  height: 18,
+                  width: 18,
                 ),
               ),
+              selectedItems.isEmpty
+                  ? Expanded(
+                      child: Text(
+                        widget.placeholder ?? "Select Tasks",
+                        style: EduPotDarkTextTheme.headline2(1),
+                      ),
+                    )
+                  : Expanded(
+                      child: ListView.builder(
+                        itemCount: selectedItems.length,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            margin: EdgeInsets.only(left: index > 0 ? 5 : 0),
+                            child: Chip(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 5,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              label: Text(selectedItems[index].name),
+                              onDeleted: () {
+                                setState(() {
+                                  selectedItems.removeAt(index);
+                                });
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                    ),
               if (!widget.hideIcon)
                 Padding(
                   padding: const EdgeInsets.only(right: 20),
@@ -193,105 +170,38 @@ class _MultiSelectDropdownState extends State<MultiSelectDropdown>
 
   OverlayEntry _createOverlayEntry() {
     RenderBox renderBox = context.findRenderObject()! as RenderBox;
-    var size = renderBox.size;
-    var offset = renderBox.localToGlobal(Offset.zero);
-    var topOffset = offset.dy + size.height + 5;
 
     return OverlayEntry(
-      builder: (context) => GestureDetector(
-        onTap: () => _toggleDropdown(close: true),
-        behavior: HitTestBehavior.translucent,
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          child: Stack(
-            children: [
-              Positioned(
-                left: offset.dx,
-                top: topOffset,
-                width: widget.dropdownStyle.width ?? size.width,
-                child: CompositedTransformFollower(
-                  offset:
-                      widget.dropdownStyle.offset ?? Offset(0, size.height + 5),
-                  link: _layerLink,
-                  showWhenUnlinked: false,
-                  child: Material(
-                    elevation: widget.dropdownStyle.elevation ?? 0,
-                    color: EduPotColorTheme.primaryDark,
-                    shape: widget.dropdownStyle.shape,
-                    child: SizeTransition(
-                      axisAlignment: 1,
-                      sizeFactor: _expandAnimation,
-                      child: ConstrainedBox(
-                        constraints: widget.dropdownStyle.constraints ??
-                            BoxConstraints(
-                              maxHeight: (MediaQuery.of(context).size.height -
-                                          topOffset -
-                                          15)
-                                      .isNegative
-                                  ? 100
-                                  : MediaQuery.of(context).size.height -
-                                      topOffset -
-                                      15,
-                            ),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            gradient: widget.gradient,
-                            borderRadius: BorderRadius.circular(7),
-                          ),
-                          child: Padding(
-                            padding:
-                                widget.dropdownStyle.padding ?? EdgeInsets.zero,
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                for (var i = 0;
-                                    i < _filteredItems.length && i < 3;
-                                    i++)
-                                  InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        final text = _filteredItems[i].name;
-                                        widget.onChange(_filteredItems[i].id);
-                                        _searchController.text = text;
-                                        _toggleDropdown(close: true);
-                                      });
-                                      _focusNode.unfocus();
-                                    },
-                                    child: _filteredItems[i],
-                                  ),
-                                if (_filteredItems.length > 3)
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      for (int i = 0; i < 3; i++)
-                                        Container(
-                                          margin: const EdgeInsets.only(
-                                              right: 4, bottom: 15),
-                                          width: 4,
-                                          height: 4,
-                                          decoration: ShapeDecoration(
-                                            color:
-                                                Colors.white.withOpacity(0.4),
-                                            shape: const OvalBorder(),
-                                          ),
-                                        )
-                                    ],
-                                  ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+        builder: (context) => OverlayContent(
+              expandAnimation: _expandAnimation,
+              layerLink: _layerLink,
+              items: widget.items,
+              toggleDropdown: () => _toggleDropdown(close: true),
+              renderBox: renderBox,
+              gradient: widget.gradient,
+              focusNode: _focusNode,
+              selectedItems: selectedItems,
+              placeholder: "Select Tasks",
+              onSelectedId: (String value) {
+                widget.items.where((element) => element.id == value).forEach(
+                  (element) {
+                    if (selectedItems
+                            .indexWhere((element) => element.id == value) >
+                        -1) {
+                      int index = selectedItems
+                          .indexWhere((element) => element.id == value);
+                      setState(() {
+                        selectedItems.removeAt(index);
+                      });
+                    } else {
+                      setState(() {
+                        selectedItems.add(Item(element.name, element.id));
+                      });
+                    }
+                  },
+                );
+              },
+            ));
   }
 
   void _toggleDropdown({bool close = false}) {
@@ -316,12 +226,12 @@ class _MultiSelectDropdownState extends State<MultiSelectDropdown>
   }
 }
 
-class SearchDropdownItem extends StatelessWidget {
+class MultiSelectDropdownItem extends StatelessWidget {
   final Widget child;
   final String id;
   final String name;
 
-  const SearchDropdownItem({
+  const MultiSelectDropdownItem({
     super.key,
     required this.child,
     required this.id,
@@ -331,7 +241,6 @@ class SearchDropdownItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: double.infinity,
       child: child,
     );
   }
@@ -344,7 +253,7 @@ String formatText(String text, int length) {
   return text;
 }
 
-class SearchDropdownButtonStyle {
+class MultiSelectDropdownButtonStyle {
   final MainAxisAlignment? mainAxisAlignment;
   final ShapeBorder? shape;
   final double elevation;
@@ -357,7 +266,7 @@ class SearchDropdownButtonStyle {
   final LinearGradient? gradient;
   final BorderRadius? borderRadius;
 
-  const SearchDropdownButtonStyle({
+  const MultiSelectDropdownButtonStyle({
     this.mainAxisAlignment,
     this.backgroundColor,
     this.primaryColor,
@@ -392,4 +301,11 @@ class MultiSelectDropdownStyle {
     this.padding,
     this.scrollbarColor,
   });
+}
+
+class Item {
+  final String id;
+  final String name;
+
+  Item(this.id, this.name);
 }

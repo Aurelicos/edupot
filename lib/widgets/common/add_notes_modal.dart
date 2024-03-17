@@ -72,7 +72,7 @@ class AddNotesModal extends StatelessWidget {
 
   Widget cancelButton(BuildContext context) {
     return TextButton(
-      onPressed: () => context.popRoute(),
+      onPressed: () => context.maybePop(),
       child: Text(
         "Cancel",
         style: EduPotDarkTextTheme.headline2(0.4),

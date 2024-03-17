@@ -126,7 +126,7 @@ class _SelectTimeModalState extends State<SelectTimeModal> {
                     hours,
                     minutes,
                   ));
-                  context.popRoute();
+                  context.maybePop();
                 },
                 child: Text(
                   "Done",
@@ -139,7 +139,7 @@ class _SelectTimeModalState extends State<SelectTimeModal> {
               padding: const EdgeInsets.symmetric(vertical: 5),
               child: Center(
                 child: TextButton(
-                  onPressed: () => context.popRoute(),
+                  onPressed: () => context.maybePop(),
                   child: Text(
                     "Cancel",
                     style: EduPotDarkTextTheme.headline2(0.4),
