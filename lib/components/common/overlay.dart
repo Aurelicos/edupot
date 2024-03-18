@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/widgets/common/multi_select_dropdown.dart';
@@ -78,6 +80,17 @@ class _OverlayContentState extends State<OverlayContent> {
     var offset = widget.renderBox.localToGlobal(Offset.zero);
     var topOffset = offset.dy + size.height + 5;
 
+    double dynamicHeight = min(
+        (_filteredItems.isNotEmpty && _filteredItems.length <= 3
+                ? _filteredItems.length + 1
+                : 3) *
+            50,
+        150.0);
+
+    double availableHeight =
+        MediaQuery.of(context).size.height - topOffset - 15;
+    double overlayHeight = min(dynamicHeight, availableHeight);
+
     return FocusScope(
       child: GestureDetector(
         onTap: widget.toggleDropdown,
@@ -101,91 +114,86 @@ class _OverlayContentState extends State<OverlayContent> {
                     child: SizeTransition(
                       axisAlignment: 1,
                       sizeFactor: widget.expandAnimation,
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(
-                          maxHeight: MediaQuery.of(context).size.height -
-                              topOffset -
-                              15,
+                      child: Container(
+                        height: overlayHeight,
+                        decoration: BoxDecoration(
+                          gradient: widget.gradient,
+                          borderRadius: BorderRadius.circular(7),
                         ),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            gradient: widget.gradient,
-                            borderRadius: BorderRadius.circular(7),
-                          ),
-                          child: Scrollbar(
-                            child: ListView.builder(
-                              itemCount: _filteredItems.isEmpty
-                                  ? 1
-                                  : _filteredItems.length,
-                              padding: EdgeInsets.zero,
-                              itemBuilder: (context, i) {
-                                return Column(
-                                  children: [
-                                    if (i == 0)
-                                      Row(
-                                        children: [
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 15),
-                                            child: SvgPicture.asset(
-                                              "assets/icons/search.svg",
-                                              height: 18,
-                                              width: 18,
-                                            ),
+                        child: Scrollbar(
+                          child: ListView.builder(
+                            itemCount: _filteredItems.isEmpty
+                                ? 1
+                                : _filteredItems.length,
+                            padding: EdgeInsets.zero,
+                            itemBuilder: (context, i) {
+                              return Column(
+                                children: [
+                                  if (i == 0)
+                                    Row(
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 15),
+                                          child: SvgPicture.asset(
+                                            "assets/icons/search.svg",
+                                            height: 18,
+                                            width: 18,
                                           ),
-                                          Expanded(
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 5),
-                                              child: TextFormField(
-                                                controller: _searchController,
-                                                focusNode: widget.focusNode,
-                                                style: EduPotDarkTextTheme
+                                        ),
+                                        Expanded(
+                                          child: Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 5),
+                                            child: TextFormField(
+                                              controller: _searchController,
+                                              focusNode: widget.focusNode,
+                                              style:
+                                                  EduPotDarkTextTheme.headline2(
+                                                      1),
+                                              onTap: () {},
+                                              decoration: InputDecoration(
+                                                border: InputBorder.none,
+                                                contentPadding:
+                                                    const EdgeInsets.only(
+                                                        left: 5),
+                                                hintText: widget.placeholder,
+                                                hintStyle: EduPotDarkTextTheme
                                                     .headline2(1),
-                                                onTap: () {},
-                                                decoration: InputDecoration(
-                                                  border: InputBorder.none,
-                                                  contentPadding:
-                                                      const EdgeInsets.only(
-                                                          left: 5),
-                                                  hintText: widget.placeholder,
-                                                  hintStyle: EduPotDarkTextTheme
-                                                      .headline2(1),
-                                                ),
                                               ),
                                             ),
                                           ),
+                                        ),
+                                      ],
+                                    ),
+                                  if (_filteredItems.isNotEmpty)
+                                    InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          selected[i] = !selected[i]!;
+                                          widget.onSelectedId(
+                                              _filteredItems[i].id);
+                                        });
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Checkbox(
+                                            value: selected[i],
+                                            onChanged: (bool? value) {
+                                              setState(() {
+                                                selected[i] = !selected[i]!;
+                                                widget.onSelectedId(
+                                                    _filteredItems[i].id);
+                                              });
+                                            },
+                                          ),
+                                          _filteredItems[i],
                                         ],
                                       ),
-                                    if (_filteredItems.isNotEmpty)
-                                      InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            selected[i] = !selected[i]!;
-                                            widget.onSelectedId(
-                                                _filteredItems[i].id);
-                                          });
-                                        },
-                                        child: Row(
-                                          children: [
-                                            Checkbox(
-                                              value: selected[i],
-                                              onChanged: (bool? value) {
-                                                setState(() {
-                                                  selected[i] = !selected[i]!;
-                                                  widget.onSelectedId(
-                                                      _filteredItems[i].id);
-                                                });
-                                              },
-                                            ),
-                                            _filteredItems[i],
-                                          ],
-                                        ),
-                                      ),
-                                  ],
-                                );
-                              },
-                            ),
+                                    ),
+                                ],
+                              );
+                            },
                           ),
                         ),
                       ),

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class MultiSelectDropdown extends StatefulWidget {
-  final void Function(String) onChange;
+  final void Function(List<Item>) onChange;
   final List<MultiSelectDropdownItem> items;
   final MultiSelectDropdownStyle dropdownStyle;
   final MultiSelectDropdownButtonStyle dropdownButtonStyle;
@@ -91,7 +91,6 @@ class _MultiSelectDropdownState extends State<MultiSelectDropdown>
         onTap: () {
           _focusNode.requestFocus();
           _searchController.text = "";
-          widget.onChange("");
           _toggleDropdown();
           initial = false;
         },
@@ -139,6 +138,7 @@ class _MultiSelectDropdownState extends State<MultiSelectDropdown>
                                 setState(() {
                                   selectedItems.removeAt(index);
                                 });
+                                widget.onChange(selectedItems);
                               },
                             ),
                           );
@@ -181,7 +181,7 @@ class _MultiSelectDropdownState extends State<MultiSelectDropdown>
               gradient: widget.gradient,
               focusNode: _focusNode,
               selectedItems: selectedItems,
-              placeholder: "Select Tasks",
+              placeholder: "Find Items",
               onSelectedId: (String value) {
                 widget.items.where((element) => element.id == value).forEach(
                   (element) {
@@ -193,10 +193,12 @@ class _MultiSelectDropdownState extends State<MultiSelectDropdown>
                       setState(() {
                         selectedItems.removeAt(index);
                       });
+                      widget.onChange(selectedItems);
                     } else {
                       setState(() {
-                        selectedItems.add(Item(element.name, element.id));
+                        selectedItems.add(Item(element.id, element.name));
                       });
+                      widget.onChange(selectedItems);
                     }
                   },
                 );

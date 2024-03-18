@@ -4,6 +4,7 @@ import 'package:edupot/providers/project_provider.dart';
 import 'package:edupot/widgets/common/description_text.dart';
 import 'package:edupot/widgets/common/input_button.dart';
 import 'package:edupot/widgets/common/input_field.dart';
+import 'package:edupot/widgets/common/multi_select_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
@@ -148,9 +149,12 @@ class Content {
             ),
           ],
         ),
+        const SizedBox(
+          height: 5,
+        ),
         AssignedTasks(
           title: "Assigned task",
-          onIdChange: (value) => (),
+          onIdChange: (value) => content.onIdChange(value),
         ),
         const SizedBox(
           height: 5,
@@ -232,6 +236,7 @@ class TaskContent {
 
 class ProjectContent {
   final void Function(String input) onTextChanged;
+  final void Function(List<Item>) onIdChange;
   final String timeText;
   final String dateText;
   final String iconTitle;
@@ -245,6 +250,7 @@ class ProjectContent {
     required this.timeText,
     required this.dateText,
     required this.iconTitle,
+    required this.onIdChange,
     this.onDate,
     this.onTime,
     this.onAttachment,

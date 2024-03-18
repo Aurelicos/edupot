@@ -1,11 +1,14 @@
+import 'package:edupot/models/entries/task.dart';
+import 'package:edupot/providers/entry_provider.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/widgets/common/description_text.dart';
 import 'package:edupot/widgets/common/multi_select_dropdown.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AssignedTasks extends StatefulWidget {
   final String title;
-  final void Function(String) onIdChange;
+  final void Function(List<Item>) onIdChange;
   final String? id;
   const AssignedTasks({
     super.key,
@@ -19,10 +22,9 @@ class AssignedTasks extends StatefulWidget {
 }
 
 class _AssignedTasksState extends State<AssignedTasks> {
-  String? selectedItemId;
-
   @override
   Widget build(BuildContext context) {
+    final entryProvider = Provider.of<EntryProvider>(context, listen: false);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -35,11 +37,8 @@ class _AssignedTasksState extends State<AssignedTasks> {
           ),
           initialSelection: widget.id,
           hideIcon: true,
-          items: _createDropdownItems(),
+          items: _createDropdownItems(entryProvider),
           onChange: (value) {
-            setState(() {
-              selectedItemId = value.isEmpty ? null : value;
-            });
             widget.onIdChange(value);
           },
         )
@@ -47,19 +46,19 @@ class _AssignedTasksState extends State<AssignedTasks> {
     );
   }
 
-  List<MultiSelectDropdownItem> _createDropdownItems() {
-    final items = ['item1', 'item2', 'item3', 'item4', 'item5'];
+  List<MultiSelectDropdownItem> _createDropdownItems(EntryProvider provider) {
+    List<TaskModel> items = provider.tasks;
     return items
         .asMap()
         .entries
         .map(
           (item) => MultiSelectDropdownItem(
-            id: item.value,
-            name: item.value,
+            id: item.value.id!,
+            name: item.value.title,
             child: Padding(
               padding: const EdgeInsets.only(right: 15, top: 15, bottom: 15),
               child: Text(
-                formatText(item.value, 14),
+                formatText(item.value.title, 14),
                 style: EduPotDarkTextTheme.headline2(1),
               ),
             ),

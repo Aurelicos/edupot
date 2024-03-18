@@ -224,20 +224,20 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                 });
                               }),
                           projectContent: ProjectContent(
-                              iconTitle:
-                                  widget.project?.iconTitle ?? simpleTitle,
-                              timeText: _selectedTime(),
-                              dateText: _selectedDate(),
-                              onTextChanged: (value) {
-                                setState(
-                                    () => simpleTitle = value.toUpperCase());
-                              },
-                              onTime: () => timeModal(context, time,
-                                  (date) => setState(() => time = date)),
-                              onDate: () => buildDatePicker(context, time,
-                                  (date) => setState(() => time = date)),
-                              onAttachment: () => showNotesModal(context,
-                                  addNotes: () {}, importNotes: () {})),
+                            iconTitle: widget.project?.iconTitle ?? simpleTitle,
+                            timeText: _selectedTime(),
+                            dateText: _selectedDate(),
+                            onTextChanged: (value) {
+                              setState(() => simpleTitle = value.toUpperCase());
+                            },
+                            onTime: () => timeModal(context, time,
+                                (date) => setState(() => time = date)),
+                            onDate: () => buildDatePicker(context, time,
+                                (date) => setState(() => time = date)),
+                            onAttachment: () => showNotesModal(context,
+                                addNotes: () {}, importNotes: () {}),
+                            onIdChange: (value) {},
+                          ),
                         ),
                       ],
                     ),
