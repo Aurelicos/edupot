@@ -15,6 +15,7 @@ import 'package:edupot/services/entry.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/widgets/common/description_text.dart';
 import 'package:edupot/widgets/common/input_field.dart';
+import 'package:edupot/widgets/common/multi_select_dropdown.dart';
 import 'package:edupot/widgets/main_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -57,6 +58,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
   );
 
   DocumentReference? assignedProject;
+  List<DocumentReference>? assignedTasks;
 
   @override
   void initState() {
@@ -65,6 +67,14 @@ class _AddTaskPageState extends State<AddTaskPage> {
         widget.task?.finalDate ??
         widget.project?.finalDate ??
         time;
+    assignedTasks = widget.project?.tasks;
+    description = widget.exam?.description ??
+        widget.task?.description ??
+        widget.project?.description ??
+        "";
+    simpleTitle = widget.project?.iconTitle ?? "MP";
+    assignedProject = widget.task?.assignedProject;
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final provider = Provider.of<SelectionProvider>(context, listen: false);
       provider.selectedIndex = widget.selectedCategory;
@@ -72,12 +82,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
           widget.task?.title ??
           widget.project?.name ??
           headlines[provider.selectedIndex];
-      description = widget.exam?.description ??
-          widget.task?.description ??
-          widget.project?.description ??
-          "";
-      assignedProject = widget.task?.assignedProject;
-      simpleTitle = widget.project?.iconTitle ?? "MP";
     });
   }
 
@@ -120,7 +124,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                               : title,
                           context,
                           isProject: provider.selectedIndex == 2,
-                          hexagonText: widget.project?.iconTitle ?? simpleTitle,
+                          hexagonText: simpleTitle,
                           color: colorsPalete[provider.selectedIndex],
                           onDelete: widget.exam != null ||
                                   widget.task != null ||
@@ -143,6 +147,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                       type,
                                       entryProvider: entryProvider,
                                       userProvider: userProvider,
+                                      assigned: type == "task"
+                                          ? widget.task?.assignedProject
+                                          : null,
                                     );
                                   }
                                 }
@@ -224,7 +231,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                 });
                               }),
                           projectContent: ProjectContent(
-                            iconTitle: widget.project?.iconTitle ?? simpleTitle,
+                            iconTitle: simpleTitle,
                             timeText: _selectedTime(),
                             dateText: _selectedDate(),
                             onTextChanged: (value) {
@@ -236,7 +243,22 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                 (date) => setState(() => time = date)),
                             onAttachment: () => showNotesModal(context,
                                 addNotes: () {}, importNotes: () {}),
-                            onIdChange: (value) {},
+                            onIdChange: (List<Item> value) => setState(() {
+                              final uid = userProvider.user?.uid ?? "";
+                              setState(() {
+                                assignedTasks = value
+                                    .map((element) {
+                                      return FirebaseFirestore.instance
+                                          .collection("entry")
+                                          .doc(uid)
+                                          .collection("tasks")
+                                          .doc(element.id);
+                                    })
+                                    .cast<DocumentReference<Object?>>()
+                                    .toList();
+                              });
+                            }),
+                            initialTasks: assignedTasks,
                           ),
                         ),
                       ],
@@ -280,6 +302,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                               description: description,
                                               finalDate: time,
                                               iconTitle: simpleTitle,
+                                              tasks: assignedTasks ?? [],
                                             )
                                           : ProjectModel(
                                               name: title,
@@ -287,7 +310,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                               finalDate: time,
                                               finished: 0,
                                               iconTitle: simpleTitle,
-                                              tasks: [],
+                                              tasks: assignedTasks ?? [],
                                             ))
                                       : null;
 
@@ -296,12 +319,24 @@ class _AddTaskPageState extends State<AddTaskPage> {
 
                           if (model is ProjectModel) {
                             EntryService()
-                                .setProject(model,
-                                    update: widget.project != null)
-                                .then((value) => projectProvider
-                                    .fetchProjects(uid, forceRefresh: true))
-                                .then((_) {
-                              if (mounted) context.maybePop();
+                                .assignTasks(uid, widget.project!.id!,
+                                    assignedTasks ?? [], widget.project!.tasks)
+                                .then((data) {
+                              EntryService()
+                                  .setProject(model,
+                                      update: widget.project != null)
+                                  .then((_) {
+                                if (data["updated"] == true) {
+                                  projectProvider.fetchProjects(uid,
+                                      forceRefresh: true);
+                                  entryProvider.fetchEntries(uid,
+                                      forceRefresh: true);
+                                } else {
+                                  projectProvider.fetchProjects(uid,
+                                      forceRefresh: true);
+                                }
+                              }).then((_) =>
+                                      mounted ? context.maybePop() : false);
                             });
                           } else {
                             EntryService()
@@ -343,9 +378,10 @@ class _AddTaskPageState extends State<AddTaskPage> {
     String type, {
     required UserProvider userProvider,
     required EntryProvider entryProvider,
+    DocumentReference? assigned,
   }) {
     EntryService()
-        .deleteEntry(userProvider.user!.uid ?? "", id, type)
+        .deleteEntry(userProvider.user!.uid ?? "", id, type, assigned)
         .then((value) {
       entryProvider
           .fetchEntries(userProvider.user!.uid ?? "", forceRefresh: true)

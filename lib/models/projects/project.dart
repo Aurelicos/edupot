@@ -3,7 +3,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/foundation.dart';
 
 part 'project.freezed.dart';
-part 'project.g.dart';
 
 @freezed
 class ProjectModel with _$ProjectModel {
@@ -14,7 +13,7 @@ class ProjectModel with _$ProjectModel {
     required DateTime finalDate,
     required int finished,
     required String iconTitle,
-    required List<dynamic> tasks,
+    required List<DocumentReference> tasks,
   }) = _ProjectModel;
 
   static ProjectModel? fromDoc(DocumentSnapshot document) {
@@ -23,6 +22,12 @@ class ProjectModel with _$ProjectModel {
     final Timestamp timestamp = data!["finalDate"];
     final DateTime finalDate = timestamp.toDate();
 
+    final List<DocumentReference> tasks = (data["tasks"] as List<dynamic>?)
+            ?.whereType<DocumentReference>()
+            .map((e) => e)
+            .toList() ??
+        [];
+
     return ProjectModel(
       id: document.id,
       name: data["name"],
@@ -30,7 +35,7 @@ class ProjectModel with _$ProjectModel {
       finalDate: finalDate,
       finished: data["finished"] ?? 0,
       iconTitle: data["iconTitle"],
-      tasks: data["tasks"],
+      tasks: tasks,
     );
   }
 
@@ -44,7 +49,4 @@ class ProjectModel with _$ProjectModel {
       "tasks": projectModel.tasks,
     };
   }
-
-  factory ProjectModel.fromJson(Map<String, dynamic> json) =>
-      _$ProjectModelFromJson(json);
 }

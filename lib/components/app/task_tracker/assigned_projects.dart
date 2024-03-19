@@ -25,6 +25,12 @@ class _AssignedProjectsState extends State<AssignedProjects> {
   String? selectedItemId;
 
   @override
+  void initState() {
+    super.initState();
+    selectedItemId = widget.id;
+  }
+
+  @override
   Widget build(BuildContext context) {
     final projectProvider =
         Provider.of<ProjectProvider>(context, listen: false);

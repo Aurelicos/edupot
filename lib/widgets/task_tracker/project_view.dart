@@ -1,37 +1,37 @@
-import 'package:edupot/models/projects/project.dart';
+import 'package:edupot/providers/project_provider.dart';
 import 'package:edupot/widgets/task_tracker/grid_project.dart';
 import 'package:edupot/widgets/task_tracker/list_project.dart';
 import 'package:edupot/widgets/task_tracker/project_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class ProjectView extends StatefulWidget {
-  final List<ProjectModel> itemArray;
-  const ProjectView({super.key, required this.itemArray});
+class ProjectView extends StatelessWidget {
+  const ProjectView({super.key});
 
-  @override
-  State<ProjectView> createState() => _ProjectViewState();
-}
-
-class _ProjectViewState extends State<ProjectView> {
   @override
   Widget build(BuildContext context) {
-    if (widget.itemArray.length <= 2 && widget.itemArray.isNotEmpty) {
-      return ProjectWidget(
-        itemArray: widget.itemArray,
-      );
-    } else if (widget.itemArray.length <= 4) {
-      return GridProject(
-        itemArray: widget.itemArray,
-      );
-    } else if (widget.itemArray.length > 4) {
-      return SizedBox(
-        height: 175,
-        child: ListProject(
-          itemArray: widget.itemArray,
-        ),
-      );
-    } else {
-      return const SizedBox();
-    }
+    return Consumer<ProjectProvider>(
+      builder: (context, projectProvider, child) {
+        final itemArray = projectProvider.projects;
+        if (itemArray.length <= 2 && itemArray.isNotEmpty) {
+          return ProjectWidget(
+            itemArray: itemArray,
+          );
+        } else if (itemArray.length <= 4) {
+          return GridProject(
+            itemArray: itemArray,
+          );
+        } else if (itemArray.length > 4) {
+          return SizedBox(
+            height: 175,
+            child: ListProject(
+              itemArray: itemArray,
+            ),
+          );
+        } else {
+          return const SizedBox();
+        }
+      },
+    );
   }
 }

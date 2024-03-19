@@ -47,9 +47,15 @@ class EntryService extends ChangeNotifier {
     }
   }
 
-  Future<dynamic> deleteEntry(
-      String userId, String entryId, String entryType) async {
+  Future<dynamic> deleteEntry(String userId, String entryId, String entryType,
+      DocumentReference? assigned) async {
     try {
+      if (assigned != null) {
+        await assigned.update({
+          'tasks':
+              FieldValue.arrayRemove([_db.doc('entry/$userId/tasks/$entryId')])
+        });
+      }
       await _db
           .collection('entry')
           .doc(userId)
@@ -85,6 +91,46 @@ class EntryService extends ChangeNotifier {
           level: 2000,
           stackTrace: StackTrace.current);
       return false;
+    }
+  }
+
+  Future<Map<String, bool>> assignTasks(String uid, String projectId,
+      List<DocumentReference> newRefs, List<DocumentReference> oldRefs) async {
+    bool updated = false;
+
+    try {
+      final projectRef = _db.collection('projects').doc(projectId);
+      final Set<String> oldRefIds = oldRefs.map((ref) => ref.id).toSet();
+
+      for (DocumentReference newTaskRef in newRefs) {
+        if (!oldRefIds.contains(newTaskRef.id)) {
+          await newTaskRef.update({'assignedProject': projectRef});
+          updated = true;
+        }
+      }
+
+      final Set<String> newRefIds = newRefs.map((ref) => ref.id).toSet();
+      for (DocumentReference oldTaskRef in oldRefs) {
+        if (!newRefIds.contains(oldTaskRef.id)) {
+          await oldTaskRef.update({'assignedProject': FieldValue.delete()});
+          updated = true;
+        }
+      }
+
+      return {
+        "success": true,
+        "updated": updated,
+      };
+    } catch (e) {
+      log(e.toString(),
+          name: "Error Assigning/Unassigning Tasks",
+          error: e,
+          level: 2000,
+          stackTrace: StackTrace.current);
+      return {
+        "success": false,
+        "updated": false,
+      };
     }
   }
 }

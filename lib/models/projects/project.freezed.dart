@@ -14,10 +14,6 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-ProjectModel _$ProjectModelFromJson(Map<String, dynamic> json) {
-  return _ProjectModel.fromJson(json);
-}
-
 /// @nodoc
 mixin _$ProjectModel {
   String? get id => throw _privateConstructorUsedError;
@@ -26,9 +22,9 @@ mixin _$ProjectModel {
   DateTime get finalDate => throw _privateConstructorUsedError;
   int get finished => throw _privateConstructorUsedError;
   String get iconTitle => throw _privateConstructorUsedError;
-  List<dynamic> get tasks => throw _privateConstructorUsedError;
+  List<DocumentReference<Object?>> get tasks =>
+      throw _privateConstructorUsedError;
 
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $ProjectModelCopyWith<ProjectModel> get copyWith =>
       throw _privateConstructorUsedError;
@@ -47,7 +43,7 @@ abstract class $ProjectModelCopyWith<$Res> {
       DateTime finalDate,
       int finished,
       String iconTitle,
-      List<dynamic> tasks});
+      List<DocumentReference<Object?>> tasks});
 }
 
 /// @nodoc
@@ -99,7 +95,7 @@ class _$ProjectModelCopyWithImpl<$Res, $Val extends ProjectModel>
       tasks: null == tasks
           ? _value.tasks
           : tasks // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>,
+              as List<DocumentReference<Object?>>,
     ) as $Val);
   }
 }
@@ -119,7 +115,7 @@ abstract class _$$ProjectModelImplCopyWith<$Res>
       DateTime finalDate,
       int finished,
       String iconTitle,
-      List<dynamic> tasks});
+      List<DocumentReference<Object?>> tasks});
 }
 
 /// @nodoc
@@ -169,13 +165,13 @@ class __$$ProjectModelImplCopyWithImpl<$Res>
       tasks: null == tasks
           ? _value._tasks
           : tasks // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>,
+              as List<DocumentReference<Object?>>,
     ));
   }
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class _$ProjectModelImpl with DiagnosticableTreeMixin implements _ProjectModel {
   const _$ProjectModelImpl(
       {this.id,
@@ -184,11 +180,8 @@ class _$ProjectModelImpl with DiagnosticableTreeMixin implements _ProjectModel {
       required this.finalDate,
       required this.finished,
       required this.iconTitle,
-      required final List<dynamic> tasks})
+      required final List<DocumentReference<Object?>> tasks})
       : _tasks = tasks;
-
-  factory _$ProjectModelImpl.fromJson(Map<String, dynamic> json) =>
-      _$$ProjectModelImplFromJson(json);
 
   @override
   final String? id;
@@ -202,9 +195,9 @@ class _$ProjectModelImpl with DiagnosticableTreeMixin implements _ProjectModel {
   final int finished;
   @override
   final String iconTitle;
-  final List<dynamic> _tasks;
+  final List<DocumentReference<Object?>> _tasks;
   @override
-  List<dynamic> get tasks {
+  List<DocumentReference<Object?>> get tasks {
     if (_tasks is EqualUnmodifiableListView) return _tasks;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_tasks);
@@ -247,7 +240,6 @@ class _$ProjectModelImpl with DiagnosticableTreeMixin implements _ProjectModel {
             const DeepCollectionEquality().equals(other._tasks, _tasks));
   }
 
-  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, id, name, description, finalDate,
       finished, iconTitle, const DeepCollectionEquality().hash(_tasks));
@@ -257,27 +249,18 @@ class _$ProjectModelImpl with DiagnosticableTreeMixin implements _ProjectModel {
   @pragma('vm:prefer-inline')
   _$$ProjectModelImplCopyWith<_$ProjectModelImpl> get copyWith =>
       __$$ProjectModelImplCopyWithImpl<_$ProjectModelImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$ProjectModelImplToJson(
-      this,
-    );
-  }
 }
 
 abstract class _ProjectModel implements ProjectModel {
   const factory _ProjectModel(
-      {final String? id,
-      required final String name,
-      required final String description,
-      required final DateTime finalDate,
-      required final int finished,
-      required final String iconTitle,
-      required final List<dynamic> tasks}) = _$ProjectModelImpl;
-
-  factory _ProjectModel.fromJson(Map<String, dynamic> json) =
-      _$ProjectModelImpl.fromJson;
+          {final String? id,
+          required final String name,
+          required final String description,
+          required final DateTime finalDate,
+          required final int finished,
+          required final String iconTitle,
+          required final List<DocumentReference<Object?>> tasks}) =
+      _$ProjectModelImpl;
 
   @override
   String? get id;
@@ -292,7 +275,7 @@ abstract class _ProjectModel implements ProjectModel {
   @override
   String get iconTitle;
   @override
-  List<dynamic> get tasks;
+  List<DocumentReference<Object?>> get tasks;
   @override
   @JsonKey(ignore: true)
   _$$ProjectModelImplCopyWith<_$ProjectModelImpl> get copyWith =>

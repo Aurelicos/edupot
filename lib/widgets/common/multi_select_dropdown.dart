@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edupot/components/common/overlay.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:flutter/material.dart';
@@ -10,14 +11,12 @@ class MultiSelectDropdown extends StatefulWidget {
   final MultiSelectDropdownButtonStyle dropdownButtonStyle;
   final Icon? icon;
   final String? placeholder;
-  final bool hideIcon;
   final bool leadingIcon;
   final LinearGradient? gradient;
-  final String? initialSelection;
+  final List<DocumentReference>? initialSelection;
 
   const MultiSelectDropdown({
     super.key,
-    this.hideIcon = false,
     this.placeholder,
     required this.items,
     required this.onChange,
@@ -40,12 +39,10 @@ class _MultiSelectDropdownState extends State<MultiSelectDropdown>
   bool _isOpen = false;
   late AnimationController _animationController;
   late Animation<double> _expandAnimation;
-  late Animation<double> _rotateAnimation;
   final TextEditingController _searchController = TextEditingController();
   List<MultiSelectDropdownItem> _filteredItems = [];
   final FocusNode _focusNode = FocusNode();
   bool initial = true;
-  List<bool?> selected = [];
   List<Item> selectedItems = [];
 
   @override
@@ -59,27 +56,28 @@ class _MultiSelectDropdownState extends State<MultiSelectDropdown>
       parent: _animationController,
       curve: Curves.easeInOut,
     );
-    _rotateAnimation = Tween(begin: 0.0, end: 0.5).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: Curves.easeInOut,
-      ),
-    );
     _filteredItems = widget.items;
-
-    if (widget.initialSelection != null) {
-      final initialItem = widget.items.firstWhere(
-        (item) => item.id == widget.initialSelection,
-      );
-      _searchController.text = initialItem.name;
-    }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_filteredItems.isNotEmpty && !initial) {
         _toggleDropdown();
       }
     });
-    selected = List.filled(widget.items.length, false);
+    _focusNode.addListener(() {
+      if (!_focusNode.hasFocus) {
+        _toggleDropdown(close: true);
+      }
+    });
+    if (widget.initialSelection != null) {
+      for (var element in widget.items) {
+        if (widget.initialSelection!.indexWhere((item) {
+              return item.id == element.id;
+            }) >
+            -1) {
+          selectedItems.add(Item(element.id, element.name));
+        }
+      }
+    }
   }
 
   @override
@@ -145,22 +143,6 @@ class _MultiSelectDropdownState extends State<MultiSelectDropdown>
                         },
                       ),
                     ),
-              if (!widget.hideIcon)
-                Padding(
-                  padding: const EdgeInsets.only(right: 20),
-                  child: RotationTransition(
-                    turns: _rotateAnimation,
-                    child: widget.icon ??
-                        const RotatedBox(
-                          quarterTurns: 3,
-                          child: Icon(
-                            Icons.arrow_back_ios_rounded,
-                            size: 18,
-                            color: Colors.white,
-                          ),
-                        ),
-                  ),
-                ),
             ],
           ),
         ),

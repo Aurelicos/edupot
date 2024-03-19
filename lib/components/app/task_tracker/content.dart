@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edupot/components/app/task_tracker/assigned_projects.dart';
 import 'package:edupot/components/app/task_tracker/assigned_tasks.dart';
 import 'package:edupot/providers/project_provider.dart';
@@ -154,6 +155,7 @@ class Content {
         ),
         AssignedTasks(
           title: "Assigned task",
+          initialTasks: content.initialTasks,
           onIdChange: (value) => content.onIdChange(value),
         ),
         const SizedBox(
@@ -241,6 +243,7 @@ class ProjectContent {
   final String dateText;
   final String iconTitle;
 
+  final List<DocumentReference>? initialTasks;
   final void Function()? onDate;
   final void Function()? onTime;
   final void Function()? onAttachment;
@@ -251,6 +254,7 @@ class ProjectContent {
     required this.dateText,
     required this.iconTitle,
     required this.onIdChange,
+    this.initialTasks,
     this.onDate,
     this.onTime,
     this.onAttachment,

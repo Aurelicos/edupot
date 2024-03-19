@@ -73,7 +73,6 @@ class _TaskTrackerPageState extends State<TaskTrackerPage> {
               _isLoading.setAll(0, [true, true]);
             });
             final entryProvider = context.read<EntryProvider>();
-            final projectProvider = context.read<ProjectProvider>();
             projectProvider
                 .fetchProjects(userProvider.user!.uid ?? "", forceRefresh: true)
                 .then((value) {
@@ -123,9 +122,7 @@ class _TaskTrackerPageState extends State<TaskTrackerPage> {
                       ),
                       _isLoading.every((element) => element == true)
                           ? projectLoadingUI()
-                          : ProjectView(
-                              itemArray: projectProvider.projects,
-                            ),
+                          : const ProjectView(),
                       _isLoading.every((element) => element == true)
                           ? loadingUI()
                           : _buildContent(context),

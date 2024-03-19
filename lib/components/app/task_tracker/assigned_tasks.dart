@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edupot/models/entries/task.dart';
 import 'package:edupot/providers/entry_provider.dart';
 import 'package:edupot/utils/themes/theme.dart';
@@ -10,8 +11,11 @@ class AssignedTasks extends StatefulWidget {
   final String title;
   final void Function(List<Item>) onIdChange;
   final String? id;
+
+  final List<DocumentReference>? initialTasks;
   const AssignedTasks({
     super.key,
+    this.initialTasks,
     required this.title,
     required this.onIdChange,
     this.id,
@@ -35,8 +39,7 @@ class _AssignedTasksState extends State<AssignedTasks> {
           dropdownButtonStyle: MultiSelectDropdownButtonStyle(
             borderRadius: BorderRadius.circular(8),
           ),
-          initialSelection: widget.id,
-          hideIcon: true,
+          initialSelection: widget.initialTasks,
           items: _createDropdownItems(entryProvider),
           onChange: (value) {
             widget.onIdChange(value);
