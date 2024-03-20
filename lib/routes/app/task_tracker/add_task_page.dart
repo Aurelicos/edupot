@@ -139,6 +139,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                   } else if (widget.task != null) {
                                     id = widget.task!.id;
                                     type = "task";
+                                  } else if (widget.project != null) {
+                                    id = widget.project!.id;
+                                    type = "project";
                                   }
 
                                   if (id != null) {
@@ -147,6 +150,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                       type,
                                       entryProvider: entryProvider,
                                       userProvider: userProvider,
+                                      projectProvider: projectProvider,
                                       assigned: type == "task"
                                           ? widget.task?.assignedProject
                                           : null,
@@ -318,36 +322,69 @@ class _AddTaskPageState extends State<AddTaskPage> {
                           widget.modalContext?.maybePop();
 
                           if (model is ProjectModel) {
-                            EntryService()
-                                .assignTasks(uid, widget.project!.id!,
-                                    assignedTasks ?? [], widget.project!.tasks)
-                                .then((data) {
+                            if (widget.project != null) {
+                              EntryService()
+                                  .assignTasks(
+                                      uid,
+                                      widget.project!.id!,
+                                      assignedTasks ?? [],
+                                      widget.project!.tasks)
+                                  .then((data) {
+                                EntryService()
+                                    .setProject(model,
+                                        update: widget.project != null)
+                                    .then((_) {
+                                  if (data["updated"] == true) {
+                                    projectProvider.fetchProjects(uid,
+                                        forceRefresh: true);
+                                    entryProvider.fetchEntries(uid,
+                                        forceRefresh: true);
+                                  } else {
+                                    projectProvider.fetchProjects(uid,
+                                        forceRefresh: true);
+                                  }
+                                }).then((_) =>
+                                        mounted ? context.maybePop() : false);
+                              });
+                            } else {
                               EntryService()
                                   .setProject(model,
-                                      update: widget.project != null)
-                                  .then((_) {
-                                if (data["updated"] == true) {
+                                      update: false,
+                                      uid: userProvider.user?.uid ?? "")
+                                  .then((projectId) {
+                                EntryService().assignTasks(uid, projectId,
+                                    assignedTasks!, []).then((_) {
                                   projectProvider.fetchProjects(uid,
                                       forceRefresh: true);
                                   entryProvider.fetchEntries(uid,
                                       forceRefresh: true);
-                                } else {
-                                  projectProvider.fetchProjects(uid,
-                                      forceRefresh: true);
-                                }
+                                });
                               }).then((_) =>
                                       mounted ? context.maybePop() : false);
-                            });
+                            }
                           } else {
                             EntryService()
                                 .setEntry(uid, model, entryType,
+                                    oldAssignee: widget.task?.assignedProject,
                                     update: provider.selectedIndex == 0
                                         ? widget.exam != null
                                         : widget.task != null)
-                                .then((_) => entryProvider.fetchEntries(uid,
-                                    forceRefresh: true))
-                                .then((_) {
-                              if (mounted) context.maybePop();
+                                .then((value) {
+                              if (value["updated"] == true) {
+                                projectProvider
+                                    .fetchProjects(uid, forceRefresh: true)
+                                    .then((_) {
+                                  entryProvider
+                                      .fetchEntries(uid, forceRefresh: true)
+                                      .then((_) =>
+                                          mounted ? context.maybePop() : false);
+                                });
+                              } else {
+                                entryProvider
+                                    .fetchEntries(uid, forceRefresh: true)
+                                    .then((_) =>
+                                        mounted ? context.maybePop() : false);
+                              }
                             });
                           }
                         },
@@ -378,14 +415,35 @@ class _AddTaskPageState extends State<AddTaskPage> {
     String type, {
     required UserProvider userProvider,
     required EntryProvider entryProvider,
+    required ProjectProvider projectProvider,
     DocumentReference? assigned,
   }) {
-    EntryService()
-        .deleteEntry(userProvider.user!.uid ?? "", id, type, assigned)
-        .then((value) {
-      entryProvider
-          .fetchEntries(userProvider.user!.uid ?? "", forceRefresh: true)
-          .then((value) => context.maybePop());
-    });
+    if (type == "project") {
+      EntryService()
+          .deleteProject(
+              id, widget.project!.tasks, userProvider.user!.uid ?? "")
+          .then((value) {
+        if (value["updated"] == true) {
+          entryProvider
+              .fetchEntries(userProvider.user!.uid ?? "", forceRefresh: true)
+              .then((_) => projectProvider
+                  .fetchProjects(id, forceRefresh: true)
+                  .then((value) => context.maybePop()));
+        } else {
+          projectProvider
+              .fetchProjects(id, forceRefresh: true)
+              .then((value) => context.maybePop());
+        }
+      });
+      return;
+    } else {
+      EntryService()
+          .deleteEntry(userProvider.user!.uid ?? "", id, type, assigned)
+          .then((value) {
+        entryProvider
+            .fetchEntries(userProvider.user!.uid ?? "", forceRefresh: true)
+            .then((value) => context.maybePop());
+      });
+    }
   }
 }

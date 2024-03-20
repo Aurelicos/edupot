@@ -57,6 +57,11 @@ class _TaskTrackerPageState extends State<TaskTrackerPage> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final projectProvider =

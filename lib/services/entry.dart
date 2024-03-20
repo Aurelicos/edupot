@@ -3,16 +3,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edupot/models/entries/exam.dart';
 import 'package:edupot/models/entries/task.dart';
 import 'package:edupot/models/projects/project.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class EntryService extends ChangeNotifier {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   Future<dynamic> setEntry(String userId, dynamic data, String entryType,
-      {bool? update}) async {
+      {bool? update, DocumentReference? oldAssignee}) async {
     try {
       DocumentReference docRef;
       Map<String, dynamic> dataMap;
+
+      bool updated = false;
 
       if (entryType == 'exam') {
         dataMap = ExamModel.toDoc(data);
@@ -22,6 +25,8 @@ class EntryService extends ChangeNotifier {
         throw 'Unsupported entry type';
       }
 
+      DocumentReference? newAssignee = data.assignedProject;
+
       if (update == true) {
         docRef = _db
             .collection('entry')
@@ -29,21 +34,57 @@ class EntryService extends ChangeNotifier {
             .collection('${entryType}s')
             .doc(data.id);
         await docRef.update(dataMap);
+
+        if (oldAssignee != null &&
+            newAssignee != null &&
+            oldAssignee.id != newAssignee.id) {
+          await oldAssignee.update({
+            'tasks': FieldValue.arrayRemove([docRef])
+          });
+          await newAssignee.update({
+            'tasks': FieldValue.arrayUnion([docRef])
+          });
+          updated = true;
+        } else if (oldAssignee == null && newAssignee != null) {
+          await newAssignee.update({
+            'tasks': FieldValue.arrayUnion([docRef])
+          });
+          updated = true;
+        } else if (oldAssignee != null && newAssignee == null) {
+          await oldAssignee.update({
+            'tasks': FieldValue.arrayRemove([docRef])
+          });
+          updated = true;
+        }
       } else {
         docRef = await _db
             .collection('entry')
             .doc(userId)
             .collection('${entryType}s')
             .add(dataMap);
+
+        if (newAssignee != null) {
+          await newAssignee.update({
+            'tasks': FieldValue.arrayUnion([docRef])
+          });
+          updated = true;
+        }
       }
-      return true;
+
+      return {
+        "success": true,
+        "updated": updated,
+      };
     } catch (e) {
       log(e.toString(),
           name: "Error Creating/Updating $entryType",
           error: e,
           level: 2000,
           stackTrace: StackTrace.current);
-      return false;
+      return {
+        "success": false,
+        "updated": false,
+      };
     }
   }
 
@@ -73,7 +114,8 @@ class EntryService extends ChangeNotifier {
     }
   }
 
-  Future<dynamic> setProject(ProjectModel data, {bool? update}) async {
+  Future<dynamic> setProject(ProjectModel data,
+      {bool? update, String? uid}) async {
     try {
       DocumentReference docRef;
 
@@ -82,8 +124,11 @@ class EntryService extends ChangeNotifier {
         await docRef.update(ProjectModel.toDoc(data));
       } else {
         docRef = await _db.collection('projects').add(ProjectModel.toDoc(data));
+        await _db.collection('entry').doc(uid).update({
+          'projects': FieldValue.arrayUnion([docRef])
+        });
       }
-      return true;
+      return docRef.id;
     } catch (e) {
       log(e.toString(),
           name: "Error Creating/Updating Project",
@@ -100,13 +145,22 @@ class EntryService extends ChangeNotifier {
 
     try {
       final projectRef = _db.collection('projects').doc(projectId);
-      final Set<String> oldRefIds = oldRefs.map((ref) => ref.id).toSet();
 
       for (DocumentReference newTaskRef in newRefs) {
-        if (!oldRefIds.contains(newTaskRef.id)) {
-          await newTaskRef.update({'assignedProject': projectRef});
+        DocumentSnapshot taskSnapshot = await newTaskRef.get();
+        DocumentReference? currentAssignedProject =
+            TaskModel.fromDoc(taskSnapshot)?.assignedProject;
+
+        if (currentAssignedProject != null &&
+            currentAssignedProject.id != projectId) {
+          await currentAssignedProject.update({
+            'tasks': FieldValue.arrayRemove([newTaskRef])
+          });
           updated = true;
         }
+
+        await newTaskRef.update({'assignedProject': projectRef});
+        updated = true;
       }
 
       final Set<String> newRefIds = newRefs.map((ref) => ref.id).toSet();
@@ -117,13 +171,37 @@ class EntryService extends ChangeNotifier {
         }
       }
 
+      return {"success": true, "updated": updated};
+    } catch (e) {
+      log(e.toString(),
+          name: "Error Assigning/Unassigning Tasks",
+          error: e,
+          level: 2000,
+          stackTrace: StackTrace.current);
+      return {"success": false, "updated": false};
+    }
+  }
+
+  Future<dynamic> deleteProject(
+      String projectId, List<DocumentReference> tasks, String uid) async {
+    try {
+      bool updated = false;
+      for (DocumentReference taskRef in tasks) {
+        await taskRef.update({'assignedProject': FieldValue.delete()});
+        updated = true;
+      }
+
+      await _db.collection('projects').doc(projectId).delete();
+      await _db.collection('entry').doc(uid).update({
+        'projects': FieldValue.arrayRemove([_db.doc('projects/$projectId')])
+      });
       return {
         "success": true,
         "updated": updated,
       };
     } catch (e) {
       log(e.toString(),
-          name: "Error Assigning/Unassigning Tasks",
+          name: "Error Deleting Project",
           error: e,
           level: 2000,
           stackTrace: StackTrace.current);

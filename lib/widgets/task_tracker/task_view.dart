@@ -50,7 +50,7 @@ class TaskView extends StatelessWidget {
       throw Exception('Unknown item type');
     }
 
-    Map<String, dynamic> formattedDate = formatDate(finalDate);
+    Map<String, dynamic> formattedDate = formatDate(finalDate, item);
 
     return Container(
       margin: const EdgeInsets.only(top: 10),
@@ -110,7 +110,7 @@ class TaskView extends StatelessWidget {
     }
   }
 
-  Map<String, dynamic> formatDate(DateTime date) {
+  Map<String, dynamic> formatDate(DateTime date, dynamic item) {
     DateTime normalizedDate = DateTime(date.year, date.month, date.day);
     DateTime now = DateTime.now();
     DateTime normalizedNow = DateTime(now.year, now.month, now.day);
@@ -118,7 +118,7 @@ class TaskView extends StatelessWidget {
     int daysUntil = normalizedDate.difference(normalizedNow).inDays;
     String finalDate;
 
-    if (daysUntil < 0) {
+    if (daysUntil < 0 && item is TaskModel) {
       finalDate = "Overdue";
     } else if (daysUntil == 0) {
       finalDate = "Today";
