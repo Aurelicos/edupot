@@ -298,6 +298,7 @@ class _SearchDropdownState extends State<SearchDropdown>
     if (_isOpen || close) {
       _overlayEntry.remove();
       _animationController.reverse();
+      FocusManager.instance.primaryFocus?.unfocus();
       setState(() => _isOpen = false);
     } else {
       _overlayEntry = _createOverlayEntry();
