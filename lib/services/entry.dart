@@ -25,7 +25,10 @@ class EntryService extends ChangeNotifier {
         throw 'Unsupported entry type';
       }
 
-      DocumentReference? newAssignee = data.assignedProject;
+      DocumentReference? newAssignee;
+      if (entryType == 'task') {
+        newAssignee = data.assignedProject;
+      }
 
       if (update == true) {
         docRef = _db
@@ -121,12 +124,29 @@ class EntryService extends ChangeNotifier {
 
       if (update == true) {
         docRef = _db.collection('projects').doc(data.id);
-        await docRef.update(ProjectModel.toDoc(data));
+        await docRef.get().then((docSnapshot) => {
+              if (docSnapshot.exists)
+                {docRef.update(ProjectModel.toDoc(data))}
+              else
+                {docRef.set(ProjectModel.toDoc(data))}
+            });
       } else {
         docRef = await _db.collection('projects').add(ProjectModel.toDoc(data));
-        await _db.collection('entry').doc(uid).update({
-          'projects': FieldValue.arrayUnion([docRef])
-        });
+        DocumentReference entryDocRef = _db.collection('entry').doc(uid);
+        await entryDocRef.get().then((docSnapshot) => {
+              if (docSnapshot.exists)
+                {
+                  entryDocRef.update({
+                    'projects': FieldValue.arrayUnion([docRef])
+                  })
+                }
+              else
+                {
+                  entryDocRef.set({
+                    'projects': FieldValue.arrayUnion([docRef])
+                  })
+                }
+            });
       }
       return docRef.id;
     } catch (e) {
@@ -187,8 +207,11 @@ class EntryService extends ChangeNotifier {
     try {
       bool updated = false;
       for (DocumentReference taskRef in tasks) {
-        await taskRef.update({'assignedProject': FieldValue.delete()});
-        updated = true;
+        DocumentSnapshot taskSnapshot = await taskRef.get();
+        if (taskSnapshot.exists) {
+          await taskRef.update({'assignedProject': FieldValue.delete()});
+          updated = true;
+        }
       }
 
       await _db.collection('projects').doc(projectId).delete();

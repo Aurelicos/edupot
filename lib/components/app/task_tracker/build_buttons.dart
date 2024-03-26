@@ -1,4 +1,5 @@
 import 'package:edupot/utils/themes/theme.dart';
+import 'package:edupot/widgets/common/circle_button.dart';
 import 'package:edupot/widgets/common/hexagon.dart';
 import 'package:edupot/widgets/task_tracker/task_dropdown.dart';
 import 'package:flutter/material.dart';
@@ -55,6 +56,8 @@ Widget buildHeadline(String title, BuildContext context,
     {bool isProject = false,
     String hexagonText = "MP",
     required Color color,
+    required void Function(bool selected) onDone,
+    bool disabled = false,
     void Function()? onDelete}) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -62,6 +65,13 @@ Widget buildHeadline(String title, BuildContext context,
     children: [
       Row(
         children: [
+          onDelete != null && !isProject
+              ? CircleButton(
+                  onPressed: onDone,
+                  color: color,
+                  disabled: disabled,
+                )
+              : const SizedBox(),
           isProject
               ? Row(
                   children: [
@@ -81,7 +91,7 @@ Widget buildHeadline(String title, BuildContext context,
                 context,
                 EduPotDarkTextTheme.headline1.copyWith(fontSize: 32),
                 MediaQuery.of(context).size.width * 0.75 -
-                    (isProject ? 42 : 0)),
+                    (isProject || onDelete != null && !isProject ? 42 : 0)),
             style: EduPotDarkTextTheme.headline1.copyWith(fontSize: 32),
           ),
         ],

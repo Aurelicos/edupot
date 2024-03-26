@@ -122,7 +122,11 @@ class _AddTaskPageState extends State<AddTaskPage> {
                           title.isEmpty
                               ? headlines[provider.selectedIndex]
                               : title,
+                          onDone: (bool selected) {
+                            print(selected);
+                          },
                           context,
+                          disabled: provider.selectedIndex != 1,
                           isProject: provider.selectedIndex == 2,
                           hexagonText: simpleTitle,
                           color: colorsPalete[provider.selectedIndex],
@@ -352,13 +356,19 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                       update: false,
                                       uid: userProvider.user?.uid ?? "")
                                   .then((projectId) {
-                                EntryService().assignTasks(uid, projectId,
-                                    assignedTasks!, []).then((_) {
+                                if (assignedTasks != null &&
+                                    assignedTasks!.isNotEmpty) {
+                                  EntryService().assignTasks(uid, projectId,
+                                      assignedTasks!, []).then((_) {
+                                    projectProvider.fetchProjects(uid,
+                                        forceRefresh: true);
+                                    entryProvider.fetchEntries(uid,
+                                        forceRefresh: true);
+                                  });
+                                } else {
                                   projectProvider.fetchProjects(uid,
                                       forceRefresh: true);
-                                  entryProvider.fetchEntries(uid,
-                                      forceRefresh: true);
-                                });
+                                }
                               }).then((_) =>
                                       mounted ? context.maybePop() : false);
                             }
@@ -427,11 +437,12 @@ class _AddTaskPageState extends State<AddTaskPage> {
           entryProvider
               .fetchEntries(userProvider.user!.uid ?? "", forceRefresh: true)
               .then((_) => projectProvider
-                  .fetchProjects(id, forceRefresh: true)
+                  .fetchProjects(userProvider.user!.uid ?? "",
+                      forceRefresh: true)
                   .then((value) => context.maybePop()));
         } else {
           projectProvider
-              .fetchProjects(id, forceRefresh: true)
+              .fetchProjects(userProvider.user!.uid ?? "", forceRefresh: true)
               .then((value) => context.maybePop());
         }
       });

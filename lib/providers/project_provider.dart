@@ -28,10 +28,13 @@ class ProjectProvider extends ChangeNotifier {
 
       final List<ProjectModel> temporaryProjects = [];
 
-      for (DocumentReference<Map<String, dynamic>> projectRef
-          in projectsList!.projects) {
-        final projectData = ProjectModel.fromDoc(await projectRef.get());
-        temporaryProjects.add(projectData!);
+      if (projectsList?.projects != null &&
+          projectsList!.projects!.isNotEmpty) {
+        for (DocumentReference<Map<String, dynamic>> projectRef
+            in projectsList.projects!) {
+          final projectData = ProjectModel.fromDoc(await projectRef.get());
+          temporaryProjects.add(projectData!);
+        }
       }
 
       _projects = temporaryProjects;
@@ -45,7 +48,7 @@ class ProjectProvider extends ChangeNotifier {
       };
     } catch (e) {
       log(e.toString(),
-          name: "Error Fetching Entries",
+          name: "Error Fetching Projects",
           level: 2000,
           error: e,
           stackTrace: StackTrace.current);

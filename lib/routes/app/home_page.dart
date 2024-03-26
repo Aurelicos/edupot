@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:edupot/providers/entry_provider.dart';
 import 'package:edupot/providers/navbar_provider.dart';
+import 'package:edupot/providers/project_provider.dart';
 import 'package:edupot/providers/user_provider.dart';
 import 'package:edupot/routes/app/task_tracker/task_tracker_page.dart';
 import 'package:edupot/routes/splash_screen.dart';
@@ -46,6 +48,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final userProvider = context.read<UserProvider>();
+    final projectProvider = context.read<ProjectProvider>();
+    final entryProvider = context.read<EntryProvider>();
 
     return FutureBuilder(
       future: userProvider.handleAuth(uid: AuthService().currentUser!.uid),
@@ -55,6 +59,10 @@ class _HomePageState extends State<HomePage> {
             AuthService().signOut();
             context.replaceRoute(const RegisterRoute());
           }
+          entryProvider.fetchEntries(userProvider.user!.uid ?? "",
+              forceRefresh: true);
+          projectProvider.fetchProjects(userProvider.user!.uid ?? "",
+              forceRefresh: true);
           if (snapshot.data!['data'] == false) {
             context.replaceRoute(const OnboardingRoute());
           } else {

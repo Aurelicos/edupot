@@ -7,17 +7,20 @@ part 'entry_project.freezed.dart';
 @freezed
 class EntryProjectModel with _$EntryProjectModel {
   const factory EntryProjectModel({
-    required List<DocumentReference<Map<String, dynamic>>> projects,
+    required List<DocumentReference<Map<String, dynamic>>>? projects,
   }) = _EntryProjectModel;
 
   static EntryProjectModel? fromDoc(DocumentSnapshot document) {
     final data = document.data() as Map<String, dynamic>?;
-
-    return EntryProjectModel(
-      projects: (data!["projects"] as List)
-          .map((item) => item as DocumentReference<Map<String, dynamic>>)
-          .toList(),
-    );
+    if (data == null) {
+      return const EntryProjectModel(projects: []);
+    } else {
+      return EntryProjectModel(
+        projects: (data["projects"] as List)
+            .map((item) => item as DocumentReference<Map<String, dynamic>>)
+            .toList(),
+      );
+    }
   }
 
   static Map<String, dynamic> toDoc(EntryProjectModel entryProjectModel) {

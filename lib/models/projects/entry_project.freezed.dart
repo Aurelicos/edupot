@@ -16,7 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$EntryProjectModel {
-  List<DocumentReference<Map<String, dynamic>>> get projects =>
+  List<DocumentReference<Map<String, dynamic>>>? get projects =>
       throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -30,7 +30,7 @@ abstract class $EntryProjectModelCopyWith<$Res> {
           EntryProjectModel value, $Res Function(EntryProjectModel) then) =
       _$EntryProjectModelCopyWithImpl<$Res, EntryProjectModel>;
   @useResult
-  $Res call({List<DocumentReference<Map<String, dynamic>>> projects});
+  $Res call({List<DocumentReference<Map<String, dynamic>>>? projects});
 }
 
 /// @nodoc
@@ -46,13 +46,13 @@ class _$EntryProjectModelCopyWithImpl<$Res, $Val extends EntryProjectModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? projects = null,
+    Object? projects = freezed,
   }) {
     return _then(_value.copyWith(
-      projects: null == projects
+      projects: freezed == projects
           ? _value.projects
           : projects // ignore: cast_nullable_to_non_nullable
-              as List<DocumentReference<Map<String, dynamic>>>,
+              as List<DocumentReference<Map<String, dynamic>>>?,
     ) as $Val);
   }
 }
@@ -65,7 +65,7 @@ abstract class _$$EntryProjectModelImplCopyWith<$Res>
       __$$EntryProjectModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<DocumentReference<Map<String, dynamic>>> projects});
+  $Res call({List<DocumentReference<Map<String, dynamic>>>? projects});
 }
 
 /// @nodoc
@@ -79,13 +79,13 @@ class __$$EntryProjectModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? projects = null,
+    Object? projects = freezed,
   }) {
     return _then(_$EntryProjectModelImpl(
-      projects: null == projects
+      projects: freezed == projects
           ? _value._projects
           : projects // ignore: cast_nullable_to_non_nullable
-              as List<DocumentReference<Map<String, dynamic>>>,
+              as List<DocumentReference<Map<String, dynamic>>>?,
     ));
   }
 }
@@ -96,15 +96,17 @@ class _$EntryProjectModelImpl
     with DiagnosticableTreeMixin
     implements _EntryProjectModel {
   const _$EntryProjectModelImpl(
-      {required final List<DocumentReference<Map<String, dynamic>>> projects})
+      {required final List<DocumentReference<Map<String, dynamic>>>? projects})
       : _projects = projects;
 
-  final List<DocumentReference<Map<String, dynamic>>> _projects;
+  final List<DocumentReference<Map<String, dynamic>>>? _projects;
   @override
-  List<DocumentReference<Map<String, dynamic>>> get projects {
+  List<DocumentReference<Map<String, dynamic>>>? get projects {
+    final value = _projects;
+    if (value == null) return null;
     if (_projects is EqualUnmodifiableListView) return _projects;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_projects);
+    return EqualUnmodifiableListView(value);
   }
 
   @override
@@ -142,11 +144,11 @@ class _$EntryProjectModelImpl
 
 abstract class _EntryProjectModel implements EntryProjectModel {
   const factory _EntryProjectModel(
-      {required final List<DocumentReference<Map<String, dynamic>>>
+      {required final List<DocumentReference<Map<String, dynamic>>>?
           projects}) = _$EntryProjectModelImpl;
 
   @override
-  List<DocumentReference<Map<String, dynamic>>> get projects;
+  List<DocumentReference<Map<String, dynamic>>>? get projects;
   @override
   @JsonKey(ignore: true)
   _$$EntryProjectModelImplCopyWith<_$EntryProjectModelImpl> get copyWith =>
