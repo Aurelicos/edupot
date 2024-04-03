@@ -122,9 +122,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                           title.isEmpty
                               ? headlines[provider.selectedIndex]
                               : title,
-                          onDone: (bool selected) {
-                            print(selected);
-                          },
+                          onDone: (bool selected) {},
                           context,
                           disabled: provider.selectedIndex != 1,
                           isProject: provider.selectedIndex == 2,
