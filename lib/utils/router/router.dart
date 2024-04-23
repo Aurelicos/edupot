@@ -4,6 +4,7 @@ import 'package:edupot/models/entries/task.dart';
 import 'package:edupot/models/projects/project.dart';
 import 'package:edupot/routes/app/calendar/calendar_page.dart';
 import 'package:edupot/routes/app/notes/notes_page.dart';
+import 'package:edupot/routes/app/settings/my_account/account_page.dart';
 import 'package:edupot/routes/app/settings/settings_page.dart';
 import 'package:edupot/routes/app/task_tracker/add_task_page.dart';
 import 'package:edupot/routes/app/task_tracker/task_tracker_page.dart';
@@ -45,5 +46,6 @@ class AppRouter extends _$AppRouter {
           transitionsBuilder: null,
         ),
         AutoRoute(page: AddTaskRoute.page),
+        AutoRoute(page: AccountRoute.page),
       ];
 }

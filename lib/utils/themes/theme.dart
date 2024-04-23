@@ -108,6 +108,18 @@ class EduPotColorTheme {
     end: Alignment(0.68, 0.74),
     colors: [Color(0x66A5AFC4), Color(0x666D7B98)],
   );
+
+  static const purplePinkGradient = LinearGradient(
+    begin: Alignment(0.67, -0.75),
+    end: Alignment(-0.67, 0.75),
+    colors: [Color(0xFF5B34FF), Color(0xFFFF5303)],
+  );
+
+  static const greenGradient = LinearGradient(
+    begin: Alignment(0.76, -0.65),
+    end: Alignment(-0.76, 0.65),
+    colors: [Color(0xFF89FF2C), Color(0xFF4362B0)],
+  );
 }
 
 class EduPotDarkTextTheme {
@@ -138,6 +150,13 @@ class EduPotDarkTextTheme {
     fontFamily: "Inter",
     fontSize: 16,
     fontWeight: FontWeight.w700,
+    color: Colors.white,
+  );
+
+  static const TextStyle smallHeadline = TextStyle(
+    fontFamily: 'Inter',
+    fontSize: 18,
+    fontWeight: FontWeight.w600,
     color: Colors.white,
   );
 }
