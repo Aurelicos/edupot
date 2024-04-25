@@ -11,7 +11,7 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<dynamic> items = [
+    final List<Map<String, dynamic>> settingsItems = [
       {
         'asset': 'assets/icons/user.svg',
         'title': 'My Account',
@@ -21,15 +21,16 @@ class SettingsPage extends StatelessWidget {
       {
         'asset': 'assets/icons/shield.svg',
         'title': 'Privacy',
-        'description': 'Adjust your privacy settings.',
+        'description': 'Adjust your privacy settings.'
       },
       {
         'asset': 'assets/icons/bell.svg',
         'title': 'Notifications',
-        'description': 'Notification preferences.',
+        'description': 'Notification preferences.'
       }
     ];
-    final List<dynamic> items2 = [
+
+    final List<Map<String, dynamic>> applicationItems = [
       {
         'asset': 'assets/icons/calendar.svg',
         'title': 'Calendar',
@@ -55,114 +56,86 @@ class SettingsPage extends StatelessWidget {
         'gradient': EduPotColorTheme.greenGradient
       }
     ];
+
     return PrimaryScaffold(
       child: SafeArea(
         child: SingleChildScrollView(
-          child: Container(
+          child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               children: [
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.035,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'Settings',
-                      style: EduPotDarkTextTheme.headline1,
-                    ),
-                    Image.asset(
-                      "assets/images/user.png",
-                      scale: 3.25,
-                    )
-                  ],
-                ),
+                _header(context),
                 const SizedBox(height: 20),
-                Container(
-                  margin: const EdgeInsets.only(bottom: 10),
-                  alignment: Alignment.centerLeft,
-                  child: const Text(
-                    "My settings",
-                    style: EduPotDarkTextTheme.smallHeadline,
-                  ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    gradient: EduPotColorTheme.mainItemGradient,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Column(
-                    children: List.generate(
-                      3,
-                      (index) => Column(
-                        children: [
-                          MainCard(
-                            items[index]['asset'],
-                            title: items[index]['title'],
-                            description: items[index]['description'],
-                            gradient: EduPotColorTheme.lightGrayCardGradient,
-                            onPressed: () {
-                              if (items[index]['onPressed'] != null) {
-                                items[index]['onPressed']();
-                              }
-                            },
-                          ),
-                          if (index != 2)
-                            Divider(
-                              color: Colors.white.withOpacity(0.1),
-                              thickness: 1,
-                              height: 1,
-                            ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                _buildSection(context, "My settings", settingsItems),
                 const SizedBox(height: 20),
-                Container(
-                  margin: const EdgeInsets.only(bottom: 10),
-                  alignment: Alignment.centerLeft,
-                  child: const Text(
-                    "Applications",
-                    style: EduPotDarkTextTheme.smallHeadline,
-                  ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    gradient: EduPotColorTheme.mainItemGradient,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Column(
-                    children: List.generate(
-                      4,
-                      (index) => Column(
-                        children: [
-                          MainCard(
-                            items2[index]['asset'],
-                            title: items2[index]['title'],
-                            description: items2[index]['description'],
-                            gradient: items2[index]['gradient'],
-                            onPressed: () {},
-                          ),
-                          if (index != 3)
-                            Divider(
-                              color: Colors.white.withOpacity(0.1),
-                              thickness: 1,
-                              height: 1,
-                            ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                _buildSection(context, "Applications", applicationItems),
                 const SizedBox(height: 20),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _header(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(height: MediaQuery.of(context).size.height * 0.035),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Text('Settings', style: EduPotDarkTextTheme.headline1),
+            Image.asset("assets/images/user.png", scale: 3.25),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSection(
+      BuildContext context, String title, List<Map<String, dynamic>> items) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          margin: const EdgeInsets.only(bottom: 10),
+          child: Text(title, style: EduPotDarkTextTheme.smallHeadline),
+        ),
+        Container(
+          decoration: BoxDecoration(
+            gradient: EduPotColorTheme.mainItemGradient,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Column(
+            children: List.generate(
+              items.length,
+              (index) => Column(
+                children: [
+                  MainCard(
+                    items[index]['asset'],
+                    title: items[index]['title'],
+                    description: items[index]['description'],
+                    gradient: items[index]['gradient'] ??
+                        EduPotColorTheme.lightGrayCardGradient,
+                    onPressed: () {
+                      if (items[index]['onPressed'] != null) {
+                        items[index]['onPressed']();
+                      }
+                    },
+                  ),
+                  if (index != items.length - 1)
+                    Divider(
+                        color: Colors.white.withOpacity(0.1),
+                        thickness: 1,
+                        height: 1),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

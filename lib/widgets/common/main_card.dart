@@ -8,6 +8,8 @@ class MainCard extends StatelessWidget {
   final String description;
   final LinearGradient gradient;
   final void Function() onPressed;
+  final bool icon;
+
   const MainCard(
     this.asset, {
     super.key,
@@ -15,6 +17,7 @@ class MainCard extends StatelessWidget {
     required this.description,
     required this.gradient,
     required this.onPressed,
+    this.icon = true,
   });
 
   @override
@@ -67,11 +70,12 @@ class MainCard extends StatelessWidget {
                 ],
               ),
               const Spacer(),
-              const Icon(
-                Icons.arrow_forward_ios_rounded,
-                size: 20,
-                color: Colors.white,
-              ),
+              if (icon)
+                const Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  size: 20,
+                  color: Colors.white,
+                ),
             ],
           ),
         ),
