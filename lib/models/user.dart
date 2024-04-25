@@ -17,6 +17,7 @@ class User with _$User {
     required dynamic createdAt,
     required bool enabled,
     String? displayName,
+    String? photoURL,
   }) = _User;
 
   static User? fromDoc(DocumentSnapshot document) {
@@ -31,6 +32,7 @@ class User with _$User {
       createdAt: data["createdAt"],
       enabled: data["enabled"],
       displayName: data["displayName"] ?? "",
+      photoURL: data["photoURL"] ?? "",
     );
   }
 
@@ -43,6 +45,7 @@ class User with _$User {
       "createdAt": user.createdAt,
       "enabled": user.enabled,
       "displayName": user.displayName ?? "",
+      "photoURL": user.photoURL ?? "",
     };
   }
 

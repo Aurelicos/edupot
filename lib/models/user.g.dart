@@ -15,6 +15,7 @@ _$UserImpl _$$UserImplFromJson(Map<String, dynamic> json) => _$UserImpl(
       createdAt: json['createdAt'],
       enabled: json['enabled'] as bool,
       displayName: json['displayName'] as String?,
+      photoURL: json['photoURL'] as String?,
     );
 
 Map<String, dynamic> _$$UserImplToJson(_$UserImpl instance) =>
@@ -27,4 +28,5 @@ Map<String, dynamic> _$$UserImplToJson(_$UserImpl instance) =>
       'createdAt': instance.createdAt,
       'enabled': instance.enabled,
       'displayName': instance.displayName,
+      'photoURL': instance.photoURL,
     };

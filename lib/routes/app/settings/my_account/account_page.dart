@@ -2,6 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edupot/components/app/primary_scaffold.dart';
 import 'package:edupot/providers/user_provider.dart';
+import 'package:edupot/services/auth.dart';
+import 'package:edupot/utils/router/router.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/widgets/common/main_card.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +17,7 @@ class AccountPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userProvider = context.read<UserProvider>();
+
     return PrimaryScaffold(
       child: Column(
         children: [
@@ -55,11 +58,25 @@ class AccountPage extends StatelessWidget {
               Positioned(
                 left: MediaQuery.of(context).size.width * 0.5 - 60,
                 top: MediaQuery.of(context).size.height * 0.25 - 60,
-                child: Image.asset(
-                  "assets/images/user.png",
-                  width: 120,
-                  height: 120,
-                ),
+                child: userProvider.user != null &&
+                        userProvider.user!.photoURL!.isNotEmpty
+                    ? CircleAvatar(
+                        radius: 60,
+                        backgroundColor: Colors.white,
+                        child: ClipOval(
+                          child: Image.network(
+                            fit: BoxFit.cover,
+                            userProvider.user!.photoURL ?? "",
+                            width: 118,
+                            height: 118,
+                          ),
+                        ),
+                      )
+                    : Image.asset(
+                        "assets/images/user.png",
+                        width: 120,
+                        height: 120,
+                      ),
               ),
             ],
           ),
@@ -88,11 +105,33 @@ class AccountPage extends StatelessWidget {
             "assets/icons/notes.svg",
             title: "Name",
             description: userProvider.user != null
-                ? userProvider.user!.displayName ?? "John Doe"
+                ? userProvider.user!.firstName.isNotEmpty
+                    ? "${userProvider.user!.firstName} ${userProvider.user!.lastName}"
+                    : userProvider.user!.displayName ?? "John Doe"
                 : "email",
             gradient: EduPotColorTheme.darkGrayCardGradient,
             icon: false,
             onPressed: () {},
+          ),
+          const Spacer(),
+          SafeArea(
+            child: Container(
+              padding: const EdgeInsets.only(bottom: 20),
+              child: TextButton(
+                onPressed: () {
+                  AuthService().signOut();
+                  userProvider.clearUser();
+                  if (context.mounted) {
+                    context.replaceRoute(const RegisterRoute());
+                  }
+                },
+                child: Text(
+                  "Sign Out",
+                  style:
+                      EduPotDarkTextTheme.headline3.copyWith(color: Colors.red),
+                ),
+              ),
+            ),
           )
         ],
       ),

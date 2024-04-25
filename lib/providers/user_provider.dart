@@ -12,6 +12,7 @@ class UserProvider extends ChangeNotifier {
   String? _firstName;
   String? _lastName;
   String? _displayName;
+  String? _photoURL;
 
   User? get user => _user;
 
@@ -22,6 +23,8 @@ class UserProvider extends ChangeNotifier {
   set lastName(String? name) => _lastName = name;
 
   set displayName(String? name) => _displayName = name;
+
+  set photoURL(String? url) => _photoURL = url;
 
   Future<bool> updateUserData(dynamic value) async {
     try {
@@ -43,6 +46,7 @@ class UserProvider extends ChangeNotifier {
         createdAt: DateTime.now(),
         enabled: true,
         displayName: _displayName ?? '',
+        photoURL: _photoURL ?? '',
       );
 
       await _db.collection('users').doc(uid).set(User.toDoc(user!));
@@ -94,6 +98,7 @@ class UserProvider extends ChangeNotifier {
         if (_auth.currentUser?.providerData[0].providerId != 'password') {
           _email = _auth.currentUser?.email;
           _displayName = _auth.currentUser?.displayName;
+          _photoURL = _auth.currentUser?.photoURL;
         }
 
         return {

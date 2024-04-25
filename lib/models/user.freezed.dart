@@ -28,6 +28,7 @@ mixin _$User {
   dynamic get createdAt => throw _privateConstructorUsedError;
   bool get enabled => throw _privateConstructorUsedError;
   String? get displayName => throw _privateConstructorUsedError;
+  String? get photoURL => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -47,7 +48,8 @@ abstract class $UserCopyWith<$Res> {
       String provider,
       dynamic createdAt,
       bool enabled,
-      String? displayName});
+      String? displayName,
+      String? photoURL});
 }
 
 /// @nodoc
@@ -71,6 +73,7 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
     Object? createdAt = freezed,
     Object? enabled = null,
     Object? displayName = freezed,
+    Object? photoURL = freezed,
   }) {
     return _then(_value.copyWith(
       uid: freezed == uid
@@ -105,6 +108,10 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
               as String?,
+      photoURL: freezed == photoURL
+          ? _value.photoURL
+          : photoURL // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -124,7 +131,8 @@ abstract class _$$UserImplCopyWith<$Res> implements $UserCopyWith<$Res> {
       String provider,
       dynamic createdAt,
       bool enabled,
-      String? displayName});
+      String? displayName,
+      String? photoURL});
 }
 
 /// @nodoc
@@ -145,6 +153,7 @@ class __$$UserImplCopyWithImpl<$Res>
     Object? createdAt = freezed,
     Object? enabled = null,
     Object? displayName = freezed,
+    Object? photoURL = freezed,
   }) {
     return _then(_$UserImpl(
       uid: freezed == uid
@@ -179,6 +188,10 @@ class __$$UserImplCopyWithImpl<$Res>
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
               as String?,
+      photoURL: freezed == photoURL
+          ? _value.photoURL
+          : photoURL // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -194,7 +207,8 @@ class _$UserImpl with DiagnosticableTreeMixin implements _User {
       required this.provider,
       required this.createdAt,
       required this.enabled,
-      this.displayName});
+      this.displayName,
+      this.photoURL});
 
   factory _$UserImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserImplFromJson(json);
@@ -215,10 +229,12 @@ class _$UserImpl with DiagnosticableTreeMixin implements _User {
   final bool enabled;
   @override
   final String? displayName;
+  @override
+  final String? photoURL;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'User(uid: $uid, email: $email, firstName: $firstName, lastName: $lastName, provider: $provider, createdAt: $createdAt, enabled: $enabled, displayName: $displayName)';
+    return 'User(uid: $uid, email: $email, firstName: $firstName, lastName: $lastName, provider: $provider, createdAt: $createdAt, enabled: $enabled, displayName: $displayName, photoURL: $photoURL)';
   }
 
   @override
@@ -233,7 +249,8 @@ class _$UserImpl with DiagnosticableTreeMixin implements _User {
       ..add(DiagnosticsProperty('provider', provider))
       ..add(DiagnosticsProperty('createdAt', createdAt))
       ..add(DiagnosticsProperty('enabled', enabled))
-      ..add(DiagnosticsProperty('displayName', displayName));
+      ..add(DiagnosticsProperty('displayName', displayName))
+      ..add(DiagnosticsProperty('photoURL', photoURL));
   }
 
   @override
@@ -252,7 +269,9 @@ class _$UserImpl with DiagnosticableTreeMixin implements _User {
             const DeepCollectionEquality().equals(other.createdAt, createdAt) &&
             (identical(other.enabled, enabled) || other.enabled == enabled) &&
             (identical(other.displayName, displayName) ||
-                other.displayName == displayName));
+                other.displayName == displayName) &&
+            (identical(other.photoURL, photoURL) ||
+                other.photoURL == photoURL));
   }
 
   @JsonKey(ignore: true)
@@ -266,7 +285,8 @@ class _$UserImpl with DiagnosticableTreeMixin implements _User {
       provider,
       const DeepCollectionEquality().hash(createdAt),
       enabled,
-      displayName);
+      displayName,
+      photoURL);
 
   @JsonKey(ignore: true)
   @override
@@ -291,7 +311,8 @@ abstract class _User implements User {
       required final String provider,
       required final dynamic createdAt,
       required final bool enabled,
-      final String? displayName}) = _$UserImpl;
+      final String? displayName,
+      final String? photoURL}) = _$UserImpl;
 
   factory _User.fromJson(Map<String, dynamic> json) = _$UserImpl.fromJson;
 
@@ -311,6 +332,8 @@ abstract class _User implements User {
   bool get enabled;
   @override
   String? get displayName;
+  @override
+  String? get photoURL;
   @override
   @JsonKey(ignore: true)
   _$$UserImplCopyWith<_$UserImpl> get copyWith =>
