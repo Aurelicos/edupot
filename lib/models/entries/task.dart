@@ -9,6 +9,7 @@ class TaskModel with _$TaskModel {
   const factory TaskModel({
     String? id,
     DocumentReference? assignedProject,
+    bool? done,
     required String title,
     required String description,
     required DateTime finalDate,
@@ -26,6 +27,7 @@ class TaskModel with _$TaskModel {
       description: data["description"],
       finalDate: finalDate,
       assignedProject: data["assignedProject"],
+      done: data["done"] ?? false,
     );
   }
 
@@ -35,6 +37,7 @@ class TaskModel with _$TaskModel {
       "description": taskModel.description,
       "finalDate": Timestamp.fromDate(taskModel.finalDate),
       "assignedProject": taskModel.assignedProject,
+      "done": taskModel.done ?? false,
     };
   }
 }

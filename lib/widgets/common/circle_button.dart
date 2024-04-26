@@ -5,6 +5,7 @@ class CircleButton extends StatefulWidget {
   final double size;
   final Color color;
   final bool disabled;
+  final bool show;
   final void Function(bool selected) onPressed;
 
   const CircleButton({
@@ -12,6 +13,7 @@ class CircleButton extends StatefulWidget {
     this.size = 32,
     this.color = Colors.white,
     this.disabled = false,
+    this.show = false,
     required this.onPressed,
   });
 
@@ -21,6 +23,13 @@ class CircleButton extends StatefulWidget {
 
 class _CircleButtonState extends State<CircleButton> {
   bool _isTapped = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _isTapped = widget.show;
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

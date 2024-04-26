@@ -60,6 +60,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
   DocumentReference? assignedProject;
   List<DocumentReference>? assignedTasks;
 
+  bool isTaskDone = false;
+
   @override
   void initState() {
     super.initState();
@@ -83,6 +85,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
           widget.project?.name ??
           headlines[provider.selectedIndex];
     });
+    isTaskDone = widget.task?.done ?? false;
   }
 
   @override
@@ -122,7 +125,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
                           title.isEmpty
                               ? headlines[provider.selectedIndex]
                               : title,
-                          onDone: (bool selected) {},
+                          onDone: (bool selected) => isTaskDone = selected,
+                          show: isTaskDone,
                           context,
                           disabled: provider.selectedIndex != 1,
                           isProject: provider.selectedIndex == 2,
@@ -294,12 +298,14 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                           description: description,
                                           finalDate: time,
                                           assignedProject: assignedProject,
+                                          done: isTaskDone,
                                         )
                                       : TaskModel(
                                           title: title,
                                           description: description,
                                           finalDate: time,
                                           assignedProject: assignedProject,
+                                          done: isTaskDone,
                                         ))
                                   : provider.selectedIndex == 2
                                       ? (widget.project != null
@@ -378,7 +384,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                         ? widget.exam != null
                                         : widget.task != null)
                                 .then((value) {
-                              if (value["updated"] == true) {
+                              if (value["updated"] == true ||
+                                  (widget.task != null &&
+                                      widget.task!.done != isTaskDone)) {
                                 projectProvider
                                     .fetchProjects(uid, forceRefresh: true)
                                     .then((_) {

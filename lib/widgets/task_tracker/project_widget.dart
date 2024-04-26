@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:edupot/models/entries/task.dart';
 import 'package:edupot/models/projects/project.dart';
 import 'package:edupot/utils/common/time_format.dart';
 import 'package:edupot/utils/router/router.dart';
@@ -10,7 +11,9 @@ import 'package:flutter_svg/svg.dart';
 
 class ProjectWidget extends StatelessWidget {
   final List<ProjectModel> itemArray;
-  const ProjectWidget({super.key, required this.itemArray});
+  final List<TaskModel> finishedTasks;
+  const ProjectWidget(
+      {super.key, required this.itemArray, this.finishedTasks = const []});
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +125,7 @@ class ProjectWidget extends StatelessWidget {
                         ),
                         indicator(
                           itemArray[index].tasks.length,
-                          itemArray[index].finished,
+                          finishedTasks.length,
                         ),
                       ],
                     ),

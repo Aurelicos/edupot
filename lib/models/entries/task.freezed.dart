@@ -19,6 +19,7 @@ mixin _$TaskModel {
   String? get id => throw _privateConstructorUsedError;
   DocumentReference<Object?>? get assignedProject =>
       throw _privateConstructorUsedError;
+  bool? get done => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
   DateTime get finalDate => throw _privateConstructorUsedError;
@@ -36,6 +37,7 @@ abstract class $TaskModelCopyWith<$Res> {
   $Res call(
       {String? id,
       DocumentReference<Object?>? assignedProject,
+      bool? done,
       String title,
       String description,
       DateTime finalDate});
@@ -56,6 +58,7 @@ class _$TaskModelCopyWithImpl<$Res, $Val extends TaskModel>
   $Res call({
     Object? id = freezed,
     Object? assignedProject = freezed,
+    Object? done = freezed,
     Object? title = null,
     Object? description = null,
     Object? finalDate = null,
@@ -69,6 +72,10 @@ class _$TaskModelCopyWithImpl<$Res, $Val extends TaskModel>
           ? _value.assignedProject
           : assignedProject // ignore: cast_nullable_to_non_nullable
               as DocumentReference<Object?>?,
+      done: freezed == done
+          ? _value.done
+          : done // ignore: cast_nullable_to_non_nullable
+              as bool?,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -96,6 +103,7 @@ abstract class _$$TaskModelImplCopyWith<$Res>
   $Res call(
       {String? id,
       DocumentReference<Object?>? assignedProject,
+      bool? done,
       String title,
       String description,
       DateTime finalDate});
@@ -114,6 +122,7 @@ class __$$TaskModelImplCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? assignedProject = freezed,
+    Object? done = freezed,
     Object? title = null,
     Object? description = null,
     Object? finalDate = null,
@@ -127,6 +136,10 @@ class __$$TaskModelImplCopyWithImpl<$Res>
           ? _value.assignedProject
           : assignedProject // ignore: cast_nullable_to_non_nullable
               as DocumentReference<Object?>?,
+      done: freezed == done
+          ? _value.done
+          : done // ignore: cast_nullable_to_non_nullable
+              as bool?,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -149,6 +162,7 @@ class _$TaskModelImpl with DiagnosticableTreeMixin implements _TaskModel {
   const _$TaskModelImpl(
       {this.id,
       this.assignedProject,
+      this.done,
       required this.title,
       required this.description,
       required this.finalDate});
@@ -158,6 +172,8 @@ class _$TaskModelImpl with DiagnosticableTreeMixin implements _TaskModel {
   @override
   final DocumentReference<Object?>? assignedProject;
   @override
+  final bool? done;
+  @override
   final String title;
   @override
   final String description;
@@ -166,7 +182,7 @@ class _$TaskModelImpl with DiagnosticableTreeMixin implements _TaskModel {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'TaskModel(id: $id, assignedProject: $assignedProject, title: $title, description: $description, finalDate: $finalDate)';
+    return 'TaskModel(id: $id, assignedProject: $assignedProject, done: $done, title: $title, description: $description, finalDate: $finalDate)';
   }
 
   @override
@@ -176,6 +192,7 @@ class _$TaskModelImpl with DiagnosticableTreeMixin implements _TaskModel {
       ..add(DiagnosticsProperty('type', 'TaskModel'))
       ..add(DiagnosticsProperty('id', id))
       ..add(DiagnosticsProperty('assignedProject', assignedProject))
+      ..add(DiagnosticsProperty('done', done))
       ..add(DiagnosticsProperty('title', title))
       ..add(DiagnosticsProperty('description', description))
       ..add(DiagnosticsProperty('finalDate', finalDate));
@@ -189,6 +206,7 @@ class _$TaskModelImpl with DiagnosticableTreeMixin implements _TaskModel {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.assignedProject, assignedProject) ||
                 other.assignedProject == assignedProject) &&
+            (identical(other.done, done) || other.done == done) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.description, description) ||
                 other.description == description) &&
@@ -198,7 +216,7 @@ class _$TaskModelImpl with DiagnosticableTreeMixin implements _TaskModel {
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, id, assignedProject, title, description, finalDate);
+      runtimeType, id, assignedProject, done, title, description, finalDate);
 
   @JsonKey(ignore: true)
   @override
@@ -211,6 +229,7 @@ abstract class _TaskModel implements TaskModel {
   const factory _TaskModel(
       {final String? id,
       final DocumentReference<Object?>? assignedProject,
+      final bool? done,
       required final String title,
       required final String description,
       required final DateTime finalDate}) = _$TaskModelImpl;
@@ -219,6 +238,8 @@ abstract class _TaskModel implements TaskModel {
   String? get id;
   @override
   DocumentReference<Object?>? get assignedProject;
+  @override
+  bool? get done;
   @override
   String get title;
   @override

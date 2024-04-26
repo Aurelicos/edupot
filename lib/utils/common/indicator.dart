@@ -15,7 +15,8 @@ Widget indicator(int size, int filled) {
                     gradient: EduPotColorTheme.mainBlueGradient(),
                     borderRadius: BorderRadius.circular(5),
                   ),
-                  width: constraints.maxWidth * size > 0 ? (filled / size) : 1,
+                  width:
+                      constraints.maxWidth * (size > 0 ? (filled / size) : 1),
                   height: 6,
                 ),
                 Container(

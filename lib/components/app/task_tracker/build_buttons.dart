@@ -58,6 +58,7 @@ Widget buildHeadline(String title, BuildContext context,
     required Color color,
     required void Function(bool selected) onDone,
     bool disabled = false,
+    bool show = false,
     void Function()? onDelete}) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -70,6 +71,7 @@ Widget buildHeadline(String title, BuildContext context,
                   onPressed: onDone,
                   color: color,
                   disabled: disabled,
+                  show: show,
                 )
               : const SizedBox(),
           isProject
