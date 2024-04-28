@@ -35,8 +35,7 @@ class _NavbarState extends State<Navbar> {
                 label: "Calendar",
                 onPressed: () async {
                   if (provider.selectedIndex != 0) {
-                    provider.selectedIndex = 0;
-                    context.replaceRoute(const CalendarRoute());
+                    comingSoonDialog();
                   }
                 },
                 provider: provider,
@@ -59,8 +58,7 @@ class _NavbarState extends State<Navbar> {
                 label: "Notes",
                 onPressed: () {
                   if (provider.selectedIndex != 2) {
-                    provider.selectedIndex = 2;
-                    context.replaceRoute(const NotesRoute());
+                    comingSoonDialog();
                   }
                 },
                 provider: provider,
@@ -80,6 +78,32 @@ class _NavbarState extends State<Navbar> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Future comingSoonDialog() {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        backgroundColor: EduPotColorTheme.primaryDark,
+        title: Text(
+          'Coming Soon',
+          style: EduPotDarkTextTheme.smallHeadline.copyWith(fontSize: 24),
+        ),
+        content: Text(
+          'This feature is coming soon!',
+          style: EduPotDarkTextTheme.headline2(0.6),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => context.router.maybePop(),
+            child: const Text(
+              'Close',
+              style: EduPotDarkTextTheme.headline3,
+            ),
+          ),
+        ],
       ),
     );
   }

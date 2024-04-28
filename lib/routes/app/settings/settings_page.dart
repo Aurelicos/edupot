@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:edupot/components/app/primary_scaffold.dart';
+import 'package:edupot/utils/common/bounce_physics.dart';
 import 'package:edupot/utils/router/router.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/widgets/common/main_card.dart';
@@ -60,6 +61,7 @@ class SettingsPage extends StatelessWidget {
     return PrimaryScaffold(
       child: SafeArea(
         child: SingleChildScrollView(
+          physics: const OneBouncePhysics(),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(

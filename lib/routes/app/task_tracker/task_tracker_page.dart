@@ -6,6 +6,7 @@ import 'package:edupot/components/auth/clickable_text.dart';
 import 'package:edupot/providers/entry_provider.dart';
 import 'package:edupot/providers/project_provider.dart';
 import 'package:edupot/providers/user_provider.dart';
+import 'package:edupot/utils/common/bounce_physics.dart';
 import 'package:edupot/utils/router/router.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/widgets/task_tracker/project_view.dart';
@@ -95,7 +96,8 @@ class _TaskTrackerPageState extends State<TaskTrackerPage> {
           },
           child: LayoutBuilder(builder: (context, constraints) {
             return SingleChildScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
+              physics: const AlwaysScrollableScrollPhysics(
+                  parent: OneBouncePhysics()),
               child: ConstrainedBox(
                 constraints: BoxConstraints(
                   minHeight: constraints.maxHeight,
