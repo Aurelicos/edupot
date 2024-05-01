@@ -1,10 +1,10 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:edupot/models/projects/project.dart';
+import 'package:edupot/routes/app/task_tracker/add_task_page.dart';
 import 'package:edupot/utils/common/time_format.dart';
-import 'package:edupot/utils/router/router.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/route_manager.dart';
 
 class ListProject extends StatelessWidget {
   final List<ProjectModel> itemArray;
@@ -29,10 +29,8 @@ class ListProject extends StatelessWidget {
             top: 15,
           ),
           child: TextButton(
-            onPressed: () => context.pushRoute(AddTaskRoute(
-              selectedCategory: 2,
-              project: itemArray[i],
-            )),
+            onPressed: () =>
+                Get.to(AddTaskPage(selectedCategory: 2, project: itemArray[i])),
             style: ButtonStyle(
               padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero),
               backgroundColor:

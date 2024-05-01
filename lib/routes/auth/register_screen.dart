@@ -1,17 +1,17 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:edupot/components/auth/clickable_text.dart';
 import 'package:edupot/providers/user_provider.dart';
+import 'package:edupot/routes/app/home_page.dart';
+import 'package:edupot/routes/auth/login_screen.dart';
 import 'package:edupot/services/auth.dart';
 import 'package:edupot/utils/themes/theme.dart';
-import 'package:edupot/utils/router/router.dart';
 import 'package:edupot/widgets/main_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:edupot/widgets/common/input_field.dart';
 import 'package:edupot/components/common/authentication.dart';
+import 'package:get/route_manager.dart';
 import 'package:provider/provider.dart';
 
-@RoutePage()
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
 
@@ -36,7 +36,7 @@ class _RegisterPageState extends State<RegisterPage> {
     super.initState();
     AuthService().authStateChanges.listen((User? user) {
       if (user != null && mounted) {
-        context.replaceRoute(const HomeRoute());
+        Get.off(const HomePage());
       }
     });
   }
@@ -131,8 +131,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 onGoogle: () {
                   _loginWithGoogle().then((value) {
                     if (!value) return;
-
-                    context.replaceRoute(const HomeRoute());
+                    Get.off(const HomePage());
                   });
                 },
               ),
@@ -228,8 +227,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           userProvider.lastName = lastName;
                           userProvider.email = email;
                           userProvider.displayName = "$firstName $lastName";
-
-                          context.pushRoute(const HomeRoute());
+                          Get.to(const HomePage());
                         }
                       });
                     },
@@ -254,7 +252,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         firstText: "Already have an account? ",
                         clickableText: "Login",
                         onPressed: () {
-                          context.pushRoute(const LoginRoute());
+                          Get.to(const LoginPage());
                         },
                       ),
                     ),

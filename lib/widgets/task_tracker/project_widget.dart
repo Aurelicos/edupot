@@ -1,13 +1,13 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:edupot/models/entries/task.dart';
 import 'package:edupot/models/projects/project.dart';
+import 'package:edupot/routes/app/task_tracker/add_task_page.dart';
 import 'package:edupot/utils/common/time_format.dart';
-import 'package:edupot/utils/router/router.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/widgets/common/hexagon.dart';
 import 'package:edupot/utils/common/indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/route_manager.dart';
 
 class ProjectWidget extends StatelessWidget {
   final List<ProjectModel> itemArray;
@@ -27,7 +27,7 @@ class ProjectWidget extends StatelessWidget {
             Container(
               margin: index > 0 ? const EdgeInsets.only(top: 20) : null,
               child: TextButton(
-                onPressed: () => context.pushRoute(AddTaskRoute(
+                onPressed: () => Get.to(AddTaskPage(
                   selectedCategory: 2,
                   project: itemArray[index],
                 )),

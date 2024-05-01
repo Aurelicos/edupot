@@ -1,15 +1,15 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:edupot/components/auth/clickable_text.dart';
+import 'package:edupot/routes/app/home_page.dart';
+import 'package:edupot/routes/auth/register_screen.dart';
 import 'package:edupot/services/auth.dart';
 import 'package:edupot/utils/themes/theme.dart';
-import 'package:edupot/utils/router/router.dart';
 import 'package:edupot/widgets/main_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:edupot/widgets/common/input_field.dart';
 import 'package:edupot/components/common/authentication.dart';
+import 'package:get/get.dart';
 
-@RoutePage()
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -32,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     AuthService().authStateChanges.listen((User? user) {
       if (user != null && mounted) {
-        context.replaceRoute(const HomeRoute());
+        Get.off(const HomePage());
       }
     });
   }
@@ -168,8 +168,7 @@ class _LoginPageState extends State<LoginPage> {
                         onGoogle: () {
                           _loginWithGoogle().then((value) {
                             if (!value) return;
-
-                            context.replaceRoute(const HomeRoute());
+                            Get.off(const HomePage());
                           });
                         },
                         onFacebook: () {},
@@ -204,7 +203,7 @@ class _LoginPageState extends State<LoginPage> {
                         onTap: () {
                           _login().then((value) {
                             if (value) {
-                              context.pushRoute(const HomeRoute());
+                              Get.to(const HomePage());
                             }
                           });
                         },
@@ -228,7 +227,7 @@ class _LoginPageState extends State<LoginPage> {
                           firstText: "I'm a new user. ",
                           clickableText: "Registration",
                           onPressed: () {
-                            context.maybePop(const RegisterRoute());
+                            Get.off(const RegisterPage());
                           },
                         ),
                       ),

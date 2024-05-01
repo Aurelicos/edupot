@@ -1,10 +1,10 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:edupot/components/app/task_tracker/time_checbox.dart';
 import 'package:edupot/components/common/wheel_list.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/widgets/main_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/route_manager.dart';
 
 class SelectTimeModal extends StatefulWidget {
   final void Function(DateTime time) selectedTime;
@@ -126,7 +126,7 @@ class _SelectTimeModalState extends State<SelectTimeModal> {
                     hours,
                     minutes,
                   ));
-                  context.maybePop();
+                  Get.back();
                 },
                 child: Text(
                   "Done",
@@ -139,7 +139,7 @@ class _SelectTimeModalState extends State<SelectTimeModal> {
               padding: const EdgeInsets.symmetric(vertical: 5),
               child: Center(
                 child: TextButton(
-                  onPressed: () => context.maybePop(),
+                  onPressed: () => Get.back(),
                   child: Text(
                     "Cancel",
                     style: EduPotDarkTextTheme.headline2(0.4),

@@ -1,10 +1,10 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:edupot/models/entries/exam.dart';
 import 'package:edupot/models/entries/task.dart';
-import 'package:edupot/utils/router/router.dart';
+import 'package:edupot/routes/app/task_tracker/add_task_page.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/route_manager.dart';
 
 class TaskView extends StatelessWidget {
   final Color? color;
@@ -58,9 +58,9 @@ class TaskView extends StatelessWidget {
       child: TextButton(
         onPressed: () {
           if (item is ExamModel) {
-            context.pushRoute(AddTaskRoute(selectedCategory: 0, exam: item));
+            Get.to(AddTaskPage(selectedCategory: 0, exam: item));
           } else if (item is TaskModel) {
-            context.pushRoute(AddTaskRoute(selectedCategory: 1, task: item));
+            Get.to(AddTaskPage(selectedCategory: 1, task: item));
           }
         },
         style: ButtonStyle(
