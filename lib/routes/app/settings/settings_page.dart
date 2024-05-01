@@ -1,12 +1,11 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:edupot/components/app/primary_scaffold.dart';
+import 'package:edupot/routes/app/settings/my_account/account_page.dart';
 import 'package:edupot/utils/common/bounce_physics.dart';
-import 'package:edupot/utils/router/router.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/widgets/common/main_card.dart';
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 
-@RoutePage()
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
@@ -17,7 +16,7 @@ class SettingsPage extends StatelessWidget {
         'asset': 'assets/icons/user.svg',
         'title': 'My Account',
         'description': 'Edit your account details.',
-        'onPressed': () => context.router.push(const AccountRoute()),
+        'onPressed': () => Get.to(const AccountPage()),
       },
       {
         'asset': 'assets/icons/shield.svg',

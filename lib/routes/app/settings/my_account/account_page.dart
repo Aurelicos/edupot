@@ -1,16 +1,15 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edupot/components/app/primary_scaffold.dart';
 import 'package:edupot/providers/user_provider.dart';
+import 'package:edupot/routes/auth/register_screen.dart';
 import 'package:edupot/services/auth.dart';
-import 'package:edupot/utils/router/router.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/widgets/common/main_card.dart';
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-@RoutePage()
 class AccountPage extends StatelessWidget {
   const AccountPage({super.key});
 
@@ -19,6 +18,7 @@ class AccountPage extends StatelessWidget {
     final userProvider = context.read<UserProvider>();
 
     return PrimaryScaffold(
+      navBar: false,
       child: Column(
         children: [
           Stack(
@@ -47,7 +47,7 @@ class AccountPage extends StatelessWidget {
                 margin: EdgeInsets.only(
                     top: MediaQuery.of(context).size.height * 0.035),
                 child: IconButton(
-                  onPressed: () => context.maybePop(),
+                  onPressed: () => Get.back(),
                   icon: const Icon(
                     Icons.arrow_back,
                     size: 32,
@@ -122,7 +122,7 @@ class AccountPage extends StatelessWidget {
                   AuthService().signOut();
                   userProvider.clearUser();
                   if (context.mounted) {
-                    context.replaceRoute(const RegisterRoute());
+                    Get.off(const RegisterPage());
                   }
                 },
                 child: Text(

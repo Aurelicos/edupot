@@ -22,6 +22,7 @@ class NotificationService {
       ),
       onDidReceiveNotificationResponse: (details) {
         NavbarProvider().selectedIndex = 3;
+        // ignore: avoid_print
         print("test");
       },
     );

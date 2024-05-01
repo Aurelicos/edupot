@@ -3,13 +3,15 @@ import 'package:edupot/providers/navbar_provider.dart';
 import 'package:edupot/providers/project_provider.dart';
 import 'package:edupot/providers/selection_provider.dart';
 import 'package:edupot/providers/user_provider.dart';
+import 'package:edupot/routes/auth_wrapper.dart';
+import 'package:edupot/services/dependency_injection.dart';
 import 'package:edupot/services/notification_service.dart';
 import 'package:edupot/utils/themes/theme.dart';
-import 'package:edupot/utils/router/router.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/route_manager.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
@@ -47,14 +49,12 @@ void main() async {
 
   await flutterLocalNotificationsPlugin.show(
       1, 'title', 'body', platformChannelSpecifics);
-
-  runApp(App());
+  DependencyInjection.init();
+  runApp(const App());
 }
 
 class App extends StatelessWidget {
-  App({super.key});
-
-  final _appRouter = AppRouter();
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -66,14 +66,14 @@ class App extends StatelessWidget {
         ChangeNotifierProvider.value(value: EntryProvider()),
         ChangeNotifierProvider.value(value: ProjectProvider()),
       ],
-      child: MaterialApp.router(
+      child: GetMaterialApp(
         title: 'EduPot',
+        home: const AuthWrapperPage(),
         theme: ThemeData(
           primaryColor: EduPotColorTheme.primaryDark,
           useMaterial3: true,
         ),
         debugShowCheckedModeBanner: false,
-        routerConfig: _appRouter.config(),
       ),
     );
   }

@@ -1,8 +1,8 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/widgets/main_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 class AddNotesModal extends StatelessWidget {
   final void Function() addNotes;
@@ -72,7 +72,7 @@ class AddNotesModal extends StatelessWidget {
 
   Widget cancelButton(BuildContext context) {
     return TextButton(
-      onPressed: () => context.maybePop(),
+      onPressed: () => Get.back(),
       child: Text(
         "Cancel",
         style: EduPotDarkTextTheme.headline2(0.4),

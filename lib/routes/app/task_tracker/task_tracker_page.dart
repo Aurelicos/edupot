@@ -1,4 +1,3 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:edupot/components/app/primary_scaffold.dart';
 import 'package:edupot/components/app/task_tracker/loading_content.dart';
 import 'package:edupot/components/app/task_tracker/task_modal.dart';
@@ -6,16 +5,16 @@ import 'package:edupot/components/auth/clickable_text.dart';
 import 'package:edupot/providers/entry_provider.dart';
 import 'package:edupot/providers/project_provider.dart';
 import 'package:edupot/providers/user_provider.dart';
+import 'package:edupot/routes/app/task_tracker/add_task_page.dart';
 import 'package:edupot/utils/common/bounce_physics.dart';
-import 'package:edupot/utils/router/router.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/widgets/task_tracker/project_view.dart';
 import 'package:edupot/widgets/task_tracker/task_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/route_manager.dart';
 import 'package:provider/provider.dart';
 
-@RoutePage()
 class TaskTrackerPage extends StatefulWidget {
   const TaskTrackerPage({super.key});
 
@@ -194,8 +193,10 @@ class _TaskTrackerPageState extends State<TaskTrackerPage> {
       backgroundColor: EduPotColorTheme.primaryDark,
       builder: (BuildContext context) {
         return TaskModal(
-          onPressed: (int index) => context.pushRoute(
-              AddTaskRoute(selectedCategory: index, modalContext: context)),
+          onPressed: (int index) => Get.to(AddTaskPage(
+            selectedCategory: index,
+            modalContext: context,
+          )),
         );
       },
     );

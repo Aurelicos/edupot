@@ -5,15 +5,15 @@ import 'package:edupot/providers/navbar_provider.dart';
 import 'package:edupot/providers/project_provider.dart';
 import 'package:edupot/providers/user_provider.dart';
 import 'package:edupot/routes/app/task_tracker/task_tracker_page.dart';
+import 'package:edupot/routes/auth/register_screen.dart';
+import 'package:edupot/routes/onboarding/onboarding.dart';
 import 'package:edupot/routes/splash_screen.dart';
 import 'package:edupot/services/auth.dart';
-import 'package:edupot/utils/router/router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:auto_route/auto_route.dart';
+import 'package:get/route_manager.dart';
 import 'package:provider/provider.dart';
 
-@RoutePage()
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -30,7 +30,7 @@ class _HomePageState extends State<HomePage> {
     _authStateChangesSubscription =
         AuthService().authStateChanges.listen((User? user) {
       if (user == null && mounted) {
-        context.replaceRoute(const RegisterRoute());
+        Get.off(const RegisterPage());
       }
     });
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -57,14 +57,14 @@ class _HomePageState extends State<HomePage> {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data!['success'] == false) {
             AuthService().signOut();
-            context.replaceRoute(const RegisterRoute());
+            Get.off(const RegisterPage());
           }
           entryProvider.fetchEntries(userProvider.user!.uid ?? "",
               forceRefresh: true);
           projectProvider.fetchProjects(userProvider.user!.uid ?? "",
               forceRefresh: true);
           if (snapshot.data!['data'] == false) {
-            context.replaceRoute(const OnboardingRoute());
+            Get.off(const OnboardingPage());
           } else {
             return const TaskTrackerPage();
           }

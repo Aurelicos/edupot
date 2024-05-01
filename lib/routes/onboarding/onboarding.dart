@@ -1,11 +1,10 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:edupot/components/onboarding/pages.dart';
+import 'package:edupot/routes/app/home_page.dart';
 import 'package:edupot/utils/themes/theme.dart';
-import 'package:edupot/utils/router/router.dart';
 import 'package:edupot/widgets/main_button.dart';
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 
-@RoutePage()
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key});
 
@@ -38,7 +37,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
   }
 
   void _navigateToNextRoute() {
-    context.pushRoute(const HomeRoute());
+    Get.to(const HomePage());
   }
 
   void _nextPage() {
@@ -190,7 +189,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                           type: MaterialType.transparency,
                           child: MainButton(
                             onTap: _currentPage == onboardingPages.length - 1
-                                ? () => context.pushRoute(const HomeRoute())
+                                ? () => Get.to(const HomePage())
                                 : _nextPage,
                             child: Text(
                               "Next",

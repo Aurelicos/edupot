@@ -1,4 +1,3 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edupot/components/app/primary_scaffold.dart';
 import 'package:edupot/components/app/task_tracker/build_buttons.dart';
@@ -18,9 +17,9 @@ import 'package:edupot/widgets/common/input_field.dart';
 import 'package:edupot/widgets/common/multi_select_dropdown.dart';
 import 'package:edupot/widgets/main_button.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-@RoutePage()
 class AddTaskPage extends StatefulWidget {
   final int selectedCategory;
   final BuildContext? modalContext;
@@ -116,7 +115,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                       children: [
                         const SizedBox(height: 15),
                         InkWell(
-                          onTap: () => context.maybePop(),
+                          onTap: () => Get.back(),
                           child: const Icon(Icons.arrow_back_rounded,
                               size: 32, color: Colors.white),
                         ),
@@ -327,7 +326,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                       : null;
 
                           final uid = userProvider.user?.uid ?? "";
-                          widget.modalContext?.maybePop();
+                          Get.back();
 
                           if (model is ProjectModel) {
                             if (widget.project != null) {
@@ -351,8 +350,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                     projectProvider.fetchProjects(uid,
                                         forceRefresh: true);
                                   }
-                                }).then((_) =>
-                                        mounted ? context.maybePop() : false);
+                                }).then((_) => mounted ? Get.back() : false);
                               });
                             } else {
                               EntryService()
@@ -373,8 +371,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                   projectProvider.fetchProjects(uid,
                                       forceRefresh: true);
                                 }
-                              }).then((_) =>
-                                      mounted ? context.maybePop() : false);
+                              }).then((_) => mounted ? Get.back() : false);
                             }
                           } else {
                             EntryService()
@@ -392,14 +389,13 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                     .then((_) {
                                   entryProvider
                                       .fetchEntries(uid, forceRefresh: true)
-                                      .then((_) =>
-                                          mounted ? context.maybePop() : false);
+                                      .then(
+                                          (_) => mounted ? Get.back() : false);
                                 });
                               } else {
                                 entryProvider
                                     .fetchEntries(uid, forceRefresh: true)
-                                    .then((_) =>
-                                        mounted ? context.maybePop() : false);
+                                    .then((_) => mounted ? Get.back() : false);
                               }
                             });
                           }
@@ -445,11 +441,11 @@ class _AddTaskPageState extends State<AddTaskPage> {
               .then((_) => projectProvider
                   .fetchProjects(userProvider.user!.uid ?? "",
                       forceRefresh: true)
-                  .then((value) => context.maybePop()));
+                  .then((value) => Get.back()));
         } else {
           projectProvider
               .fetchProjects(userProvider.user!.uid ?? "", forceRefresh: true)
-              .then((value) => context.maybePop());
+              .then((value) => Get.back());
         }
       });
       return;
@@ -459,7 +455,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
           .then((value) {
         entryProvider
             .fetchEntries(userProvider.user!.uid ?? "", forceRefresh: true)
-            .then((value) => context.maybePop());
+            .then((value) => Get.back());
       });
     }
   }

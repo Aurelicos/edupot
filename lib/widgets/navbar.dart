@@ -1,11 +1,12 @@
 import 'dart:ui';
 
-import 'package:auto_route/auto_route.dart';
 import 'package:edupot/providers/navbar_provider.dart';
-import 'package:edupot/utils/router/router.dart';
+import 'package:edupot/routes/app/settings/settings_page.dart';
+import 'package:edupot/routes/app/task_tracker/task_tracker_page.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class Navbar extends StatefulWidget {
@@ -47,7 +48,8 @@ class _NavbarState extends State<Navbar> {
                 onPressed: () {
                   if (provider.selectedIndex != 1) {
                     provider.selectedIndex = 1;
-                    context.replaceRoute(const TaskTrackerRoute());
+                    Get.off(const TaskTrackerPage(),
+                        transition: Transition.noTransition);
                   }
                 },
                 provider: provider,
@@ -70,7 +72,8 @@ class _NavbarState extends State<Navbar> {
                 onPressed: () {
                   if (provider.selectedIndex != 3) {
                     provider.selectedIndex = 3;
-                    context.replaceRoute(const SettingsRoute());
+                    Get.off(const SettingsPage(),
+                        transition: Transition.noTransition);
                   }
                 },
                 provider: provider,
@@ -97,7 +100,7 @@ class _NavbarState extends State<Navbar> {
         ),
         actions: <Widget>[
           TextButton(
-            onPressed: () => context.router.maybePop(),
+            onPressed: () => Get.back(),
             child: const Text(
               'Close',
               style: EduPotDarkTextTheme.headline3,
