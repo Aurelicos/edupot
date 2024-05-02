@@ -3,7 +3,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/foundation.dart';
 
 part 'exam.freezed.dart';
-part 'exam.g.dart';
 
 @freezed
 class ExamModel with _$ExamModel {
@@ -38,7 +37,4 @@ class ExamModel with _$ExamModel {
       "priority": examModel.priority ?? 1,
     };
   }
-
-  factory ExamModel.fromJson(Map<String, dynamic> json) =>
-      _$ExamModelFromJson(json);
 }

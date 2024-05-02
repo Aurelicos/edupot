@@ -1,4 +1,4 @@
-import 'package:edupot/services/connection_service.dart';
+import 'package:edupot/controllers/connection_controller.dart';
 import 'package:get/instance_manager.dart';
 
 class DependencyInjection {

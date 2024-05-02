@@ -4,8 +4,6 @@ import 'package:flutter/foundation.dart';
 
 part 'user.freezed.dart';
 
-part 'user.g.dart';
-
 @freezed
 class User with _$User {
   const factory User({
@@ -48,6 +46,4 @@ class User with _$User {
       "photoURL": user.photoURL ?? "",
     };
   }
-
-  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 }
