@@ -4,6 +4,7 @@ import 'package:edupot/routes/app/task_tracker/add_task_page.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
 
 class TaskView extends StatelessWidget {
@@ -55,42 +56,74 @@ class TaskView extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(top: 10),
       height: 54,
-      child: TextButton(
-        onPressed: () {
-          if (item is ExamModel) {
-            Get.to(AddTaskPage(selectedCategory: 0, exam: item));
-          } else if (item is TaskModel) {
-            Get.to(AddTaskPage(selectedCategory: 1, task: item));
-          }
-        },
-        style: ButtonStyle(
-          padding: MaterialStateProperty.all<EdgeInsets>(
-              const EdgeInsets.symmetric(horizontal: 20)),
-          backgroundColor: MaterialStateProperty.all<Color>(
-              EduPotColorTheme.primaryBlueDark),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          ),
-        ),
-        child: Row(
-          children: [
-            SvgPicture.asset(
-              "assets/icons/circle.svg",
-              colorFilter: color != null
-                  ? ColorFilter.mode(color!, BlendMode.srcIn)
-                  : null,
-            ),
-            const SizedBox(width: 15),
-            Text(title, style: EduPotDarkTextTheme.headline2(1)),
-            const Spacer(),
-            Text(
-              formattedDate["finalDate"],
-              style: EduPotDarkTextTheme.headline2(1).copyWith(
-                color: getColorForDays(formattedDate["daysUntil"]),
+      child: Builder(
+        builder: (BuildContext context) {
+          return TextButton(
+            onLongPress: () {
+              final RenderBox renderBox =
+                  context.findRenderObject() as RenderBox;
+              final Offset offset = renderBox.localToGlobal(Offset.zero);
+              final double buttonWidth = renderBox.size.width;
+              final double buttonHeight = renderBox.size.height;
+
+              showMenu(
+                context: context,
+                position: RelativeRect.fromLTRB(
+                  offset.dx,
+                  offset.dy + buttonHeight,
+                  MediaQuery.of(context).size.width - offset.dx - buttonWidth,
+                  MediaQuery.of(context).size.height - offset.dy,
+                ),
+                items: [
+                  const PopupMenuItem(
+                    child: Text("0"),
+                  ),
+                  const PopupMenuItem(
+                    child: Text("1"),
+                  ),
+                  const PopupMenuItem(
+                    child: Text("2"),
+                  ),
+                ],
+              );
+            },
+            onPressed: () {
+              if (item is ExamModel) {
+                Get.to(AddTaskPage(selectedCategory: 0, exam: item));
+              } else if (item is TaskModel) {
+                Get.to(AddTaskPage(selectedCategory: 1, task: item));
+              }
+            },
+            style: ButtonStyle(
+              padding: MaterialStateProperty.all<EdgeInsets>(
+                  const EdgeInsets.symmetric(horizontal: 20)),
+              backgroundColor: MaterialStateProperty.all<Color>(
+                  EduPotColorTheme.primaryBlueDark),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
               ),
             ),
-          ],
-        ),
+            child: Row(
+              children: [
+                SvgPicture.asset(
+                  "assets/icons/circle.svg",
+                  colorFilter: color != null
+                      ? ColorFilter.mode(color!, BlendMode.srcIn)
+                      : null,
+                ),
+                const SizedBox(width: 15),
+                Text(title, style: EduPotDarkTextTheme.headline2(1)),
+                const Spacer(),
+                Text(
+                  formattedDate["finalDate"],
+                  style: EduPotDarkTextTheme.headline2(1).copyWith(
+                    color: getColorForDays(formattedDate["daysUntil"]),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

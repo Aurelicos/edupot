@@ -14,10 +14,6 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-ExamModel _$ExamModelFromJson(Map<String, dynamic> json) {
-  return _ExamModel.fromJson(json);
-}
-
 /// @nodoc
 mixin _$ExamModel {
   String? get id => throw _privateConstructorUsedError;
@@ -26,7 +22,6 @@ mixin _$ExamModel {
   String get description => throw _privateConstructorUsedError;
   DateTime get finalDate => throw _privateConstructorUsedError;
 
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $ExamModelCopyWith<ExamModel> get copyWith =>
       throw _privateConstructorUsedError;
@@ -148,7 +143,7 @@ class __$$ExamModelImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class _$ExamModelImpl with DiagnosticableTreeMixin implements _ExamModel {
   const _$ExamModelImpl(
       {this.id,
@@ -156,9 +151,6 @@ class _$ExamModelImpl with DiagnosticableTreeMixin implements _ExamModel {
       required this.title,
       required this.description,
       required this.finalDate});
-
-  factory _$ExamModelImpl.fromJson(Map<String, dynamic> json) =>
-      _$$ExamModelImplFromJson(json);
 
   @override
   final String? id;
@@ -203,7 +195,6 @@ class _$ExamModelImpl with DiagnosticableTreeMixin implements _ExamModel {
                 other.finalDate == finalDate));
   }
 
-  @JsonKey(ignore: true)
   @override
   int get hashCode =>
       Object.hash(runtimeType, id, priority, title, description, finalDate);
@@ -213,13 +204,6 @@ class _$ExamModelImpl with DiagnosticableTreeMixin implements _ExamModel {
   @pragma('vm:prefer-inline')
   _$$ExamModelImplCopyWith<_$ExamModelImpl> get copyWith =>
       __$$ExamModelImplCopyWithImpl<_$ExamModelImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$ExamModelImplToJson(
-      this,
-    );
-  }
 }
 
 abstract class _ExamModel implements ExamModel {
@@ -229,9 +213,6 @@ abstract class _ExamModel implements ExamModel {
       required final String title,
       required final String description,
       required final DateTime finalDate}) = _$ExamModelImpl;
-
-  factory _ExamModel.fromJson(Map<String, dynamic> json) =
-      _$ExamModelImpl.fromJson;
 
   @override
   String? get id;
