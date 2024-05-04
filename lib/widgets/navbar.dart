@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:edupot/providers/navbar_provider.dart';
+import 'package:edupot/routes/app/learning/learning_page.dart';
 import 'package:edupot/routes/app/settings/settings_page.dart';
 import 'package:edupot/routes/app/task_tracker/task_tracker_page.dart';
 import 'package:edupot/utils/themes/theme.dart';
@@ -56,11 +57,13 @@ class _NavbarState extends State<Navbar> {
               ),
               _button(
                 index: 2,
-                icon: "notes",
-                label: "Notes",
+                icon: "learn",
+                label: "Learn",
                 onPressed: () {
                   if (provider.selectedIndex != 2) {
-                    comingSoonDialog();
+                    provider.selectedIndex = 2;
+                    Get.off(const LearningPage(),
+                        transition: Transition.noTransition);
                   }
                 },
                 provider: provider,
