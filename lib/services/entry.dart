@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edupot/models/entries/exam.dart';
 import 'package:edupot/models/entries/task.dart';
 import 'package:edupot/models/projects/project.dart';
+import 'package:edupot/services/notification_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -106,6 +107,7 @@ class EntryService extends ChangeNotifier {
           .collection('${entryType}s')
           .doc(entryId)
           .delete();
+      NotificationService.cancelNotification(entryId.hashCode);
       return true;
     } catch (e) {
       log(e.toString(),
@@ -218,6 +220,7 @@ class EntryService extends ChangeNotifier {
       await _db.collection('entry').doc(uid).update({
         'projects': FieldValue.arrayRemove([_db.doc('projects/$projectId')])
       });
+      NotificationService.cancelNotification(projectId.hashCode);
       return {
         "success": true,
         "updated": updated,

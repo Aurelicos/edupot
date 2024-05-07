@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edupot/models/entries/exam.dart';
 import 'package:edupot/models/entries/task.dart';
+import 'package:edupot/services/notification_service.dart';
 import 'package:flutter/material.dart';
 
 class EntryProvider extends ChangeNotifier {
@@ -38,6 +39,9 @@ class EntryProvider extends ChangeNotifier {
       _lastFetchTime = DateTime.now();
 
       notifyListeners();
+
+      NotificationService.scheduleEntriesNotifications(userId, exams, tasks);
+
       return {
         "cached": false,
         "success": true,

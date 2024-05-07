@@ -192,12 +192,12 @@ class _TaskTrackerPageState extends State<TaskTrackerPage> {
       context: context,
       backgroundColor: EduPotColorTheme.primaryDark,
       builder: (BuildContext context) {
-        return TaskModal(
-          onPressed: (int index) => Get.to(AddTaskPage(
+        return TaskModal(onPressed: (int index) {
+          Navigator.of(context).pop();
+          Get.to(AddTaskPage(
             selectedCategory: index,
-            modalContext: context,
-          )),
-        );
+          ));
+        });
       },
     );
   }

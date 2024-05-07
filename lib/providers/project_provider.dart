@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edupot/models/projects/entry_project.dart';
 import 'package:edupot/models/projects/project.dart';
+import 'package:edupot/services/notification_service.dart';
 import 'package:flutter/material.dart';
 
 class ProjectProvider extends ChangeNotifier {
@@ -42,6 +43,9 @@ class ProjectProvider extends ChangeNotifier {
       _lastFetchTime = DateTime.now();
 
       notifyListeners();
+
+      NotificationService.scheduleProjectsNotifications(userId, projects);
+
       return {
         "cached": false,
         "success": true,

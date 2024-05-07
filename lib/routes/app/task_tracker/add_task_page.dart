@@ -10,6 +10,7 @@ import 'package:edupot/providers/entry_provider.dart';
 import 'package:edupot/providers/project_provider.dart';
 import 'package:edupot/providers/selection_provider.dart';
 import 'package:edupot/providers/user_provider.dart';
+import 'package:edupot/routes/app/task_tracker/task_tracker_page.dart';
 import 'package:edupot/services/entry.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/widgets/common/description_text.dart';
@@ -20,22 +21,23 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
+// ignore: must_be_immutable
 class AddTaskPage extends StatefulWidget {
   final int selectedCategory;
-  final BuildContext? modalContext;
+  final String? id;
 
-  final ExamModel? exam;
-  final TaskModel? task;
+  ExamModel? exam;
+  TaskModel? task;
 
-  final ProjectModel? project;
+  ProjectModel? project;
 
-  const AddTaskPage({
+  AddTaskPage({
     super.key,
     required this.selectedCategory,
-    this.modalContext,
     this.exam,
     this.task,
     this.project,
+    this.id,
   });
 
   @override
@@ -61,9 +63,46 @@ class _AddTaskPageState extends State<AddTaskPage> {
 
   bool isTaskDone = false;
 
+  final Map<String, int> categoryMap = {
+    'exam': 0,
+    'task': 1,
+    'project': 2,
+  };
+
   @override
   void initState() {
     super.initState();
+    if (widget.id != null) {
+      switch (widget.selectedCategory) {
+        case 0:
+          Provider.of<EntryProvider>(context, listen: false)
+              .exams
+              .forEach((element) {
+            if (element.id == widget.id) {
+              widget.exam = element;
+            }
+          });
+          break;
+        case 1:
+          Provider.of<EntryProvider>(context, listen: false)
+              .tasks
+              .forEach((element) {
+            if (element.id == widget.id) {
+              widget.task = element;
+            }
+          });
+          break;
+        case 2:
+          Provider.of<ProjectProvider>(context, listen: false)
+              .projects
+              .forEach((element) {
+            if (element.id == widget.id) {
+              widget.project = element;
+            }
+          });
+          break;
+      }
+    }
     time = widget.exam?.finalDate ??
         widget.task?.finalDate ??
         widget.project?.finalDate ??
@@ -115,7 +154,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                       children: [
                         const SizedBox(height: 15),
                         InkWell(
-                          onTap: () => Get.back(),
+                          onTap: () => Get.off(const TaskTrackerPage()),
                           child: const Icon(Icons.arrow_back_rounded,
                               size: 32, color: Colors.white),
                         ),
@@ -326,7 +365,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                       : null;
 
                           final uid = userProvider.user?.uid ?? "";
-                          Get.back();
 
                           if (model is ProjectModel) {
                             if (widget.project != null) {
@@ -350,7 +388,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                     projectProvider.fetchProjects(uid,
                                         forceRefresh: true);
                                   }
-                                }).then((_) => mounted ? Get.back() : false);
+                                }).then((_) => mounted
+                                        ? Get.off(const TaskTrackerPage())
+                                        : false);
                               });
                             } else {
                               EntryService()
@@ -371,7 +411,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                   projectProvider.fetchProjects(uid,
                                       forceRefresh: true);
                                 }
-                              }).then((_) => mounted ? Get.back() : false);
+                              }).then((_) => mounted
+                                      ? Get.off(const TaskTrackerPage())
+                                      : false);
                             }
                           } else {
                             EntryService()
@@ -389,13 +431,16 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                     .then((_) {
                                   entryProvider
                                       .fetchEntries(uid, forceRefresh: true)
-                                      .then(
-                                          (_) => mounted ? Get.back() : false);
+                                      .then((_) => mounted
+                                          ? Get.off(const TaskTrackerPage())
+                                          : false);
                                 });
                               } else {
                                 entryProvider
                                     .fetchEntries(uid, forceRefresh: true)
-                                    .then((_) => mounted ? Get.back() : false);
+                                    .then((_) => mounted
+                                        ? Get.off(const TaskTrackerPage())
+                                        : false);
                               }
                             });
                           }
@@ -441,11 +486,11 @@ class _AddTaskPageState extends State<AddTaskPage> {
               .then((_) => projectProvider
                   .fetchProjects(userProvider.user!.uid ?? "",
                       forceRefresh: true)
-                  .then((value) => Get.back()));
+                  .then((value) => Get.off(const TaskTrackerPage())));
         } else {
           projectProvider
               .fetchProjects(userProvider.user!.uid ?? "", forceRefresh: true)
-              .then((value) => Get.back());
+              .then((value) => Get.off(const TaskTrackerPage()));
         }
       });
       return;
@@ -455,7 +500,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
           .then((value) {
         entryProvider
             .fetchEntries(userProvider.user!.uid ?? "", forceRefresh: true)
-            .then((value) => Get.back());
+            .then((value) => Get.off(const TaskTrackerPage()));
       });
     }
   }
