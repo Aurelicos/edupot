@@ -1,11 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edupot/models/entries/exam.dart';
 import 'package:edupot/models/entries/task.dart';
+import 'package:edupot/providers/entry_provider.dart';
+import 'package:edupot/providers/user_provider.dart';
 import 'package:edupot/routes/app/task_tracker/add_task_page.dart';
+import 'package:edupot/services/entry.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
+import 'package:provider/provider.dart';
 
 class TaskView extends StatelessWidget {
   final Color? color;
@@ -41,12 +46,18 @@ class TaskView extends StatelessWidget {
     String title;
     DateTime finalDate;
 
+    bool isDone = false;
+
+    final userProvider = context.watch<UserProvider>();
+    final entryProvider = context.watch<EntryProvider>();
+
     if (item is ExamModel) {
       title = item.title;
       finalDate = item.finalDate;
     } else if (item is TaskModel) {
       title = item.title;
       finalDate = item.finalDate;
+      isDone = item.done ?? false;
     } else {
       throw Exception('Unknown item type');
     }
@@ -63,26 +74,80 @@ class TaskView extends StatelessWidget {
               final RenderBox renderBox =
                   context.findRenderObject() as RenderBox;
               final Offset offset = renderBox.localToGlobal(Offset.zero);
-              final double buttonWidth = renderBox.size.width;
-              final double buttonHeight = renderBox.size.height;
 
               showMenu(
                 context: context,
+                elevation: 0,
                 position: RelativeRect.fromLTRB(
+                  MediaQuery.of(context).size.width - offset.dx,
+                  offset.dy,
                   offset.dx,
-                  offset.dy + buttonHeight,
-                  MediaQuery.of(context).size.width - offset.dx - buttonWidth,
                   MediaQuery.of(context).size.height - offset.dy,
                 ),
+                color: EduPotColorTheme.primaryBlueDark,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)),
+                shadowColor: Colors.transparent,
                 items: [
-                  const PopupMenuItem(
-                    child: Text("0"),
-                  ),
-                  const PopupMenuItem(
-                    child: Text("1"),
-                  ),
-                  const PopupMenuItem(
-                    child: Text("2"),
+                  if (item is TaskModel)
+                    PopupMenuItem(
+                      padding: EdgeInsets.zero,
+                      onTap: () {
+                        setDone(item.id ?? "", !isDone,
+                            userProvider: userProvider,
+                            entryProvider: entryProvider);
+                      },
+                      child: Container(
+                        padding:
+                            const EdgeInsets.only(left: 10, top: 8, bottom: 8),
+                        child: Row(
+                          children: [
+                            SvgPicture.asset(
+                              "assets/icons/${isDone ? "uncheckmark" : "checkmark"}.svg",
+                              height: 20,
+                              width: 20,
+                              colorFilter: const ColorFilter.mode(
+                                  EduPotColorTheme.projectBlue,
+                                  BlendMode.srcIn),
+                            ),
+                            const SizedBox(width: 10),
+                            Text(isDone ? "Undone" : "Done",
+                                style: EduPotDarkTextTheme.correctText()),
+                          ],
+                        ),
+                      ),
+                    ),
+                  PopupMenuItem(
+                    padding: EdgeInsets.zero,
+                    onTap: () {
+                      deleteAndFetchEntries(
+                        item.id,
+                        item is ExamModel ? "exam" : "task",
+                        userProvider: userProvider,
+                        entryProvider: entryProvider,
+                        assigned:
+                            item is TaskModel ? item.assignedProject : null,
+                      );
+                    },
+                    child: Container(
+                      padding:
+                          const EdgeInsets.only(left: 10, top: 8, bottom: 8),
+                      child: Row(
+                        children: [
+                          SvgPicture.asset(
+                            "assets/icons/bin.svg",
+                            height: 20,
+                            width: 20,
+                            colorFilter: const ColorFilter.mode(
+                                Colors.red, BlendMode.srcIn),
+                          ),
+                          const SizedBox(width: 10),
+                          Text("Remove",
+                              style: EduPotDarkTextTheme.correctText(
+                                  color: Colors.red)),
+                        ],
+                      ),
+                    ),
                   ),
                 ],
               );
@@ -105,12 +170,20 @@ class TaskView extends StatelessWidget {
             ),
             child: Row(
               children: [
-                SvgPicture.asset(
-                  "assets/icons/circle.svg",
-                  colorFilter: color != null
-                      ? ColorFilter.mode(color!, BlendMode.srcIn)
-                      : null,
-                ),
+                isDone
+                    ? SvgPicture.asset(
+                        "assets/icons/check.svg",
+                        width: 20,
+                        height: 20,
+                      )
+                    : SvgPicture.asset(
+                        "assets/icons/circle.svg",
+                        width: 20,
+                        height: 20,
+                        colorFilter: color != null
+                            ? ColorFilter.mode(color!, BlendMode.srcIn)
+                            : null,
+                      ),
                 const SizedBox(width: 15),
                 Text(title, style: EduPotDarkTextTheme.headline2(1)),
                 const Spacer(),
@@ -164,5 +237,31 @@ class TaskView extends StatelessWidget {
     }
 
     return {"finalDate": finalDate, "daysUntil": daysUntil};
+  }
+
+  void deleteAndFetchEntries(
+    String id,
+    String type, {
+    required UserProvider userProvider,
+    required EntryProvider entryProvider,
+    DocumentReference? assigned,
+  }) {
+    EntryService()
+        .deleteEntry(userProvider.user!.uid ?? "", id, type, assigned)
+        .then((value) {
+      entryProvider.fetchEntries(userProvider.user!.uid ?? "",
+          forceRefresh: true);
+    });
+  }
+
+  void setDone(
+    String id,
+    bool done, {
+    required UserProvider userProvider,
+    required EntryProvider entryProvider,
+  }) {
+    EntryService().markDone(userProvider.user!.uid ?? "", id, done: done).then(
+        (value) => entryProvider.fetchEntries(userProvider.user!.uid ?? "",
+            forceRefresh: true));
   }
 }

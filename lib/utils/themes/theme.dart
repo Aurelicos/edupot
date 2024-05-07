@@ -159,4 +159,13 @@ class EduPotDarkTextTheme {
     fontWeight: FontWeight.w600,
     color: Colors.white,
   );
+
+  static TextStyle correctText({Color color = Colors.white}) {
+    return TextStyle(
+      fontFamily: 'Inter',
+      fontSize: 14,
+      fontWeight: FontWeight.w400,
+      color: color,
+    );
+  }
 }

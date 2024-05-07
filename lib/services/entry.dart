@@ -237,4 +237,24 @@ class EntryService extends ChangeNotifier {
       };
     }
   }
+
+  Future<bool> markDone(String userId, String entryId,
+      {required bool done}) async {
+    try {
+      await _db
+          .collection('entry')
+          .doc(userId)
+          .collection('tasks')
+          .doc(entryId)
+          .update({'done': done});
+      return true;
+    } catch (e) {
+      log(e.toString(),
+          name: "Error Marking task as Done",
+          error: e,
+          level: 2000,
+          stackTrace: StackTrace.current);
+      return false;
+    }
+  }
 }
