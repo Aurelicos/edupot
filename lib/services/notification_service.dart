@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:edupot/models/entries/exam.dart';
 import 'package:edupot/models/entries/task.dart';
 import 'package:edupot/models/projects/project.dart';
@@ -91,14 +93,21 @@ class NotificationService {
       tz.TZDateTime scheduleHourBefore = tz.TZDateTime.from(
           localExamDate.subtract(const Duration(hours: 1)), tz.local);
 
-      if (scheduleDayBefore.isAfter(now)) {
-        NotificationService.scheduleNotification(exam.hashCode, "Exam Reminder",
-            "Your exam ${exam.title} is due tomorrow!", scheduleDayBefore,
+      if (now.difference(scheduleDayBefore).inDays == 0) {
+        NotificationService.scheduleNotification(
+            stableNotificationId(exam.id!, 'day'),
+            "Exam Reminder",
+            "Your exam ${exam.title} is due tomorrow!",
+            scheduleDayBefore,
             payload: "exam ${exam.id}");
       }
-      if (scheduleHourBefore.isAfter(now)) {
-        NotificationService.scheduleNotification(exam.hashCode, "Exam Reminder",
-            "Your exam ${exam.title} is due in one hour!", scheduleHourBefore,
+      if (now.difference(scheduleHourBefore).inHours == 0 &&
+          now.minute == scheduleHourBefore.minute) {
+        NotificationService.scheduleNotification(
+            stableNotificationId(exam.id!, 'hour'),
+            "Exam Reminder",
+            "Your exam ${exam.title} is due in one hour!",
+            scheduleHourBefore,
             payload: "exam ${exam.id}");
       }
     }
@@ -110,14 +119,21 @@ class NotificationService {
       tz.TZDateTime scheduleHourBefore = tz.TZDateTime.from(
           localTaskDate.subtract(const Duration(hours: 1)), tz.local);
 
-      if (scheduleDayBefore.isAfter(now)) {
-        NotificationService.scheduleNotification(task.hashCode, "Task Reminder",
-            "Your task ${task.title} is due tomorrow!", scheduleDayBefore,
+      if (now.difference(scheduleDayBefore).inDays == 0) {
+        NotificationService.scheduleNotification(
+            stableNotificationId(task.id!, 'day'),
+            "Task Reminder",
+            "Your task ${task.title} is due tomorrow!",
+            scheduleDayBefore,
             payload: "task ${task.id}");
       }
-      if (scheduleHourBefore.isAfter(now)) {
-        NotificationService.scheduleNotification(task.hashCode, "Task Reminder",
-            "Your task ${task.title} is due in one hour!", scheduleHourBefore,
+      if (now.difference(scheduleHourBefore).inHours == 0 &&
+          now.minute == scheduleHourBefore.minute) {
+        NotificationService.scheduleNotification(
+            stableNotificationId(task.id!, 'hour'),
+            "Task Reminder",
+            "Your task ${task.title} is due in one hour!",
+            scheduleHourBefore,
             payload: "task ${task.id}");
       }
     }
@@ -128,22 +144,24 @@ class NotificationService {
     tz.TZDateTime now = tz.TZDateTime.now(tz.local);
 
     for (final project in projects) {
+      DateTime localProjectDate = project.finalDate.toLocal();
       tz.TZDateTime scheduleDayBefore = tz.TZDateTime.from(
-          project.finalDate.subtract(const Duration(days: 1)), tz.local);
+          localProjectDate.subtract(const Duration(days: 1)), tz.local);
       tz.TZDateTime scheduleHourBefore = tz.TZDateTime.from(
-          project.finalDate.subtract(const Duration(hours: 1)), tz.local);
+          localProjectDate.subtract(const Duration(hours: 1)), tz.local);
 
-      if (scheduleDayBefore.isAfter(now)) {
+      if (now.difference(scheduleDayBefore).inDays == 0) {
         NotificationService.scheduleNotification(
-            project.hashCode,
+            stableNotificationId(project.id!, 'day'),
             "Project Deadline Reminder",
             "Your project ${project.name} deadline is tomorrow!",
             scheduleDayBefore,
             payload: "project ${project.id}");
       }
-      if (scheduleHourBefore.isAfter(now)) {
+      if (now.difference(scheduleHourBefore).inHours == 0 &&
+          now.minute == scheduleHourBefore.minute) {
         NotificationService.scheduleNotification(
-            project.hashCode,
+            stableNotificationId(project.id!, 'hour'),
             "Project Deadline Reminder",
             "Your project ${project.name} deadline is in one hour!",
             scheduleHourBefore,
@@ -152,7 +170,20 @@ class NotificationService {
     }
   }
 
-  static Future<void> cancelNotification(int id) async {
-    await flutterLocalNotificationsPlugin.cancel(id);
+  static int stableNotificationId(String baseId, String type) {
+    final bytes = utf8.encode(baseId + type);
+    int hash = 0;
+    for (var byte in bytes) {
+      hash = (hash + byte) % (1 << 31);
+    }
+    return hash;
+  }
+
+  static Future<void> cancelAllNotificationsForEvent(String eventId) async {
+    List<String> notificationTypes = ['day', 'hour'];
+    for (var type in notificationTypes) {
+      int notificationId = stableNotificationId(eventId, type);
+      await flutterLocalNotificationsPlugin.cancel(notificationId);
+    }
   }
 }

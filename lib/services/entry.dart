@@ -107,7 +107,7 @@ class EntryService extends ChangeNotifier {
           .collection('${entryType}s')
           .doc(entryId)
           .delete();
-      NotificationService.cancelNotification(entryId.hashCode);
+      NotificationService.cancelAllNotificationsForEvent(entryId);
       return true;
     } catch (e) {
       log(e.toString(),
@@ -220,7 +220,7 @@ class EntryService extends ChangeNotifier {
       await _db.collection('entry').doc(uid).update({
         'projects': FieldValue.arrayRemove([_db.doc('projects/$projectId')])
       });
-      NotificationService.cancelNotification(projectId.hashCode);
+      NotificationService.cancelAllNotificationsForEvent(projectId);
       return {
         "success": true,
         "updated": updated,
