@@ -24,7 +24,7 @@ class NotificationService {
         .requestNotificationsPermission();
 
     const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
+        AndroidInitializationSettings('@mipmap/launcher_icon');
 
     await flutterLocalNotificationsPlugin.initialize(
       const InitializationSettings(
