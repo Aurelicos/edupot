@@ -7,6 +7,7 @@ import 'package:edupot/routes/app/task_tracker/add_task_page.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:timezone/timezone.dart' as tz;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NotificationService {
   static final NotificationService _notificationService =
@@ -84,57 +85,78 @@ class NotificationService {
 
   static Future<void> scheduleEntriesNotifications(
       String userId, List<ExamModel> exams, List<TaskModel> tasks) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     tz.TZDateTime now = tz.TZDateTime.now(tz.local);
 
     for (final exam in exams) {
       DateTime localExamDate = exam.finalDate.toLocal();
-      tz.TZDateTime scheduleDayBefore = tz.TZDateTime.from(
-          localExamDate.subtract(const Duration(days: 1)), tz.local);
-      tz.TZDateTime scheduleHourBefore = tz.TZDateTime.from(
-          localExamDate.subtract(const Duration(hours: 1)), tz.local);
+      if (localExamDate.isAfter(DateTime.now())) {
+        tz.TZDateTime scheduleDayBefore = tz.TZDateTime.from(
+            localExamDate.subtract(const Duration(days: 1)), tz.local);
+        tz.TZDateTime scheduleHourBefore = tz.TZDateTime.from(
+            localExamDate.subtract(const Duration(hours: 1)), tz.local);
 
-      if (now.difference(scheduleDayBefore).inDays == 0) {
-        NotificationService.scheduleNotification(
-            stableNotificationId(exam.id!, 'day'),
-            "Exam Reminder",
-            "Your exam ${exam.title} is due tomorrow!",
-            scheduleDayBefore,
-            payload: "exam ${exam.id}");
-      }
-      if (now.difference(scheduleHourBefore).inHours == 0 &&
-          now.minute == scheduleHourBefore.minute) {
-        NotificationService.scheduleNotification(
-            stableNotificationId(exam.id!, 'hour'),
-            "Exam Reminder",
-            "Your exam ${exam.title} is due in one hour!",
-            scheduleHourBefore,
-            payload: "exam ${exam.id}");
+        bool dayNotificationScheduled =
+            prefs.getBool("exam_day_${exam.id}") ?? false;
+        bool hourNotificationScheduled =
+            prefs.getBool("exam_hour_${exam.id}") ?? false;
+
+        if (!dayNotificationScheduled && scheduleDayBefore.isAfter(now)) {
+          NotificationService.scheduleNotification(
+              stableNotificationId(exam.id!, 'day'),
+              "Exam Reminder",
+              "Your exam ${exam.title} is due tomorrow!",
+              scheduleDayBefore,
+              payload: "exam ${exam.id}");
+          prefs.setBool("exam_day_${exam.id}", true);
+        }
+
+        if (!hourNotificationScheduled && scheduleHourBefore.isAfter(now)) {
+          NotificationService.scheduleNotification(
+              stableNotificationId(exam.id!, 'hour'),
+              "Exam Reminder",
+              "Your exam ${exam.title} is due in one hour!",
+              scheduleHourBefore,
+              payload: "exam ${exam.id}");
+          prefs.setBool("exam_hour_${exam.id}", true);
+        }
       }
     }
 
     for (final task in tasks) {
-      DateTime localTaskDate = task.finalDate.toLocal();
-      tz.TZDateTime scheduleDayBefore = tz.TZDateTime.from(
-          localTaskDate.subtract(const Duration(days: 1)), tz.local);
-      tz.TZDateTime scheduleHourBefore = tz.TZDateTime.from(
-          localTaskDate.subtract(const Duration(hours: 1)), tz.local);
+      if (!task.done!) {
+        DateTime localTaskDate = task.finalDate.toLocal();
+        if (localTaskDate.isAfter(DateTime.now())) {
+          tz.TZDateTime scheduleDayBefore = tz.TZDateTime.from(
+              localTaskDate.subtract(const Duration(days: 1)), tz.local);
+          tz.TZDateTime scheduleHourBefore = tz.TZDateTime.from(
+              localTaskDate.subtract(const Duration(hours: 1)), tz.local);
 
-      if (now.difference(scheduleDayBefore).inDays == 0) {
-        NotificationService.scheduleNotification(
-            stableNotificationId(task.id!, 'day'),
-            "Task Reminder",
-            "Your task ${task.title} is due tomorrow!",
-            scheduleDayBefore,
-            payload: "task ${task.id}");
-      }
-      if (now.difference(scheduleHourBefore).inHours == 0 &&
-          now.minute == scheduleHourBefore.minute) {
-        NotificationService.scheduleNotification(
-            stableNotificationId(task.id!, 'hour'),
-            "Task Reminder",
-            "Your task ${task.title} is due in one hour!",
-            scheduleHourBefore,
-            payload: "task ${task.id}");
+          bool dayNotificationScheduled =
+              prefs.getBool("task_day_${task.id}") ?? false;
+          bool hourNotificationScheduled =
+              prefs.getBool("task_hour_${task.id}") ?? false;
+
+          if (!dayNotificationScheduled && scheduleDayBefore.isAfter(now)) {
+            NotificationService.scheduleNotification(
+                stableNotificationId(task.id!, 'day'),
+                "Task Reminder",
+                "Your task ${task.title} is due tomorrow!",
+                scheduleDayBefore,
+                payload: "task ${task.id}");
+            prefs.setBool("task_day_${task.id}", true);
+          }
+
+          if (!hourNotificationScheduled && scheduleHourBefore.isAfter(now)) {
+            NotificationService.scheduleNotification(
+                stableNotificationId(task.id!, 'hour'),
+                "Task Reminder",
+                "Your task ${task.title} is due in one hour!",
+                scheduleHourBefore,
+                payload: "task ${task.id}");
+            prefs.setBool("task_hour_${task.id}", true);
+          }
+        }
       }
     }
   }

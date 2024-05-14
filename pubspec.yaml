@@ -25,6 +25,7 @@ dependencies:
   connectivity_plus: ^6.0.3
   get: ^4.6.6
   timezone: ^0.9.3
+  shared_preferences: ^2.2.3
 
 dev_dependencies:
   flutter_test:
