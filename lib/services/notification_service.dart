@@ -4,10 +4,10 @@ import 'package:edupot/models/entries/exam.dart';
 import 'package:edupot/models/entries/task.dart';
 import 'package:edupot/models/projects/project.dart';
 import 'package:edupot/routes/app/task_tracker/add_task_page.dart';
+import 'package:edupot/services/shared_preferences_service.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:timezone/timezone.dart' as tz;
-import 'package:shared_preferences/shared_preferences.dart';
 
 class NotificationService {
   static final NotificationService _notificationService =
@@ -47,7 +47,7 @@ class NotificationService {
 
         int selectedCategory = categoryMap[type] ?? 0;
 
-        Get.off(AddTaskPage(
+        Get.to(AddTaskPage(
           selectedCategory: selectedCategory,
           id: id,
         ));
@@ -85,7 +85,6 @@ class NotificationService {
 
   static Future<void> scheduleEntriesNotifications(
       String userId, List<ExamModel> exams, List<TaskModel> tasks) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
     tz.TZDateTime now = tz.TZDateTime.now(tz.local);
 
     for (final exam in exams) {
@@ -97,9 +96,9 @@ class NotificationService {
             localExamDate.subtract(const Duration(hours: 1)), tz.local);
 
         bool dayNotificationScheduled =
-            prefs.getBool("exam_day_${exam.id}") ?? false;
+            SharedPreferencesService.value("exam_day_${exam.id}");
         bool hourNotificationScheduled =
-            prefs.getBool("exam_hour_${exam.id}") ?? false;
+            SharedPreferencesService.value("exam_hour_${exam.id}");
 
         if (!dayNotificationScheduled && scheduleDayBefore.isAfter(now)) {
           NotificationService.scheduleNotification(
@@ -108,7 +107,7 @@ class NotificationService {
               "Your exam ${exam.title} is due tomorrow!",
               scheduleDayBefore,
               payload: "exam ${exam.id}");
-          prefs.setBool("exam_day_${exam.id}", true);
+          SharedPreferencesService.setValue("exam_day_${exam.id}", true);
         }
 
         if (!hourNotificationScheduled && scheduleHourBefore.isAfter(now)) {
@@ -118,7 +117,7 @@ class NotificationService {
               "Your exam ${exam.title} is due in one hour!",
               scheduleHourBefore,
               payload: "exam ${exam.id}");
-          prefs.setBool("exam_hour_${exam.id}", true);
+          SharedPreferencesService.setValue("exam_hour_${exam.id}", true);
         }
       }
     }
@@ -133,9 +132,10 @@ class NotificationService {
               localTaskDate.subtract(const Duration(hours: 1)), tz.local);
 
           bool dayNotificationScheduled =
-              prefs.getBool("task_day_${task.id}") ?? false;
+              SharedPreferencesService.value("task_day_${task.id}");
+
           bool hourNotificationScheduled =
-              prefs.getBool("task_hour_${task.id}") ?? false;
+              SharedPreferencesService.value("task_hour_${task.id}");
 
           if (!dayNotificationScheduled && scheduleDayBefore.isAfter(now)) {
             NotificationService.scheduleNotification(
@@ -144,7 +144,7 @@ class NotificationService {
                 "Your task ${task.title} is due tomorrow!",
                 scheduleDayBefore,
                 payload: "task ${task.id}");
-            prefs.setBool("task_day_${task.id}", true);
+            SharedPreferencesService.setValue("task_day_${task.id}", true);
           }
 
           if (!hourNotificationScheduled && scheduleHourBefore.isAfter(now)) {
@@ -154,7 +154,7 @@ class NotificationService {
                 "Your task ${task.title} is due in one hour!",
                 scheduleHourBefore,
                 payload: "task ${task.id}");
-            prefs.setBool("task_hour_${task.id}", true);
+            SharedPreferencesService.setValue("task_hour_${task.id}", true);
           }
         }
       }

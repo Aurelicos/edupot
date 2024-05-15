@@ -6,6 +6,7 @@ import 'package:edupot/providers/user_provider.dart';
 import 'package:edupot/routes/auth_wrapper.dart';
 import 'package:edupot/controllers/dependency_injection.dart';
 import 'package:edupot/services/notification_service.dart';
+import 'package:edupot/services/shared_preferences_service.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -26,6 +27,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  await SharedPreferencesService.init();
 
   tz.initializeTimeZones();
 

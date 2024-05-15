@@ -1,5 +1,6 @@
 import 'package:edupot/components/app/primary_scaffold.dart';
 import 'package:edupot/routes/app/settings/my_account/account_page.dart';
+import 'package:edupot/routes/app/settings/privacy/privacy_page.dart';
 import 'package:edupot/utils/common/bounce_physics.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/widgets/common/main_card.dart';
@@ -21,7 +22,8 @@ class SettingsPage extends StatelessWidget {
       {
         'asset': 'assets/icons/shield.svg',
         'title': 'Privacy',
-        'description': 'Adjust your privacy settings.'
+        'description': 'Adjust your privacy settings.',
+        'onPressed': () => Get.to(const PrivacyPage()),
       },
       {
         'asset': 'assets/icons/bell.svg',
@@ -125,6 +127,7 @@ class SettingsPage extends StatelessWidget {
                         items[index]['onPressed']();
                       }
                     },
+                    onSwitch: null,
                   ),
                   if (index != items.length - 1)
                     Divider(
