@@ -2,12 +2,14 @@ import 'package:edupot/components/app/primary_scaffold.dart';
 import 'package:edupot/components/app/task_tracker/loading_content.dart';
 import 'package:edupot/components/app/task_tracker/task_modal.dart';
 import 'package:edupot/components/auth/clickable_text.dart';
+import 'package:edupot/models/projects/project.dart';
 import 'package:edupot/providers/entry_provider.dart';
 import 'package:edupot/providers/project_provider.dart';
 import 'package:edupot/providers/user_provider.dart';
 import 'package:edupot/routes/app/task_tracker/add_task_page.dart';
 import 'package:edupot/utils/common/bounce_physics.dart';
 import 'package:edupot/utils/themes/theme.dart';
+import 'package:edupot/widgets/common/search_list.dart';
 import 'package:edupot/widgets/task_tracker/project_view.dart';
 import 'package:edupot/widgets/task_tracker/task_view.dart';
 import 'package:flutter/material.dart';
@@ -66,6 +68,7 @@ class _TaskTrackerPageState extends State<TaskTrackerPage> {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final projectProvider =
         Provider.of<ProjectProvider>(context, listen: false);
+    bool isSearching = false;
 
     return PrimaryScaffold(
       onPressed: () => modal(),
@@ -103,35 +106,57 @@ class _TaskTrackerPageState extends State<TaskTrackerPage> {
                 ),
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Stack(
                     children: [
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.045,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'Task Tracker',
-                            style: EduPotDarkTextTheme.headline1,
-                          ),
                           SizedBox(
-                            width: 45,
-                            child: GestureDetector(
-                              onTap: () {},
-                              child:
-                                  SvgPicture.asset("assets/icons/search.svg"),
-                            ),
-                          )
+                            height: MediaQuery.of(context).size.height * 0.045,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                'Task Tracker',
+                                style: EduPotDarkTextTheme.headline1,
+                              ),
+                              SizedBox(
+                                width: 45,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      isSearching = !isSearching;
+                                    });
+                                  },
+                                  child: SvgPicture.asset(
+                                      "assets/icons/search.svg"),
+                                ),
+                              )
+                            ],
+                          ),
+                          _isLoading.every((element) => element == true)
+                              ? projectLoadingUI()
+                              : const ProjectView(),
+                          _isLoading.every((element) => element == true)
+                              ? loadingUI()
+                              : _buildContent(context),
                         ],
                       ),
-                      _isLoading.every((element) => element == true)
-                          ? projectLoadingUI()
-                          : const ProjectView(),
-                      _isLoading.every((element) => element == true)
-                          ? loadingUI()
-                          : _buildContent(context),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top: MediaQuery.of(context).size.height * 0.045),
+                        child: SearchList(
+                          placeholder: "Search",
+                          color: EduPotColorTheme.lightGray2,
+                          dropdownButtonStyle: SearchListButtonStyle(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          hideIcon: true,
+                          items: _createDropdownItems(projectProvider),
+                          onChange: (value) {},
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -141,6 +166,27 @@ class _TaskTrackerPageState extends State<TaskTrackerPage> {
         ),
       ),
     );
+  }
+
+  List<SearchListItem> _createDropdownItems(ProjectProvider provider) {
+    List<ProjectModel> items = provider.projects;
+    return items
+        .asMap()
+        .entries
+        .map(
+          (item) => SearchListItem(
+            id: item.value.id!,
+            name: item.value.name,
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Text(
+                formatText(item.value.name, 14),
+                style: EduPotDarkTextTheme.headline2(1),
+              ),
+            ),
+          ),
+        )
+        .toList();
   }
 
   Widget _buildContent(BuildContext context) {

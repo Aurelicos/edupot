@@ -12,6 +12,8 @@ class EduPotColorTheme {
   static const tasksPurple = Color(0xFFBB476C);
   static const projectBlue = Color(0xFF4886E8);
   static const greyBorder = Color(0xFFA5AFC4);
+  static const lightGray = Color(0xFF363956);
+  static const lightGray2 = Color(0xFF464967);
 
   static const mainItemGradient = LinearGradient(
     begin: Alignment(1.00, 0.00),
