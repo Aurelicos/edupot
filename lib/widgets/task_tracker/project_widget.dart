@@ -32,11 +32,10 @@ class ProjectWidget extends StatelessWidget {
                   project: itemArray[index],
                 )),
                 style: ButtonStyle(
-                  padding:
-                      MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero),
+                  padding: WidgetStateProperty.all<EdgeInsets>(EdgeInsets.zero),
                   backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.transparent),
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      WidgetStateProperty.all<Color>(Colors.transparent),
+                  shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
                   ),

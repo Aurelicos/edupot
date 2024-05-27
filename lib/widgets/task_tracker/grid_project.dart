@@ -41,10 +41,10 @@ class GridProject extends StatelessWidget {
               onPressed: () => Get.to(
                   AddTaskPage(selectedCategory: 2, project: itemArray[i])),
               style: ButtonStyle(
-                padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero),
+                padding: WidgetStateProperty.all<EdgeInsets>(EdgeInsets.zero),
                 backgroundColor:
-                    MaterialStateProperty.all<Color>(Colors.transparent),
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    WidgetStateProperty.all<Color>(Colors.transparent),
+                shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),

@@ -127,7 +127,7 @@ class _NavbarState extends State<Navbar> {
         style: ButtonStyle(
           visualDensity: VisualDensity.compact,
           overlayColor:
-              MaterialStateColor.resolveWith((states) => Colors.transparent),
+              WidgetStateColor.resolveWith((states) => Colors.transparent),
         ),
         child: ColorFiltered(
           colorFilter: ColorFilter.mode(

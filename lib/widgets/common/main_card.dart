@@ -45,9 +45,9 @@ class _MainCardState extends State<MainCard> {
     return TextButton(
       onPressed: widget.onPressed,
       style: ButtonStyle(
-        padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero),
-        backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        padding: WidgetStateProperty.all<EdgeInsets>(EdgeInsets.zero),
+        backgroundColor: WidgetStateProperty.all<Color>(Colors.transparent),
+        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
       ),
