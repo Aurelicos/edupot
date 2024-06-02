@@ -71,6 +71,33 @@ class EduPotColorTheme {
     ],
   );
 
+  static const brighterOrangeGradient = LinearGradient(
+    begin: Alignment(0.69, -0.72),
+    end: Alignment(-0.69, 0.72),
+    colors: [
+      Color(0xFFFFCE50),
+      Color(0xFFE9600D),
+    ],
+  );
+
+  static const brighterBlueGradient = LinearGradient(
+    begin: Alignment(0.69, -0.72),
+    end: Alignment(-0.69, 0.72),
+    colors: [
+      Color(0xFF6BAEFA),
+      Color(0xFF144ACE),
+    ],
+  );
+
+  static const brighterPinkGradient = LinearGradient(
+    begin: Alignment(0.69, -0.72),
+    end: Alignment(-0.69, 0.72),
+    colors: [
+      Color(0xFF5B34FF),
+      Color(0xFFFF5303),
+    ],
+  );
+
   static const darkGradient = LinearGradient(
     colors: [
       Color(0xFF313346),
