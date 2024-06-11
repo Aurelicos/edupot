@@ -57,14 +57,18 @@ class _HomePageState extends State<HomePage> {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data!['success'] == false) {
             AuthService().signOut();
-            Get.off(const RegisterPage());
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              Get.off(const RegisterPage());
+            });
           }
           entryProvider.fetchEntries(userProvider.user!.uid ?? "",
               forceRefresh: true);
           projectProvider.fetchProjects(userProvider.user!.uid ?? "",
               forceRefresh: true);
           if (snapshot.data!['data'] == false) {
-            Get.off(const OnboardingPage());
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              Get.off(const OnboardingPage());
+            });
           } else {
             return const TaskTrackerPage();
           }
