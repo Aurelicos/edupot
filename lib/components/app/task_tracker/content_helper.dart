@@ -65,6 +65,7 @@ void timeModal(
     backgroundColor: EduPotColorTheme.primaryDark,
     builder: (BuildContext context) {
       return SelectTimeModal(
+        oldTime: time,
         selectedTime: (DateTime selectedTime) {
           date(DateTime(
             time.year,

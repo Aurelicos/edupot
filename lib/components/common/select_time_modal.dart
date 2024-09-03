@@ -8,7 +8,8 @@ import 'package:get/route_manager.dart';
 
 class SelectTimeModal extends StatefulWidget {
   final void Function(DateTime time) selectedTime;
-  const SelectTimeModal({super.key, required this.selectedTime});
+  final DateTime? oldTime;
+  const SelectTimeModal({super.key, required this.selectedTime, this.oldTime});
 
   @override
   State<SelectTimeModal> createState() => _SelectTimeModalState();
@@ -21,8 +22,18 @@ class _SelectTimeModalState extends State<SelectTimeModal> {
   int minutes = 30;
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.oldTime != null) {
+      hours = widget.oldTime!.hour;
+      minutes = widget.oldTime!.minute;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
+
     return SingleChildScrollView(
       child: SizedBox(
         height: height / 2 <= 475 ? 500 : height / 2,
@@ -82,7 +93,9 @@ class _SelectTimeModalState extends State<SelectTimeModal> {
                           });
                         },
                         initialItem: selected == 0
-                            ? 12
+                            ? widget.oldTime != null
+                                ? widget.oldTime!.hour
+                                : 12
                             : int.parse(times[selected].split(":")[0]),
                         childCount: 24,
                       ),
@@ -100,7 +113,9 @@ class _SelectTimeModalState extends State<SelectTimeModal> {
                           });
                         },
                         initialItem: selected == 0
-                            ? 30
+                            ? widget.oldTime != null
+                                ? widget.oldTime!.minute
+                                : 30
                             : int.parse(times[selected].split(":")[1]),
                         childCount: 60,
                       ),
