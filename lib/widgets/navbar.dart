@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:edupot/providers/navbar_provider.dart';
+import 'package:edupot/routes/app/calendar/calendar_page.dart';
 import 'package:edupot/routes/app/learning/learning_page.dart';
 import 'package:edupot/routes/app/settings/settings_page.dart';
 import 'package:edupot/routes/app/task_tracker/task_tracker_page.dart';
@@ -37,7 +38,9 @@ class _NavbarState extends State<Navbar> {
                 label: "Calendar",
                 onPressed: () async {
                   if (provider.selectedIndex != 0) {
-                    comingSoonDialog();
+                    provider.selectedIndex = 0;
+                    Get.off(const CalendarPage(),
+                        transition: Transition.noTransition);
                   }
                 },
                 provider: provider,
