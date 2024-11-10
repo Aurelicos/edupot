@@ -43,7 +43,7 @@ class CalendarPage extends StatelessWidget {
                 )
               ],
             ),
-            const Calendar(),
+            const Expanded(child: Calendar()),
           ],
         ),
       ),

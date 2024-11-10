@@ -1,3 +1,4 @@
+import 'package:edupot/providers/day_provider.dart';
 import 'package:edupot/providers/entry_provider.dart';
 import 'package:edupot/providers/navbar_provider.dart';
 import 'package:edupot/providers/project_provider.dart';
@@ -50,6 +51,7 @@ class App extends StatelessWidget {
         ChangeNotifierProvider.value(value: SelectionProvider()),
         ChangeNotifierProvider.value(value: EntryProvider()),
         ChangeNotifierProvider.value(value: ProjectProvider()),
+        ChangeNotifierProvider.value(value: DayProvider()),
       ],
       child: GetMaterialApp(
         title: 'EduPot',

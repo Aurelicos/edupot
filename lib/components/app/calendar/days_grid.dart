@@ -1,51 +1,53 @@
+import 'package:edupot/components/app/calendar/day_cell.dart';
+import 'package:edupot/providers/entry_provider.dart';
+import 'package:edupot/providers/project_provider.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class DaysGrid extends StatelessWidget {
-  final List<List<List<int>>> dates;
   final DateTime selectedDate;
-  const DaysGrid({super.key, required this.dates, required this.selectedDate});
+  final bool isWeekView;
+  final Function(DateTime) onDateSelected;
+
+  const DaysGrid({
+    super.key,
+    required this.selectedDate,
+    required this.isWeekView,
+    required this.onDateSelected,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final List<String> weekDays =
-        DateFormat.E().dateSymbols.STANDALONESHORTWEEKDAYS;
+    final weekDays = DateFormat.E().dateSymbols.STANDALONESHORTWEEKDAYS;
 
-    final firstLine = dates[1][0].length < 7 && dates[0].isNotEmpty
-        ? dates[0][dates[0].length - 1] + dates[1][0]
-        : dates[1][0];
+    final entryProvider = Provider.of<EntryProvider>(context);
+    final projectProvider = Provider.of<ProjectProvider>(context);
 
-    final lastLine = dates[1][dates[1].length - 1].length < 7 &&
-            dates.length > 2 &&
-            dates[2].isNotEmpty
-        ? dates[1][dates[1].length - 1] + dates[2][0]
-        : dates[1][dates[1].length - 1];
+    final examsDates = entryProvider.exams
+        .map((exam) => DateTime(
+            exam.finalDate.year, exam.finalDate.month, exam.finalDate.day))
+        .toList();
+    final tasksDates = entryProvider.tasks
+        .map((task) => DateTime(
+            task.finalDate.year, task.finalDate.month, task.finalDate.day))
+        .toList();
+    final projectsDates = projectProvider.projects
+        .map((project) => DateTime(project.finalDate.year,
+            project.finalDate.month, project.finalDate.day))
+        .toList();
 
-    final lastMonthLength =
-        dates[0].isNotEmpty ? dates[0][dates[0].length - 1].length : 0;
-    int nextMonthLength =
-        dates.length > 2 && dates[2].isNotEmpty ? dates[2][0].length : 0;
+    final dayInfos =
+        generateDayInfos(selectedDate, examsDates, tasksDates, projectsDates);
 
-    final List<List<int>> days = [
-      firstLine,
-      ...dates[1].sublist(1, dates[1].length - 1),
-      lastLine
-    ];
-
-    final List<int> flatDays = days.expand((week) => week).toList();
-
-    if (flatDays.length < 42 && dates.length > 2 && dates[2].length > 1) {
-      final int daysToAdd = 42 - flatDays.length;
-      final List<int> extraDays = List.generate(
-          daysToAdd, (index) => dates[2][1][index % dates[2][1].length]);
-      nextMonthLength += daysToAdd;
-      flatDays.addAll(extraDays);
+    List<DayInfo> displayedDayInfos = dayInfos;
+    if (isWeekView) {
+      displayedDayInfos = getWeekDayInfos(dayInfos, selectedDate);
     }
 
     return Column(
       children: [
-        const SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: weekDays
@@ -59,37 +61,84 @@ class DaysGrid extends StatelessWidget {
               .toList(),
         ),
         GridView.builder(
+          physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          itemCount: 42,
+          itemCount: displayedDayInfos.length,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 7,
             childAspectRatio: 5 / 4,
           ),
           padding: const EdgeInsets.all(0),
           itemBuilder: (context, index) {
-            final int day = flatDays[index];
-            final bool isCurrentMonth =
-                index >= lastMonthLength && index < (42 - nextMonthLength);
-
-            return Container(
-              width: MediaQuery.of(context).size.width / 7,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: isCurrentMonth &&
-                        DateTime.now().day == day &&
-                        DateTime.now().year == selectedDate.year &&
-                        DateTime.now().month == selectedDate.month
-                    ? Colors.white12
-                    : Colors.transparent,
-              ),
-              child: Text(
-                day.toString(),
-                style: EduPotDarkTextTheme.headline2(isCurrentMonth ? 1 : 0.4),
-              ),
+            final dayInfo = displayedDayInfos[index];
+            return DayCell(
+              dayInfo: dayInfo,
+              selected: dayInfo.date.day == selectedDate.day &&
+                  dayInfo.date.month == selectedDate.month &&
+                  dayInfo.date.year == selectedDate.year &&
+                  isWeekView,
+              onDateSelected: (date) {
+                onDateSelected(date);
+              },
             );
           },
         ),
       ],
     );
+  }
+
+  List<DayInfo> generateDayInfos(
+    DateTime selectedDate,
+    List<DateTime> examsDates,
+    List<DateTime> tasksDates,
+    List<DateTime> projectsDates,
+  ) {
+    DateTime firstDayOfMonth =
+        DateTime(selectedDate.year, selectedDate.month, 1);
+    int weekdayOfFirstDay = firstDayOfMonth.weekday;
+    int daysToSubtract = weekdayOfFirstDay - 1;
+    DateTime firstDateInGrid =
+        firstDayOfMonth.subtract(Duration(days: daysToSubtract));
+
+    List<DateTime> gridDates = List.generate(
+        42, (index) => firstDateInGrid.add(Duration(days: index)));
+
+    Set<String> examsDatesSet =
+        examsDates.map((date) => DateFormat('yyyy-MM-dd').format(date)).toSet();
+    Set<String> tasksDatesSet =
+        tasksDates.map((date) => DateFormat('yyyy-MM-dd').format(date)).toSet();
+    Set<String> projectsDatesSet = projectsDates
+        .map((date) => DateFormat('yyyy-MM-dd').format(date))
+        .toSet();
+
+    return gridDates.map((date) {
+      String dateStr = DateFormat('yyyy-MM-dd').format(date);
+      bool isCurrentMonth = date.month == selectedDate.month;
+      bool hasExam = examsDatesSet.contains(dateStr);
+      bool hasTask = tasksDatesSet.contains(dateStr);
+      bool hasProject = projectsDatesSet.contains(dateStr);
+
+      return DayInfo(
+        date: date,
+        isCurrentMonth: isCurrentMonth,
+        hasExam: hasExam,
+        hasTask: hasTask,
+        hasProject: hasProject,
+      );
+    }).toList();
+  }
+
+  List<DayInfo> getWeekDayInfos(List<DayInfo> dayInfos, DateTime selectedDate) {
+    int selectedIndex = dayInfos.indexWhere((dayInfo) =>
+        dayInfo.date.day == selectedDate.day &&
+        dayInfo.date.month == selectedDate.month &&
+        dayInfo.date.year == selectedDate.year);
+
+    int weekStartIndex = selectedIndex - (selectedDate.weekday - 1);
+    if (weekStartIndex < 0) {
+      weekStartIndex = 0;
+    }
+
+    return dayInfos.sublist(weekStartIndex, weekStartIndex + 7);
   }
 }
