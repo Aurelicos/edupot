@@ -175,14 +175,20 @@ class _CalendarState extends State<Calendar>
               }
             },
             child: Container(
-              color: Colors.transparent,
-              padding: const EdgeInsets.all(16.0),
               child: _isWeekView
                   ? entriesInDay.isNotEmpty
                       ? Column(
                           children: [
-                            TaskView(entry: examsInDay),
-                            TaskView(entry: tasksInDay),
+                            TaskView(
+                              entry: examsInDay,
+                              color: EduPotColorTheme.examsOrange,
+                              returnBack: true,
+                            ),
+                            TaskView(
+                              entry: tasksInDay,
+                              color: EduPotColorTheme.tasksPurple,
+                              returnBack: true,
+                            ),
                           ],
                         )
                       : Center(

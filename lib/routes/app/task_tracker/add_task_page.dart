@@ -25,6 +25,7 @@ import 'package:provider/provider.dart';
 class AddTaskPage extends StatefulWidget {
   final int selectedCategory;
   final String? id;
+  final bool? returnBack;
 
   ExamModel? exam;
   TaskModel? task;
@@ -38,6 +39,7 @@ class AddTaskPage extends StatefulWidget {
     this.task,
     this.project,
     this.id,
+    this.returnBack = false,
   });
 
   @override
@@ -154,7 +156,10 @@ class _AddTaskPageState extends State<AddTaskPage> {
                       children: [
                         const SizedBox(height: 15),
                         InkWell(
-                          onTap: () => Get.off(const TaskTrackerPage()),
+                          onTap: () => widget.returnBack != null &&
+                                  widget.returnBack == true
+                              ? Get.back()
+                              : Get.off(const TaskTrackerPage()),
                           child: const Icon(Icons.arrow_back_rounded,
                               size: 32, color: Colors.white),
                         ),
@@ -389,7 +394,10 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                         forceRefresh: true);
                                   }
                                 }).then((_) => mounted
-                                        ? Get.off(const TaskTrackerPage())
+                                        ? widget.returnBack != null &&
+                                                widget.returnBack == true
+                                            ? Get.back()
+                                            : Get.off(const TaskTrackerPage())
                                         : false);
                               });
                             } else {
@@ -412,7 +420,10 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                       forceRefresh: true);
                                 }
                               }).then((_) => mounted
-                                      ? Get.off(const TaskTrackerPage())
+                                      ? widget.returnBack != null &&
+                                              widget.returnBack == true
+                                          ? Get.back()
+                                          : Get.off(const TaskTrackerPage())
                                       : false);
                             }
                           } else {
@@ -432,14 +443,20 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                   entryProvider
                                       .fetchEntries(uid, forceRefresh: true)
                                       .then((_) => mounted
-                                          ? Get.off(const TaskTrackerPage())
+                                          ? widget.returnBack != null &&
+                                                  widget.returnBack == true
+                                              ? Get.back()
+                                              : Get.off(const TaskTrackerPage())
                                           : false);
                                 });
                               } else {
                                 entryProvider
                                     .fetchEntries(uid, forceRefresh: true)
                                     .then((_) => mounted
-                                        ? Get.off(const TaskTrackerPage())
+                                        ? widget.returnBack != null &&
+                                                widget.returnBack == true
+                                            ? Get.back()
+                                            : Get.off(const TaskTrackerPage())
                                         : false);
                               }
                             });
@@ -486,11 +503,17 @@ class _AddTaskPageState extends State<AddTaskPage> {
               .then((_) => projectProvider
                   .fetchProjects(userProvider.user!.uid ?? "",
                       forceRefresh: true)
-                  .then((value) => Get.off(const TaskTrackerPage())));
+                  .then((value) =>
+                      widget.returnBack != null && widget.returnBack == true
+                          ? Get.back()
+                          : Get.off(const TaskTrackerPage())));
         } else {
           projectProvider
               .fetchProjects(userProvider.user!.uid ?? "", forceRefresh: true)
-              .then((value) => Get.off(const TaskTrackerPage()));
+              .then((value) =>
+                  widget.returnBack != null && widget.returnBack == true
+                      ? Get.back()
+                      : Get.off(const TaskTrackerPage()));
         }
       });
       return;
@@ -500,7 +523,10 @@ class _AddTaskPageState extends State<AddTaskPage> {
           .then((value) {
         entryProvider
             .fetchEntries(userProvider.user!.uid ?? "", forceRefresh: true)
-            .then((value) => Get.off(const TaskTrackerPage()));
+            .then((value) =>
+                widget.returnBack != null && widget.returnBack == true
+                    ? Get.back()
+                    : Get.off(const TaskTrackerPage()));
       });
     }
   }

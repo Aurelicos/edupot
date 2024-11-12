@@ -16,10 +16,12 @@ class TaskView extends StatelessWidget {
   final Color? color;
   final List<dynamic> entry;
   final bool isTask;
+  final bool? returnBack;
   const TaskView({
     super.key,
     this.color,
     this.isTask = false,
+    this.returnBack = false,
     required this.entry,
   });
 
@@ -154,9 +156,11 @@ class TaskView extends StatelessWidget {
             },
             onPressed: () {
               if (item is ExamModel) {
-                Get.to(AddTaskPage(selectedCategory: 0, exam: item));
+                Get.to(AddTaskPage(
+                    selectedCategory: 0, exam: item, returnBack: returnBack));
               } else if (item is TaskModel) {
-                Get.to(AddTaskPage(selectedCategory: 1, task: item));
+                Get.to(AddTaskPage(
+                    selectedCategory: 1, task: item, returnBack: returnBack));
               }
             },
             style: ButtonStyle(
