@@ -47,7 +47,7 @@ class NotificationService {
 
         int selectedCategory = categoryMap[type] ?? 0;
 
-        Get.to(AddTaskPage(
+        Get.to(AddEntryPage(
           selectedCategory: selectedCategory,
           id: id,
         ));
@@ -101,7 +101,6 @@ class NotificationService {
             SharedPreferencesService.value("exam_day_${exam.id}");
         bool hourNotificationScheduled =
             SharedPreferencesService.value("exam_hour_${exam.id}");
-        print("task: $localExamDate, now: $now");
 
         if (!dayNotificationScheduled &&
             scheduleDayBefore.isAfter(now) &&

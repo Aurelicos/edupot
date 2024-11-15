@@ -27,7 +27,7 @@ class ProjectWidget extends StatelessWidget {
             Container(
               margin: index > 0 ? const EdgeInsets.only(top: 20) : null,
               child: TextButton(
-                onPressed: () => Get.to(AddTaskPage(
+                onPressed: () => Get.to(AddEntryPage(
                   selectedCategory: 2,
                   project: itemArray[index],
                 )),

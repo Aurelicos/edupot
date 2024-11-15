@@ -32,7 +32,7 @@ class FilteredEntry extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        Get.offAll(AddTaskPage(
+        Get.offAll(AddEntryPage(
           selectedCategory: _getSelectedCategory(),
           exam: item is ExamModel ? item : null,
           task: item is TaskModel ? item : null,

@@ -22,31 +22,33 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
-class AddTaskPage extends StatefulWidget {
+class AddEntryPage extends StatefulWidget {
   final int selectedCategory;
   final String? id;
   final bool? returnBack;
+  final DateTime? initDate;
 
   ExamModel? exam;
   TaskModel? task;
 
   ProjectModel? project;
 
-  AddTaskPage({
+  AddEntryPage({
     super.key,
     required this.selectedCategory,
     this.exam,
     this.task,
     this.project,
     this.id,
+    this.initDate,
     this.returnBack = false,
   });
 
   @override
-  State<AddTaskPage> createState() => _AddTaskPageState();
+  State<AddEntryPage> createState() => _AddEntryPageState();
 }
 
-class _AddTaskPageState extends State<AddTaskPage> {
+class _AddEntryPageState extends State<AddEntryPage> {
   String title = "";
   String simpleTitle = "MP";
 
@@ -126,6 +128,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
           headlines[provider.selectedIndex];
     });
     isTaskDone = widget.task?.done ?? false;
+    time = widget.initDate ?? time;
   }
 
   @override

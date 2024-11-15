@@ -204,7 +204,7 @@ class _TaskTrackerPageState extends State<TaskTrackerPage> {
       builder: (BuildContext context) {
         return TaskModal(onPressed: (int index) {
           Navigator.of(context).pop();
-          Get.to(AddTaskPage(
+          Get.to(AddEntryPage(
             selectedCategory: index,
           ));
         });

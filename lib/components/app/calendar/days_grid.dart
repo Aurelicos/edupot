@@ -7,12 +7,14 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class DaysGrid extends StatelessWidget {
+  final DateTime displayedMonth;
   final DateTime selectedDate;
   final bool isWeekView;
   final Function(DateTime) onDateSelected;
 
   const DaysGrid({
     super.key,
+    required this.displayedMonth,
     required this.selectedDate,
     required this.isWeekView,
     required this.onDateSelected,
@@ -39,7 +41,7 @@ class DaysGrid extends StatelessWidget {
         .toList();
 
     final dayInfos =
-        generateDayInfos(selectedDate, examsDates, tasksDates, projectsDates);
+        generateDayInfos(displayedMonth, examsDates, tasksDates, projectsDates);
 
     List<DayInfo> displayedDayInfos = dayInfos;
     if (isWeekView) {
@@ -75,8 +77,7 @@ class DaysGrid extends StatelessWidget {
               dayInfo: dayInfo,
               selected: dayInfo.date.day == selectedDate.day &&
                   dayInfo.date.month == selectedDate.month &&
-                  dayInfo.date.year == selectedDate.year &&
-                  isWeekView,
+                  dayInfo.date.year == selectedDate.year,
               onDateSelected: (date) {
                 onDateSelected(date);
               },
@@ -88,13 +89,13 @@ class DaysGrid extends StatelessWidget {
   }
 
   List<DayInfo> generateDayInfos(
-    DateTime selectedDate,
+    DateTime displayedMonth,
     List<DateTime> examsDates,
     List<DateTime> tasksDates,
     List<DateTime> projectsDates,
   ) {
     DateTime firstDayOfMonth =
-        DateTime(selectedDate.year, selectedDate.month, 1);
+        DateTime(displayedMonth.year, displayedMonth.month, 1);
     int weekdayOfFirstDay = firstDayOfMonth.weekday;
     int daysToSubtract = weekdayOfFirstDay - 1;
     DateTime firstDateInGrid =
@@ -113,7 +114,7 @@ class DaysGrid extends StatelessWidget {
 
     return gridDates.map((date) {
       String dateStr = DateFormat('yyyy-MM-dd').format(date);
-      bool isCurrentMonth = date.month == selectedDate.month;
+      bool isCurrentMonth = date.month == displayedMonth.month;
       bool hasExam = examsDatesSet.contains(dateStr);
       bool hasTask = tasksDatesSet.contains(dateStr);
       bool hasProject = projectsDatesSet.contains(dateStr);

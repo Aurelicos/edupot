@@ -184,7 +184,7 @@ class _SearchListState extends State<SearchList> with TickerProviderStateMixin {
           child: Column(
             children: [
               const Text(
-                "Start your task search",
+                "Start your entry search",
                 style: EduPotDarkTextTheme.smallHeadline,
               ),
               Text(

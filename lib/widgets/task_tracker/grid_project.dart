@@ -39,7 +39,7 @@ class GridProject extends StatelessWidget {
           itemBuilder: (context, i) {
             return TextButton(
               onPressed: () => Get.to(
-                  AddTaskPage(selectedCategory: 2, project: itemArray[i])),
+                  AddEntryPage(selectedCategory: 2, project: itemArray[i])),
               style: ButtonStyle(
                 padding: WidgetStateProperty.all<EdgeInsets>(EdgeInsets.zero),
                 backgroundColor:

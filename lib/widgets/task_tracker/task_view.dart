@@ -156,10 +156,10 @@ class TaskView extends StatelessWidget {
             },
             onPressed: () {
               if (item is ExamModel) {
-                Get.to(AddTaskPage(
+                Get.to(AddEntryPage(
                     selectedCategory: 0, exam: item, returnBack: returnBack));
               } else if (item is TaskModel) {
-                Get.to(AddTaskPage(
+                Get.to(AddEntryPage(
                     selectedCategory: 1, task: item, returnBack: returnBack));
               }
             },

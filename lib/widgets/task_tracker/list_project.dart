@@ -29,8 +29,8 @@ class ListProject extends StatelessWidget {
             top: 15,
           ),
           child: TextButton(
-            onPressed: () =>
-                Get.to(AddTaskPage(selectedCategory: 2, project: itemArray[i])),
+            onPressed: () => Get.to(
+                AddEntryPage(selectedCategory: 2, project: itemArray[i])),
             style: ButtonStyle(
               padding: WidgetStateProperty.all<EdgeInsets>(EdgeInsets.zero),
               backgroundColor:
