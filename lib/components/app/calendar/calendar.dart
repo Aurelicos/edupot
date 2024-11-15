@@ -234,58 +234,54 @@ class _CalendarState extends State<Calendar>
                   });
                 }
               },
-              child: Container(
-                color: Colors.transparent,
-                padding: const EdgeInsets.all(16.0),
-                child: _isWeekView
-                    ? entriesInDay.isNotEmpty
-                        ? Column(
-                            children: [
-                              TaskView(
-                                entry: examsInDay,
-                                color: EduPotColorTheme.examsOrange,
-                                returnBack: true,
-                              ),
-                              TaskView(
-                                entry: tasksInDay,
-                                color: EduPotColorTheme.tasksPurple,
-                                returnBack: true,
-                              ),
-                            ],
-                          )
-                        : Center(
-                            child: Text(
-                              'No entries on this day.',
-                              style: EduPotDarkTextTheme.headline2(1),
+              child: _isWeekView
+                  ? entriesInDay.isNotEmpty
+                      ? Column(
+                          children: [
+                            TaskView(
+                              entry: examsInDay,
+                              color: EduPotColorTheme.examsOrange,
+                              returnBack: true,
                             ),
-                          )
-                    : fullCount > 0
-                        ? Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              if (tasksCount > 0 &&
-                                  examsCount > 0 &&
-                                  projectsCount > 0)
-                                Container(
-                                  margin: const EdgeInsets.only(bottom: 8),
-                                  child: const Text(
-                                    'Monthly Overview:',
-                                    style: EduPotDarkTextTheme.headline4,
-                                  ),
+                            TaskView(
+                              entry: tasksInDay,
+                              color: EduPotColorTheme.tasksPurple,
+                              returnBack: true,
+                            ),
+                          ],
+                        )
+                      : Center(
+                          child: Text(
+                            'No entries on this day.',
+                            style: EduPotDarkTextTheme.headline2(1),
+                          ),
+                        )
+                  : fullCount > 0
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (tasksCount > 0 &&
+                                examsCount > 0 &&
+                                projectsCount > 0)
+                              Container(
+                                margin: const EdgeInsets.only(bottom: 8),
+                                child: const Text(
+                                  'Monthly Overview:',
+                                  style: EduPotDarkTextTheme.headline4,
                                 ),
-                              if (tasksCount > 0)
-                                point(tasksCount, "task",
-                                    EduPotColorTheme.tasksPurple),
-                              if (examsCount > 0)
-                                point(examsCount, "exam",
-                                    EduPotColorTheme.examsOrange),
-                              if (projectsCount > 0)
-                                point(projectsCount, "project",
-                                    EduPotColorTheme.projectBlue),
-                            ],
-                          )
-                        : const SizedBox(),
-              ),
+                              ),
+                            if (tasksCount > 0)
+                              point(tasksCount, "task",
+                                  EduPotColorTheme.tasksPurple),
+                            if (examsCount > 0)
+                              point(examsCount, "exam",
+                                  EduPotColorTheme.examsOrange),
+                            if (projectsCount > 0)
+                              point(projectsCount, "project",
+                                  EduPotColorTheme.projectBlue),
+                          ],
+                        )
+                      : const SizedBox(),
             ),
           ),
         ],
