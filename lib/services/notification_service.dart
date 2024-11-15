@@ -58,10 +58,14 @@ class NotificationService {
   NotificationService._internal();
 
   static Future<void> scheduleNotification(
-      int id, String title, String body, tz.TZDateTime scheduledDate,
-      {String channelId = "id",
-      String channelName = "channel",
-      String payload = ""}) async {
+    int id,
+    String title,
+    String body,
+    tz.TZDateTime scheduledDate, {
+    String channelId = "id",
+    String channelName = "channel",
+    String payload = "",
+  }) async {
     await flutterLocalNotificationsPlugin.zonedSchedule(
       id,
       title,
@@ -78,7 +82,6 @@ class NotificationService {
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      matchDateTimeComponents: DateTimeComponents.time,
       payload: payload,
     );
   }
@@ -89,19 +92,20 @@ class NotificationService {
 
     for (final exam in exams) {
       DateTime localExamDate = exam.finalDate.toLocal();
-      if (localExamDate.isAfter(DateTime.now())) {
+      if (localExamDate.isAfter(now)) {
         tz.TZDateTime scheduleDayBefore = tz.TZDateTime.from(
             localExamDate.subtract(const Duration(days: 1)), tz.local);
         tz.TZDateTime scheduleHourBefore = tz.TZDateTime.from(
             localExamDate.subtract(const Duration(hours: 1)), tz.local);
-
         bool dayNotificationScheduled =
             SharedPreferencesService.value("exam_day_${exam.id}");
         bool hourNotificationScheduled =
             SharedPreferencesService.value("exam_hour_${exam.id}");
+        print("task: $localExamDate, now: $now");
 
         if (!dayNotificationScheduled &&
-            scheduleDayBefore.isAtSameMomentAs(now)) {
+            scheduleDayBefore.isAfter(now) &&
+            scheduleDayBefore.difference(now).inHours <= 48) {
           NotificationService.scheduleNotification(
               stableNotificationId(exam.id!, 'day'),
               "Exam Reminder",
@@ -112,7 +116,8 @@ class NotificationService {
         }
 
         if (!hourNotificationScheduled &&
-            scheduleHourBefore.isAtSameMomentAs(now)) {
+            scheduleHourBefore.isAfter(now) &&
+            scheduleHourBefore.difference(now).inMinutes <= 120) {
           NotificationService.scheduleNotification(
               stableNotificationId(exam.id!, 'hour'),
               "Exam Reminder",
@@ -127,7 +132,7 @@ class NotificationService {
     for (final task in tasks) {
       if (!task.done!) {
         DateTime localTaskDate = task.finalDate.toLocal();
-        if (localTaskDate.isAfter(DateTime.now())) {
+        if (localTaskDate.isAfter(now)) {
           tz.TZDateTime scheduleDayBefore = tz.TZDateTime.from(
               localTaskDate.subtract(const Duration(days: 1)), tz.local);
           tz.TZDateTime scheduleHourBefore = tz.TZDateTime.from(
@@ -140,7 +145,8 @@ class NotificationService {
               SharedPreferencesService.value("task_hour_${task.id}");
 
           if (!dayNotificationScheduled &&
-              scheduleDayBefore.isAtSameMomentAs(now)) {
+              scheduleDayBefore.isAfter(now) &&
+              scheduleDayBefore.difference(now).inHours <= 48) {
             NotificationService.scheduleNotification(
                 stableNotificationId(task.id!, 'day'),
                 "Task Reminder",
@@ -151,7 +157,8 @@ class NotificationService {
           }
 
           if (!hourNotificationScheduled &&
-              scheduleHourBefore.isAtSameMomentAs(now)) {
+              scheduleHourBefore.isAfter(now) &&
+              scheduleHourBefore.difference(now).inMinutes <= 120) {
             NotificationService.scheduleNotification(
                 stableNotificationId(task.id!, 'hour'),
                 "Task Reminder",
@@ -171,6 +178,7 @@ class NotificationService {
 
     for (final project in projects) {
       DateTime localProjectDate = project.finalDate.toLocal();
+
       tz.TZDateTime scheduleWeekBefore = tz.TZDateTime.from(
           localProjectDate.subtract(const Duration(days: 7)), tz.local);
       tz.TZDateTime scheduleDayBefore = tz.TZDateTime.from(
@@ -178,30 +186,47 @@ class NotificationService {
       tz.TZDateTime scheduleHourBefore = tz.TZDateTime.from(
           localProjectDate.subtract(const Duration(hours: 1)), tz.local);
 
-      if (now.difference(scheduleWeekBefore).inDays == 0) {
+      bool weekNotificationScheduled =
+          SharedPreferencesService.value("project_week_${project.id}");
+      bool dayNotificationScheduled =
+          SharedPreferencesService.value("project_day_${project.id}");
+      bool hourNotificationScheduled =
+          SharedPreferencesService.value("project_hour_${project.id}");
+
+      if (!weekNotificationScheduled &&
+          scheduleWeekBefore.isAfter(now) &&
+          scheduleWeekBefore.difference(now).inDays <= 8) {
         NotificationService.scheduleNotification(
             stableNotificationId(project.id!, 'week'),
             "Project Deadline Reminder",
             "Your project ${project.name} deadline is in one week!",
             scheduleWeekBefore,
             payload: "project ${project.id}");
+        SharedPreferencesService.setValue("project_week_${project.id}", true);
       }
-      if (now.difference(scheduleDayBefore).inDays == 0) {
+
+      if (!dayNotificationScheduled &&
+          scheduleDayBefore.isAfter(now) &&
+          scheduleDayBefore.difference(now).inHours <= 48) {
         NotificationService.scheduleNotification(
             stableNotificationId(project.id!, 'day'),
             "Project Deadline Reminder",
             "Your project ${project.name} deadline is tomorrow!",
             scheduleDayBefore,
             payload: "project ${project.id}");
+        SharedPreferencesService.setValue("project_day_${project.id}", true);
       }
-      if (now.difference(scheduleHourBefore).inHours == 0 &&
-          now.minute == scheduleHourBefore.minute) {
+
+      if (!hourNotificationScheduled &&
+          scheduleHourBefore.isAfter(now) &&
+          scheduleHourBefore.difference(now).inMinutes <= 120) {
         NotificationService.scheduleNotification(
             stableNotificationId(project.id!, 'hour'),
             "Project Deadline Reminder",
             "Your project ${project.name} deadline is in one hour!",
             scheduleHourBefore,
             payload: "project ${project.id}");
+        SharedPreferencesService.setValue("project_hour_${project.id}", true);
       }
     }
   }
