@@ -1,4 +1,4 @@
-import 'package:edupot/components/app/task_tracker/time_checbox.dart';
+import 'package:edupot/components/app/task_tracker/time_checkbox.dart';
 import 'package:edupot/components/common/wheel_list.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/widgets/main_button.dart';

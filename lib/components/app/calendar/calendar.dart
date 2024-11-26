@@ -194,7 +194,7 @@ class _CalendarState extends State<Calendar>
               duration: const Duration(milliseconds: 300),
               transitionBuilder: (Widget child, Animation<double> animation) {
                 final offsetAnimation = Tween<Offset>(
-                  begin: Offset(_slideDirection.toDouble(), 0),
+                  begin: Offset(_slideDirection.toDouble() * 2, 0),
                   end: const Offset(0, 0),
                 ).animate(animation);
 

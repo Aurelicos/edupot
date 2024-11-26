@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:edupot/components/app/calendar/calendar.dart';
 import 'package:edupot/components/app/primary_scaffold.dart';
 import 'package:edupot/components/app/task_tracker/build_buttons.dart';
 import 'package:edupot/components/app/task_tracker/content.dart';
@@ -263,8 +264,17 @@ class _AddEntryPageState extends State<AddEntryPage> {
                             ),
                             onTime: () => timeModal(context, time,
                                 (date) => setState(() => time = date)),
-                            onDate: () => buildDatePicker(context, time,
-                                (date) => setState(() => time = date)),
+                            onDate: () {
+                              showModalBottomSheet(
+                                context: context,
+                                builder: (context) {
+                                  return Container(
+                                    color: EduPotColorTheme.primaryDark,
+                                    child: Calendar(),
+                                  );
+                                },
+                              );
+                            },
                           ),
                           taskContent: TaskContent(
                               timeText: _selectedTime(),
