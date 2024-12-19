@@ -60,7 +60,7 @@ class _NavbarState extends State<Navbar> {
               ),
               _button(
                 index: 2,
-                icon: "learn",
+                icon: "study",
                 label: "Learn",
                 onPressed: () {
                   if (provider.selectedIndex != 2) {
@@ -73,7 +73,7 @@ class _NavbarState extends State<Navbar> {
               ),
               _button(
                 index: 3,
-                icon: "settings",
+                icon: "setting",
                 label: "Settings",
                 onPressed: () {
                   if (provider.selectedIndex != 3) {

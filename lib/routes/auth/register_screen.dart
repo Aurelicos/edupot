@@ -108,6 +108,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = context.read<UserProvider>();
+
     return Scaffold(
       backgroundColor: EduPotColorTheme.primaryDark,
       resizeToAvoidBottomInset: true,
@@ -221,8 +223,6 @@ class _RegisterPageState extends State<RegisterPage> {
                           return _exception = "Email already in use";
                         }
                         if (value is bool && value == true) {
-                          final userProvider = context.read<UserProvider>();
-
                           userProvider.firstName = firstName;
                           userProvider.lastName = lastName;
                           userProvider.email = email;
