@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:edupot/components/app/calendar/calendar_modal.dart';
 import 'package:edupot/components/app/primary_scaffold.dart';
 import 'package:edupot/components/app/task_tracker/build_buttons.dart';
 import 'package:edupot/components/app/task_tracker/content.dart';
@@ -263,16 +264,37 @@ class _AddEntryPageState extends State<AddEntryPage> {
                             ),
                             onTime: () => timeModal(context, time,
                                 (date) => setState(() => time = date)),
-                            onDate: () => buildDatePicker(context, time,
-                                (date) => setState(() => time = date)),
+                            onDate: () {
+                              showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                backgroundColor: EduPotColorTheme.primaryDark,
+                                builder: (context) {
+                                  return CalendarModal(
+                                    selectedTime: (date) =>
+                                        setState(() => time = date),
+                                  );
+                                },
+                              );
+                            },
                           ),
                           taskContent: TaskContent(
                               timeText: _selectedTime(),
                               dateText: _selectedDate(),
                               onTime: () => timeModal(context, time,
                                   (date) => setState(() => time = date)),
-                              onDate: () => buildDatePicker(context, time,
-                                  (date) => setState(() => time = date)),
+                              onDate: () => showModalBottomSheet(
+                                    context: context,
+                                    isScrollControlled: true,
+                                    backgroundColor:
+                                        EduPotColorTheme.primaryDark,
+                                    builder: (context) {
+                                      return CalendarModal(
+                                        selectedTime: (date) =>
+                                            setState(() => time = date),
+                                      );
+                                    },
+                                  ),
                               context: context,
                               docId: widget.task?.assignedProject?.id,
                               onProject: (String id) {
@@ -295,8 +317,17 @@ class _AddEntryPageState extends State<AddEntryPage> {
                             },
                             onTime: () => timeModal(context, time,
                                 (date) => setState(() => time = date)),
-                            onDate: () => buildDatePicker(context, time,
-                                (date) => setState(() => time = date)),
+                            onDate: () => showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              backgroundColor: EduPotColorTheme.primaryDark,
+                              builder: (context) {
+                                return CalendarModal(
+                                  selectedTime: (date) =>
+                                      setState(() => time = date),
+                                );
+                              },
+                            ),
                             onAttachment: () => showNotesModal(context,
                                 addNotes: () {}, importNotes: () {}),
                             onIdChange: (List<Item> value) => setState(() {

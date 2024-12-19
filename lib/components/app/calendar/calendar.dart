@@ -10,7 +10,8 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class Calendar extends StatefulWidget {
-  const Calendar({super.key});
+  final bool simpleView;
+  const Calendar({super.key, this.simpleView = false});
 
   @override
   State<Calendar> createState() => _CalendarState();
@@ -194,7 +195,7 @@ class _CalendarState extends State<Calendar>
               duration: const Duration(milliseconds: 300),
               transitionBuilder: (Widget child, Animation<double> animation) {
                 final offsetAnimation = Tween<Offset>(
-                  begin: Offset(_slideDirection.toDouble(), 0),
+                  begin: Offset(_slideDirection.toDouble() * 2, 0),
                   end: const Offset(0, 0),
                 ).animate(animation);
 
@@ -207,7 +208,7 @@ class _CalendarState extends State<Calendar>
                 key: ValueKey(_displayedMonth.month),
                 displayedMonth: _displayedMonth,
                 selectedDate: dayProvider.selectedDate,
-                isWeekView: _isWeekView,
+                isWeekView: widget.simpleView ? false : _isWeekView,
                 onDateSelected: (date) {
                   setState(() {
                     dayProvider.selectedDate = date;
@@ -234,54 +235,56 @@ class _CalendarState extends State<Calendar>
                   });
                 }
               },
-              child: _isWeekView
-                  ? entriesInDay.isNotEmpty
-                      ? Column(
-                          children: [
-                            TaskView(
-                              entry: examsInDay,
-                              color: EduPotColorTheme.examsOrange,
-                              returnBack: true,
-                            ),
-                            TaskView(
-                              entry: tasksInDay,
-                              color: EduPotColorTheme.tasksPurple,
-                              returnBack: true,
-                            ),
-                          ],
-                        )
-                      : Center(
-                          child: Text(
-                            'No entries on this day.',
-                            style: EduPotDarkTextTheme.headline2(1),
-                          ),
-                        )
-                  : fullCount > 0
-                      ? Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            if (tasksCount > 0 &&
-                                examsCount > 0 &&
-                                projectsCount > 0)
-                              Container(
-                                margin: const EdgeInsets.only(bottom: 8),
-                                child: const Text(
-                                  'Monthly Overview:',
-                                  style: EduPotDarkTextTheme.headline4,
+              child: widget.simpleView
+                  ? const SizedBox()
+                  : _isWeekView
+                      ? entriesInDay.isNotEmpty
+                          ? Column(
+                              children: [
+                                TaskView(
+                                  entry: examsInDay,
+                                  color: EduPotColorTheme.examsOrange,
+                                  returnBack: true,
                                 ),
+                                TaskView(
+                                  entry: tasksInDay,
+                                  color: EduPotColorTheme.tasksPurple,
+                                  returnBack: true,
+                                ),
+                              ],
+                            )
+                          : Center(
+                              child: Text(
+                                'No entries on this day.',
+                                style: EduPotDarkTextTheme.headline2(1),
                               ),
-                            if (tasksCount > 0)
-                              point(tasksCount, "task",
-                                  EduPotColorTheme.tasksPurple),
-                            if (examsCount > 0)
-                              point(examsCount, "exam",
-                                  EduPotColorTheme.examsOrange),
-                            if (projectsCount > 0)
-                              point(projectsCount, "project",
-                                  EduPotColorTheme.projectBlue),
-                          ],
-                        )
-                      : const SizedBox(),
+                            )
+                      : fullCount > 0
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (tasksCount > 0 &&
+                                    examsCount > 0 &&
+                                    projectsCount > 0)
+                                  Container(
+                                    margin: const EdgeInsets.only(bottom: 8),
+                                    child: const Text(
+                                      'Monthly Overview:',
+                                      style: EduPotDarkTextTheme.headline4,
+                                    ),
+                                  ),
+                                if (tasksCount > 0)
+                                  point(tasksCount, "task",
+                                      EduPotColorTheme.tasksPurple),
+                                if (examsCount > 0)
+                                  point(examsCount, "exam",
+                                      EduPotColorTheme.examsOrange),
+                                if (projectsCount > 0)
+                                  point(projectsCount, "project",
+                                      EduPotColorTheme.projectBlue),
+                              ],
+                            )
+                          : const SizedBox(),
             ),
           ),
         ],
