@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 class MainButton extends StatelessWidget {
   final void Function() onTap;
   final Widget child;
+  final bool isBorderOnly;
 
   const MainButton({
     super.key,
     required this.onTap,
     required this.child,
+    this.isBorderOnly = false,
   });
 
   @override
@@ -24,8 +26,14 @@ class MainButton extends StatelessWidget {
       ),
       child: Ink(
         decoration: BoxDecoration(
-          gradient: EduPotColorTheme.mainBlueGradient(),
+          gradient: isBorderOnly ? null : EduPotColorTheme.mainBlueGradient(),
           borderRadius: BorderRadius.circular(8),
+          border: isBorderOnly
+              ? Border.all(
+                  color: EduPotColorTheme.projectBlue,
+                  width: 2,
+                )
+              : null,
         ),
         child: Container(
           alignment: Alignment.center,

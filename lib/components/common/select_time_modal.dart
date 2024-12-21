@@ -9,7 +9,15 @@ import 'package:get/route_manager.dart';
 class SelectTimeModal extends StatefulWidget {
   final void Function(DateTime time) selectedTime;
   final DateTime? oldTime;
-  const SelectTimeModal({super.key, required this.selectedTime, this.oldTime});
+  final bool showSecondsOnly;
+  final String title;
+  const SelectTimeModal({
+    super.key,
+    required this.selectedTime,
+    this.oldTime,
+    this.showSecondsOnly = false,
+    this.title = "Select Time",
+  });
 
   @override
   State<SelectTimeModal> createState() => _SelectTimeModalState();
@@ -20,6 +28,7 @@ class _SelectTimeModalState extends State<SelectTimeModal> {
   List<String> times = ["Selection", "14:00", "18:00", "8:00"];
   int hours = 12;
   int minutes = 30;
+  int seconds = 0;
 
   @override
   void initState() {
@@ -27,6 +36,7 @@ class _SelectTimeModalState extends State<SelectTimeModal> {
     if (widget.oldTime != null) {
       hours = widget.oldTime!.hour;
       minutes = widget.oldTime!.minute;
+      seconds = widget.oldTime!.second;
     }
   }
 
@@ -44,31 +54,33 @@ class _SelectTimeModalState extends State<SelectTimeModal> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Text(
-                "Select Time",
+                widget.title,
                 style: EduPotDarkTextTheme.headline1.copyWith(fontSize: 24),
               ),
             ),
             const SizedBox(height: 25),
-            Container(
-              padding: const EdgeInsets.only(left: 20),
-              height: 40,
-              child: ListView.separated(
-                separatorBuilder: (context, index) => const SizedBox(width: 10),
-                itemCount: times.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {
-                  return CustomCheckbox(
-                    onClick: () {
-                      setState(() {
-                        selected = index;
-                      });
-                    },
-                    isSelected: selected == index,
-                    content: times[index],
-                  );
-                },
+            if (!widget.showSecondsOnly)
+              Container(
+                padding: const EdgeInsets.only(left: 20),
+                height: 40,
+                child: ListView.separated(
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(width: 10),
+                  itemCount: times.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    return CustomCheckbox(
+                      onClick: () {
+                        setState(() {
+                          selected = index;
+                        });
+                      },
+                      isSelected: selected == index,
+                      content: times[index],
+                    );
+                  },
+                ),
               ),
-            ),
             const SizedBox(height: 25),
             Container(
               height: 185,
@@ -84,43 +96,62 @@ class _SelectTimeModalState extends State<SelectTimeModal> {
                     "assets/icons/metric_left.svg",
                     height: 165,
                   ),
-                  Row(
-                    children: [
-                      WheelList(
-                        onItemChanged: (int value) {
-                          setState(() {
-                            hours = value;
-                          });
-                        },
-                        initialItem: selected == 0
-                            ? widget.oldTime != null
-                                ? widget.oldTime!.hour
-                                : 12
-                            : int.parse(times[selected].split(":")[0]),
-                        childCount: 24,
-                      ),
-                      Text(
-                        ":",
-                        style: TextStyle(
-                          fontSize: 50,
-                          color: Colors.white.withOpacity(0.4),
+                  if (widget.showSecondsOnly)
+                    Expanded(
+                      child: Center(
+                        child: WheelList(
+                          childCount: 12,
+                          step: 5,
+                          dontStartFromZero: true,
+                          onItemChanged: (int value) {
+                            setState(() {
+                              seconds = value;
+                            });
+                          },
+                          initialItem: widget.oldTime != null
+                              ? widget.oldTime!.second
+                              : 0,
                         ),
                       ),
-                      WheelList(
-                        onItemChanged: (int value) {
-                          setState(() {
-                            minutes = value;
-                          });
-                        },
-                        initialItem: selected == 0
-                            ? widget.oldTime != null
-                                ? widget.oldTime!.minute
-                                : 30
-                            : int.parse(times[selected].split(":")[1]),
-                        childCount: 60,
-                      ),
-                    ],
-                  ),
+                    )
+                  else
+                    Row(
+                      children: [
+                        WheelList(
+                          onItemChanged: (int value) {
+                            setState(() {
+                              hours = value;
+                            });
+                          },
+                          initialItem: selected == 0
+                              ? widget.oldTime != null
+                                  ? widget.oldTime!.hour
+                                  : 12
+                              : int.parse(times[selected].split(":")[0]),
+                          childCount: 24,
+                        ),
+                        Text(
+                          ":",
+                          style: TextStyle(
+                            fontSize: 50,
+                            color: Colors.white.withOpacity(0.4),
+                          ),
+                        ),
+                        WheelList(
+                          onItemChanged: (int value) {
+                            setState(() {
+                              minutes = value;
+                            });
+                          },
+                          initialItem: selected == 0
+                              ? widget.oldTime != null
+                                  ? widget.oldTime!.minute
+                                  : 30
+                              : int.parse(times[selected].split(":")[1]),
+                          childCount: 60,
+                        ),
+                      ],
+                    ),
                   SvgPicture.asset(
                     "assets/icons/metric_right.svg",
                     height: 165,
@@ -140,6 +171,7 @@ class _SelectTimeModalState extends State<SelectTimeModal> {
                     DateTime.now().day,
                     hours,
                     minutes,
+                    seconds,
                   ));
                   Get.back();
                 },

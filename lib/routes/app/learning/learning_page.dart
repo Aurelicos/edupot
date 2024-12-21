@@ -1,21 +1,23 @@
 import 'package:edupot/components/app/primary_scaffold.dart';
+import 'package:edupot/routes/app/learning/create/creation_page.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/widgets/learning/learn_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 
 class LearningPage extends StatelessWidget {
   const LearningPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    const List<String> data = [
-      "study",
-      "create",
-      "reports",
-      "settings",
-    ];
+    const Map<String, Widget> data = {
+      "study": Placeholder(),
+      "create": CreationPage(),
+      "reports": Placeholder(),
+      "settings": Placeholder(),
+    };
     return PrimaryScaffold(
       child: SafeArea(
         child: Container(
@@ -43,9 +45,9 @@ class LearningPage extends StatelessWidget {
                   ),
                   itemBuilder: (BuildContext context, int index) {
                     return LearnButton(
-                      data[index],
+                      data.keys.toList()[index],
                       onPressed: () {
-                        print("Learn button pressed");
+                        Get.to(data.values.toList()[index]);
                       },
                     );
                   },

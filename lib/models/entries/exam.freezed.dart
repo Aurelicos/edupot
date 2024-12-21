@@ -22,7 +22,9 @@ mixin _$ExamModel {
   String get description => throw _privateConstructorUsedError;
   DateTime get finalDate => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ExamModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ExamModelCopyWith<ExamModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -50,6 +52,8 @@ class _$ExamModelCopyWithImpl<$Res, $Val extends ExamModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ExamModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -108,6 +112,8 @@ class __$$ExamModelImplCopyWithImpl<$Res>
       _$ExamModelImpl _value, $Res Function(_$ExamModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ExamModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -199,7 +205,9 @@ class _$ExamModelImpl with DiagnosticableTreeMixin implements _ExamModel {
   int get hashCode =>
       Object.hash(runtimeType, id, priority, title, description, finalDate);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ExamModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ExamModelImplCopyWith<_$ExamModelImpl> get copyWith =>
@@ -224,8 +232,11 @@ abstract class _ExamModel implements ExamModel {
   String get description;
   @override
   DateTime get finalDate;
+
+  /// Create a copy of ExamModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ExamModelImplCopyWith<_$ExamModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

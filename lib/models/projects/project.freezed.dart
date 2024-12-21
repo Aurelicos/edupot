@@ -25,7 +25,9 @@ mixin _$ProjectModel {
   List<DocumentReference<Object?>> get tasks =>
       throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ProjectModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ProjectModelCopyWith<ProjectModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -56,6 +58,8 @@ class _$ProjectModelCopyWithImpl<$Res, $Val extends ProjectModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ProjectModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -126,6 +130,8 @@ class __$$ProjectModelImplCopyWithImpl<$Res>
       _$ProjectModelImpl _value, $Res Function(_$ProjectModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ProjectModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -244,7 +250,9 @@ class _$ProjectModelImpl with DiagnosticableTreeMixin implements _ProjectModel {
   int get hashCode => Object.hash(runtimeType, id, name, description, finalDate,
       finished, iconTitle, const DeepCollectionEquality().hash(_tasks));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ProjectModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ProjectModelImplCopyWith<_$ProjectModelImpl> get copyWith =>
@@ -276,8 +284,11 @@ abstract class _ProjectModel implements ProjectModel {
   String get iconTitle;
   @override
   List<DocumentReference<Object?>> get tasks;
+
+  /// Create a copy of ProjectModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ProjectModelImplCopyWith<_$ProjectModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

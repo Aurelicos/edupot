@@ -4,11 +4,15 @@ class WheelList extends StatefulWidget {
   final void Function(int index) onItemChanged;
   final int initialItem;
   final int childCount;
+  final int step;
+  final bool dontStartFromZero;
   const WheelList({
     super.key,
     required this.onItemChanged,
     required this.childCount,
     this.initialItem = 0,
+    this.step = 1,
+    this.dontStartFromZero = false,
   });
 
   @override
@@ -22,8 +26,12 @@ class _WheelListState extends State<WheelList> {
   @override
   void initState() {
     super.initState();
-    _controller = FixedExtentScrollController(initialItem: widget.initialItem);
-    _centerIndex = widget.initialItem;
+    int initialIndex = widget.initialItem ~/ widget.step;
+    if (widget.dontStartFromZero) {
+      initialIndex -= 1;
+    }
+    _controller = FixedExtentScrollController(initialItem: initialIndex);
+    _centerIndex = initialIndex;
   }
 
   @override
@@ -47,7 +55,9 @@ class _WheelListState extends State<WheelList> {
           child: ListWheelScrollView.useDelegate(
             onSelectedItemChanged: (index) {
               setState(() {
-                widget.onItemChanged(index);
+                widget.onItemChanged(
+                    (widget.dontStartFromZero ? (index + 1) : index) *
+                        widget.step);
                 _centerIndex = index;
               });
             },
@@ -59,7 +69,10 @@ class _WheelListState extends State<WheelList> {
             childDelegate: ListWheelChildBuilderDelegate(
               childCount: widget.childCount,
               builder: (context, index) {
-                return buildNumbers(index == _centerIndex, index);
+                return buildNumbers(
+                    index == _centerIndex,
+                    (widget.dontStartFromZero ? (index + 1) : index) *
+                        widget.step);
               },
             ),
           ),
@@ -87,6 +100,11 @@ class _WheelListState extends State<WheelList> {
   }
 
   Widget buildNumbers(bool isCenterItem, int hours) {
+    final isLastItem = hours == widget.childCount * widget.step;
+    if (widget.step > 1 && widget.dontStartFromZero && isLastItem) {
+      hours -= 1;
+    }
+
     final textStyle = TextStyle(
       fontSize: isCenterItem ? 50 : 40,
       color: Colors.white,
