@@ -1,8 +1,10 @@
-import 'package:edupot/components/app/learning/creaition_content.dart';
+import 'package:edupot/components/app/learning/creation_content.dart';
+import 'package:edupot/components/app/learning/quiz_creation_content.dart';
 import 'package:edupot/components/app/primary_scaffold.dart';
 import 'package:edupot/components/common/select_time_modal.dart';
+import 'package:edupot/models/learning/quiz.dart';
 import 'package:edupot/providers/quiz_provider.dart';
-import 'package:edupot/services/learning.dart';
+import 'package:edupot/routes/app/learning/create/creation_page.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/widgets/common/input_button.dart';
 import 'package:edupot/widgets/main_button.dart';
@@ -11,9 +13,10 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class CreateQuizPage extends StatefulWidget {
-  final int index;
+  final int? index;
+  final int? existingIndex;
 
-  const CreateQuizPage({super.key, required this.index});
+  const CreateQuizPage({super.key, this.index, this.existingIndex});
 
   @override
   State<CreateQuizPage> createState() => _CreateQuizPageState();
@@ -27,8 +30,33 @@ class _CreateQuizPageState extends State<CreateQuizPage> {
   List<bool> value = List<bool>.generate(4, (index) => false, growable: false);
 
   @override
+  void initState() {
+    super.initState();
+    final quizProvider = Provider.of<QuizProvider>(context, listen: false);
+    if (widget.existingIndex != null) {
+      _initializeExistingQuiz(quizProvider);
+    }
+  }
+
+  void _initializeExistingQuiz(QuizProvider quizProvider) {
+    _question = quizProvider.questions[widget.existingIndex!];
+    _answers.setAll(0, quizProvider.answers[widget.existingIndex!]);
+    _correctAnswers
+      ..clear()
+      ..addAll(quizProvider.correctAnswers[widget.existingIndex!]);
+    value = List<bool>.generate(
+      4,
+      (index) =>
+          _answers[index].isNotEmpty &&
+          _correctAnswers.contains(_answers[index]),
+      growable: false,
+    );
+    date = DateTime(0, 0, 0, 0, 0, quizProvider.times[widget.existingIndex!]);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final quizProvider = Provider.of<QuizProvider>(context);
+    final quizProvider = Provider.of<QuizProvider>(context, listen: false);
 
     return PrimaryScaffold(
       navBar: false,
@@ -44,11 +72,29 @@ class _CreateQuizPageState extends State<CreateQuizPage> {
                     children: [
                       SizedBox(
                           height: MediaQuery.of(context).size.height * 0.045),
-                      _buildHeader(),
+                      QuizCreationContent.buildHeader(widget.index != null
+                          ? widget.index ?? 0
+                          : widget.existingIndex != null
+                              ? AnswerType.values.indexOf(quizProvider
+                                  .answerTypes[widget.existingIndex!])
+                              : 0),
                       const SizedBox(height: 25),
-                      _buildQuestionInput(),
+                      QuizCreationContent.buildQuestionInput(
+                          initialValue: _question,
+                          onChanged: (value) =>
+                              setState(() => _question = value)),
                       const SizedBox(height: 15),
-                      _buildAnswersInput(),
+                      if (widget.index != null && widget.index! <= 1 ||
+                          (widget.existingIndex != null &&
+                              quizProvider.answerTypes[widget.existingIndex!] !=
+                                  AnswerType.fillIn))
+                        _buildAnswersInput(widget.index == 1 ||
+                            (widget.existingIndex != null &&
+                                quizProvider
+                                        .answerTypes[widget.existingIndex!] ==
+                                    AnswerType.trueFalse))
+                      else
+                        _buildFillInAnswer(),
                       const SizedBox(height: 25),
                       _buildTimeSelector(),
                     ],
@@ -64,60 +110,37 @@ class _CreateQuizPageState extends State<CreateQuizPage> {
     );
   }
 
-  Widget _buildHeader() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        InkWell(
-          onTap: () => Get.back(),
-          child: const Icon(Icons.arrow_back_rounded,
-              size: 32, color: Colors.white),
-        ),
-        const SizedBox(width: 10),
-        Text(
-          CreaitionContent.radioOptions.values.toList()[widget.index],
-          style: EduPotDarkTextTheme.headline1.copyWith(fontSize: 28),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildQuestionInput() {
+  Widget _buildFillInAnswer() {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 10),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      margin: const EdgeInsets.only(top: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(4),
-        color: const Color.fromARGB(255, 62, 67, 124),
+        gradient: EduPotColorTheme.greenGradient,
       ),
-      child: Align(
-        alignment: Alignment.center,
-        child: TextFormField(
-          decoration: InputDecoration(
-            hintText: "Add question",
-            hintStyle: EduPotDarkTextTheme.smallHeadline.copyWith(
-              fontSize: 20,
-              color: Colors.white.withOpacity(0.85),
-              shadows: [
-                Shadow(
-                  color: Colors.black.withOpacity(0.5),
-                  offset: const Offset(0, 2),
-                  blurRadius: 2,
-                ),
-              ],
-            ),
-            border: InputBorder.none,
-          ),
-          style: EduPotDarkTextTheme.smallHeadline.copyWith(fontSize: 20),
-          textAlign: TextAlign.center,
-          onChanged: (value) => setState(() => _question = value),
+      child: TextFormField(
+        initialValue: _answers[0],
+        decoration: const InputDecoration(
+          hintText: "Add answer",
+          hintStyle: EduPotDarkTextTheme.smallHeadline,
+          border: InputBorder.none,
         ),
+        style: EduPotDarkTextTheme.smallHeadline,
+        textAlign: TextAlign.center,
+        onChanged: (value) => setState(() {
+          _answers[0] = value;
+          _correctAnswers[0] = value;
+        }),
       ),
     );
   }
 
-  Widget _buildAnswersInput() {
+  Widget _buildAnswersInput(bool isTrueFalse) {
+    if (isTrueFalse) {
+      _answers.setAll(0, ["True", "False"]);
+    }
     return GridView.builder(
-      itemCount: 4,
+      itemCount: isTrueFalse ? 2 : 4,
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
@@ -130,7 +153,7 @@ class _CreateQuizPageState extends State<CreateQuizPage> {
         return Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(6),
-            color: CreaitionContent.colors[index],
+            color: CreationContent.answerColors[index],
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -140,11 +163,17 @@ class _CreateQuizPageState extends State<CreateQuizPage> {
                 child: Align(
                   alignment: Alignment.center,
                   child: TextFormField(
+                    initialValue: isTrueFalse
+                        ? ["True", "False"][index]
+                        : _answers[index],
                     decoration: InputDecoration(
-                      hintText: "Answer ${index + 1}",
+                      hintText: isTrueFalse
+                          ? ["True", "False"][index]
+                          : "Answer ${index + 1}",
                       hintStyle: EduPotDarkTextTheme.smallHeadline,
                       border: InputBorder.none,
                     ),
+                    readOnly: isTrueFalse,
                     style: EduPotDarkTextTheme.smallHeadline,
                     textAlign: TextAlign.center,
                     onChanged: (value) =>
@@ -156,14 +185,26 @@ class _CreateQuizPageState extends State<CreateQuizPage> {
                 scale: 0.75,
                 child: Switch(
                   value: value[index],
-                  onChanged: (switchValue) => setState(() {
-                    value[index] = switchValue;
-                    if (switchValue) {
-                      _correctAnswers.add(_answers[index]);
-                    } else {
-                      _correctAnswers.remove(_answers[index]);
-                    }
-                  }),
+                  onChanged: _answers[index].isEmpty && !isTrueFalse
+                      ? null
+                      : (switchValue) => setState(() {
+                            if (isTrueFalse) {
+                              value = List<bool>.generate(
+                                  2, (i) => i == index && switchValue,
+                                  growable: false);
+                              _correctAnswers.clear();
+                              if (switchValue) {
+                                _correctAnswers.add(_answers[index]);
+                              }
+                            } else {
+                              value[index] = switchValue;
+                              if (switchValue) {
+                                _correctAnswers.add(_answers[index]);
+                              } else {
+                                _correctAnswers.remove(_answers[index]);
+                              }
+                            }
+                          }),
                   activeColor: Colors.white,
                   activeTrackColor: EduPotColorTheme.projectBlue,
                   inactiveTrackColor: EduPotColorTheme.primaryDark,
@@ -206,61 +247,45 @@ class _CreateQuizPageState extends State<CreateQuizPage> {
     return MainButton(
       onTap: () {
         if (_question.isEmpty) {
-          _showErrorDialog("Question title cannot be empty.");
+          QuizCreationContent.showErrorDialog(
+              "Question title cannot be empty.", context);
           return;
         }
 
         final nonEmptyAnswers =
             _answers.where((answer) => answer.isNotEmpty).toList();
         if (nonEmptyAnswers.isEmpty) {
-          _showErrorDialog("Answers cannot be empty.");
+          QuizCreationContent.showErrorDialog(
+              "Answers cannot be empty.", context);
           return;
         }
 
         if (_correctAnswers.isEmpty ||
             _correctAnswers.every((answer) => answer.isEmpty)) {
-          _showErrorDialog("There must be at least one correct answer.");
+          QuizCreationContent.showErrorDialog(
+              "There must be at least one correct answer.", context);
           return;
         }
-
-        quizProvider.addQuestion(
-          _question,
-          CreaitionContent.radioOptions.keys.toList()[widget.index].toString(),
-          nonEmptyAnswers,
-          _correctAnswers,
-          date.second,
-        );
-        LearningService().createQuiz(
-          quizProvider.title,
-          quizProvider.isPublic,
-          quizProvider.questions,
-          quizProvider.answerTypes,
-          quizProvider.answers,
-          quizProvider.correctAnswers,
-          quizProvider.times,
-        );
-        Get.back();
+        if (widget.existingIndex != null) {
+          quizProvider.updateQuestion(
+            widget.existingIndex!,
+            question: _question,
+            answerOptions: nonEmptyAnswers,
+            correctAnswers: _correctAnswers,
+            time: date.second,
+          );
+        } else {
+          quizProvider.addQuestion(
+            _question,
+            AnswerType.values[widget.index!],
+            nonEmptyAnswers,
+            _correctAnswers,
+            date.second,
+          );
+        }
+        Get.off(const CreationPage());
       },
       child: Text("Submit", style: EduPotDarkTextTheme.headline2(1)),
-    );
-  }
-
-  void _showErrorDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(
-          message,
-          style: EduPotDarkTextTheme.smallHeadline,
-        ),
-        backgroundColor: EduPotColorTheme.primaryDark,
-        actions: [
-          TextButton(
-            child: Text("OK", style: EduPotDarkTextTheme.headline2(1)),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-        ],
-      ),
     );
   }
 }

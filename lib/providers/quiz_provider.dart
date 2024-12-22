@@ -1,3 +1,4 @@
+import 'package:edupot/models/learning/quiz.dart';
 import 'package:flutter/material.dart';
 
 class QuizProvider with ChangeNotifier {
@@ -5,7 +6,7 @@ class QuizProvider with ChangeNotifier {
   int index = 0;
   bool _isPublic = false;
   final List<String> _questions = [];
-  final List<String> _answerTypes = [];
+  final List<AnswerType> _answerTypes = [];
   final List<List<String>> _answers = [];
   final List<List<String>> _correctAnswers = [];
   final List<int> _times = [];
@@ -13,7 +14,7 @@ class QuizProvider with ChangeNotifier {
   String get title => _title;
   bool get isPublic => _isPublic;
   List<String> get questions => List.unmodifiable(_questions);
-  List<String> get answerTypes => List.unmodifiable(_answerTypes);
+  List<AnswerType> get answerTypes => List.unmodifiable(_answerTypes);
   List<List<String>> get answers => List.unmodifiable(_answers);
   List<List<String>> get correctAnswers => List.unmodifiable(_correctAnswers);
   List<int> get times => List.unmodifiable(_times);
@@ -28,14 +29,14 @@ class QuizProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setType(int index, String type) {
+  void setType(int index, AnswerType type) {
     if (index >= 0 && index < _answerTypes.length) {
       _answerTypes[index] = type;
       notifyListeners();
     }
   }
 
-  void addQuestion(String question, String answerType,
+  void addQuestion(String question, AnswerType answerType,
       List<String> answerOptions, List<String> correctAnswers, int time) {
     _questions.add(question);
     _answerTypes.add(answerType);
@@ -59,7 +60,7 @@ class QuizProvider with ChangeNotifier {
   void updateQuestion(
     int index, {
     String? question,
-    String? answerType,
+    AnswerType? answerType,
     List<String>? answerOptions,
     List<String>? correctAnswers,
     int? time,

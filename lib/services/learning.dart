@@ -28,7 +28,6 @@ class LearningService extends ChangeNotifier {
         'times': times,
       });
     } catch (e) {
-      print(e);
       rethrow;
     }
   }

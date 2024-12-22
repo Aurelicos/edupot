@@ -4,6 +4,7 @@ import 'package:edupot/providers/quiz_provider.dart';
 import 'package:edupot/providers/navbar_provider.dart';
 import 'package:edupot/providers/project_provider.dart';
 import 'package:edupot/providers/selection_provider.dart';
+import 'package:edupot/providers/step_provider.dart';
 import 'package:edupot/providers/user_provider.dart';
 import 'package:edupot/routes/auth_wrapper.dart';
 import 'package:edupot/controllers/dependency_injection.dart';
@@ -54,6 +55,7 @@ class App extends StatelessWidget {
         ChangeNotifierProvider.value(value: ProjectProvider()),
         ChangeNotifierProvider.value(value: DayProvider()),
         ChangeNotifierProvider.value(value: QuizProvider()),
+        ChangeNotifierProvider.value(value: StepProvider()),
       ],
       child: GetMaterialApp(
         title: 'EduPot',
