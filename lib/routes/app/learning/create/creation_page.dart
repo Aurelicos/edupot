@@ -1,7 +1,12 @@
 import 'package:edupot/components/app/learning/creation_content.dart';
+import 'package:edupot/components/app/learning/quiz_creation_content.dart';
 import 'package:edupot/components/app/primary_scaffold.dart';
+import 'package:edupot/models/learning/quiz.dart';
 import 'package:edupot/providers/quiz_provider.dart';
 import 'package:edupot/providers/step_provider.dart';
+import 'package:edupot/providers/user_provider.dart';
+import 'package:edupot/routes/app/learning/learning_page.dart';
+import 'package:edupot/services/learning.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/widgets/learning/indicator.dart';
 import 'package:edupot/widgets/main_button.dart';
@@ -21,6 +26,8 @@ class _CreationPageState extends State<CreationPage> {
   Widget build(BuildContext context) {
     final step = context.watch<StepProvider>();
     final QuizProvider quizProvider = Provider.of<QuizProvider>(context);
+    final UserProvider userProvider = Provider.of<UserProvider>(context);
+
     return PrimaryScaffold(
       navBar: false,
       onPressed: quizProvider.questions.length > 4
@@ -69,12 +76,37 @@ class _CreationPageState extends State<CreationPage> {
                           ? 25
                           : 0),
                   child: MainButton(
-                    onTap: () => setState(() =>
+                    onTap: () => setState(() {
+                      if (step.selectedIndex < CreationContent.steps) {
+                        step.selectedIndex++;
+                      } else {
+                        if (quizProvider.questions.isNotEmpty) {
+                          LearningService learningService = LearningService();
+                          final quizModel = QuizModel(
+                            title: quizProvider.title,
+                            isPublic: quizProvider.isPublic,
+                            questions: quizProvider.questions,
+                            answerTypes: quizProvider.answerTypes
+                                .map((type) => type.toString().split('.').last)
+                                .toList(),
+                            answers: quizProvider.answers,
+                            correctAnswers: quizProvider.correctAnswers,
+                            times: quizProvider.times,
+                          );
+                          learningService.addQuiz(
+                              userProvider.user!.uid ?? "", quizModel);
+                          Get.off(const LearningPage());
+                        } else {
+                          QuizCreationContent.showErrorDialog(
+                              "Please add at least one question", context);
+                        }
+                      }
+                    }),
+                    child: Text(
                         step.selectedIndex < CreationContent.steps
-                            ? step.selectedIndex++
-                            : null),
-                    child:
-                        Text("Next", style: EduPotDarkTextTheme.headline2(1)),
+                            ? "Next"
+                            : "Save",
+                        style: EduPotDarkTextTheme.headline2(1)),
                   ),
                 ),
               ),
@@ -87,6 +119,8 @@ class _CreationPageState extends State<CreationPage> {
 
   Widget header(BuildContext context) {
     final step = context.watch<StepProvider>();
+    final QuizProvider quizProvider = Provider.of<QuizProvider>(context);
+    final UserProvider userProvider = Provider.of<UserProvider>(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -116,7 +150,27 @@ class _CreationPageState extends State<CreationPage> {
           ),
         ),
         InkWell(
-          onTap: () => Get.back(),
+          onTap: () {
+            if (quizProvider.questions.isNotEmpty) {
+              LearningService learningService = LearningService();
+              final quizModel = QuizModel(
+                title: quizProvider.title,
+                isPublic: quizProvider.isPublic,
+                questions: quizProvider.questions,
+                answerTypes: quizProvider.answerTypes
+                    .map((type) => type.toString().split('.').last)
+                    .toList(),
+                answers: quizProvider.answers,
+                correctAnswers: quizProvider.correctAnswers,
+                times: quizProvider.times,
+              );
+              learningService.addQuiz(userProvider.user!.uid ?? "", quizModel);
+              Get.off(const LearningPage());
+            } else {
+              QuizCreationContent.showErrorDialog(
+                  "Please add at least one question", context);
+            }
+          },
           child: const Text(
             "Save",
             style: EduPotDarkTextTheme.headline3,

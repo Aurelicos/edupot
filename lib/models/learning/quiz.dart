@@ -27,29 +27,42 @@ class QuizModel with _$QuizModel {
     final data = document.data() as Map<String, dynamic>;
 
     return QuizModel(
-        uid: document.id,
-        title: data["title"] ?? '',
-        isPublic: data["isPublic"] ?? false,
-        questions: List<String>.from(data["questions"] ?? []),
-        answerTypes: List<String>.from(data["answerTypes"] ?? []),
-        answers: (data["answers"] as List<dynamic>? ?? [])
-            .map((ansList) => List<String>.from(ansList))
-            .toList(),
-        correctAnswers: (data["correctAnswers"] as List<dynamic>? ?? [])
-            .map((ansList) => List<String>.from(ansList))
-            .toList(),
-        times: List<int>.from(data["times"] ?? []));
+      uid: document.id,
+      title: data['title'] ?? '',
+      isPublic: data['isPublic'] ?? false,
+      questions: List<String>.from(data['questions'] ?? []),
+      answerTypes: List<String>.from(data['answerTypes'] ?? []),
+      answers: _decodeNestedArray(data['answers'] as List<dynamic>? ?? []),
+      correctAnswers:
+          _decodeNestedArray(data['correctAnswers'] as List<dynamic>? ?? []),
+      times: List<int>.from(data['times'] ?? []),
+    );
   }
 
-  static Map<String, dynamic> toDoc(QuizModel quizmodel) {
+  static Map<String, dynamic> toDoc(QuizModel quizModel) {
     return {
-      "title": quizmodel.title,
-      "isPublic": quizmodel.isPublic,
-      "questions": quizmodel.questions,
-      "answerTypes": quizmodel.answerTypes,
-      "answers": quizmodel.answers,
-      "correctAnswers": quizmodel.correctAnswers,
-      "times": quizmodel.times,
+      "title": quizModel.title,
+      "isPublic": quizModel.isPublic,
+      "questions": quizModel.questions,
+      "answerTypes": quizModel.answerTypes,
+      "answers": _encodeNestedArray(quizModel.answers),
+      "correctAnswers": _encodeNestedArray(quizModel.correctAnswers),
+      "times": quizModel.times,
     };
+  }
+
+  static List<Map<String, dynamic>> _encodeNestedArray(
+      List<List<String>> nestedArray) {
+    return nestedArray
+        .map((innerList) =>
+            {'values': innerList}) // Každý seznam zabalíme do mapy
+        .toList();
+  }
+
+  static List<List<String>> _decodeNestedArray(List<dynamic> encodedArray) {
+    return encodedArray
+        .map((item) =>
+            List<String>.from(item['values'] ?? [])) // Extrahujeme hodnoty
+        .toList();
   }
 }

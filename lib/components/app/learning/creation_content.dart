@@ -36,7 +36,7 @@ class CreationContent {
       case 2:
         return _addQuizes(context);
       case 3:
-        return _sharing();
+        return _sharing(context);
       default:
         return const SizedBox();
     }
@@ -104,11 +104,67 @@ class CreationContent {
     );
   }
 
-  static Widget _sharing() {
-    return const Placeholder();
+  static Widget _sharing(BuildContext context) {
+    QuizProvider quizProvider =
+        Provider.of<QuizProvider>(context, listen: true);
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * 0.5,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Text(
+            "Change visibility of your quiz",
+            textAlign: TextAlign.center,
+            style: EduPotDarkTextTheme.headline1,
+          ),
+          TextButton(
+            onPressed: () {
+              quizProvider.setIsPublic(!quizProvider.isPublic);
+            },
+            style: ButtonStyle(
+              padding: WidgetStateProperty.all<EdgeInsets>(EdgeInsets.zero),
+              backgroundColor:
+                  WidgetStateProperty.all<Color>(Colors.transparent),
+              shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              ),
+            ),
+            child: Ink(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                gradient: EduPotColorTheme.mainItemGradient,
+              ),
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                child: Row(
+                  children: [
+                    Switch(
+                      value: quizProvider.isPublic,
+                      onChanged: (value) {
+                        quizProvider.setIsPublic(value);
+                      },
+                      activeColor: Colors.white,
+                      activeTrackColor: EduPotColorTheme.projectBlue,
+                      inactiveTrackColor: EduPotColorTheme.primaryDark,
+                    ),
+                    const SizedBox(width: 15),
+                    Text(
+                      quizProvider.isPublic ? "Public" : "Private",
+                      style: EduPotDarkTextTheme.headline2(1),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
-  static List<Widget> _addQuestionButton(context) {
+  static List<Widget> _addQuestionButton(BuildContext context) {
     return [
       const SizedBox(height: 15),
       SizedBox(
