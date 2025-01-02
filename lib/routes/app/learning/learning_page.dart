@@ -1,5 +1,6 @@
 import 'package:edupot/components/app/primary_scaffold.dart';
 import 'package:edupot/routes/app/learning/create/creation_page.dart';
+import 'package:edupot/routes/app/learning/study/study_page.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/widgets/learning/learn_button.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,7 +14,7 @@ class LearningPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const Map<String, Widget> data = {
-      "study": Placeholder(),
+      "study": StudyPage(),
       "create": CreationPage(),
       "reports": Placeholder(),
       "settings": Placeholder(),
