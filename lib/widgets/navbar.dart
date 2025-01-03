@@ -136,7 +136,7 @@ class _NavbarState extends State<Navbar> {
           colorFilter: ColorFilter.mode(
             provider.selectedIndex == index
                 ? Colors.white
-                : Colors.white.withOpacity(0.45),
+                : Colors.white.withValues(alpha: 0.45),
             BlendMode.srcIn,
           ),
           child: Column(

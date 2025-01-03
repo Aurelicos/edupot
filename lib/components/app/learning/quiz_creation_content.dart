@@ -38,10 +38,10 @@ class QuizCreationContent {
             hintText: "Add question",
             hintStyle: EduPotDarkTextTheme.smallHeadline.copyWith(
               fontSize: 20,
-              color: Colors.white.withOpacity(0.85),
+              color: Colors.white.withValues(alpha: 0.85),
               shadows: [
                 Shadow(
-                  color: Colors.black.withOpacity(0.5),
+                  color: Colors.black.withValues(alpha: 0.5),
                   offset: const Offset(0, 2),
                   blurRadius: 2,
                 ),

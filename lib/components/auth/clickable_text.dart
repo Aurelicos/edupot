@@ -27,7 +27,7 @@ class ClickableText extends StatelessWidget {
             text: clickableText,
             style: EduPotDarkTextTheme.headline2(0.4).copyWith(
               decoration: TextDecoration.underline,
-              decorationColor: Colors.white.withOpacity(0.4),
+              decorationColor: Colors.white.withValues(alpha: 0.4),
             ),
             recognizer: TapGestureRecognizer()..onTap = onPressed,
           ),

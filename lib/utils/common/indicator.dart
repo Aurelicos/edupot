@@ -21,7 +21,7 @@ Widget indicator(int size, int filled) {
                 ),
                 Container(
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
+                    color: Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(5),
                   ),
                   height: 6,

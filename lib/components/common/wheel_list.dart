@@ -84,7 +84,7 @@ class _WheelListState extends State<WheelList> {
                 gradient: LinearGradient(
                   colors: [
                     const Color(0xff272943),
-                    const Color(0xff272943).withOpacity(0.01),
+                    const Color(0xff272943).withValues(alpha: 0.01),
                     const Color(0xff272943),
                   ],
                   begin: Alignment.topCenter,

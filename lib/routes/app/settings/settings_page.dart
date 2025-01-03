@@ -131,7 +131,7 @@ class SettingsPage extends StatelessWidget {
                   ),
                   if (index != items.length - 1)
                     Divider(
-                        color: Colors.white.withOpacity(0.1),
+                        color: Colors.white.withValues(alpha: 0.1),
                         thickness: 1,
                         height: 1),
                 ],

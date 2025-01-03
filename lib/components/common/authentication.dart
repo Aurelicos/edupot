@@ -27,7 +27,7 @@ Widget orDivider() {
       children: [
         Expanded(
           child: Divider(
-            color: Colors.white.withOpacity(0.1),
+            color: Colors.white.withValues(alpha: 0.1),
             height: 20,
             thickness: 1,
           ),
@@ -35,7 +35,7 @@ Widget orDivider() {
         Text("or", style: EduPotDarkTextTheme.headline2(1)),
         Expanded(
           child: Divider(
-            color: Colors.white.withOpacity(0.1),
+            color: Colors.white.withValues(alpha: 0.1),
             height: 20,
             thickness: 1,
           ),

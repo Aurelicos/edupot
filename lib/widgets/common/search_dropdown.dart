@@ -271,8 +271,8 @@ class _SearchDropdownState extends State<SearchDropdown>
                                           width: 4,
                                           height: 4,
                                           decoration: ShapeDecoration(
-                                            color:
-                                                Colors.white.withOpacity(0.4),
+                                            color: Colors.white
+                                                .withValues(alpha: 0.4),
                                             shape: const OvalBorder(),
                                           ),
                                         )

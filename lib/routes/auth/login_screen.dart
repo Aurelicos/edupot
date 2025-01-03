@@ -158,7 +158,7 @@ class _LoginPageState extends State<LoginPage> {
                                 _authException,
                                 style:
                                     EduPotDarkTextTheme.headline2(0.4).copyWith(
-                                  color: Colors.red.withOpacity(0.75),
+                                  color: Colors.red.withValues(alpha: 0.75),
                                 ),
                               ),
                             )
@@ -183,7 +183,8 @@ class _LoginPageState extends State<LoginPage> {
                               style:
                                   EduPotDarkTextTheme.headline2(0.4).copyWith(
                                 decoration: TextDecoration.underline,
-                                decorationColor: Colors.white.withOpacity(0.4),
+                                decorationColor:
+                                    Colors.white.withValues(alpha: 0.4),
                               ),
                             ),
                           ),

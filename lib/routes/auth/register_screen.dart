@@ -206,7 +206,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       child: Text(
                         _exception,
                         style: EduPotDarkTextTheme.headline2(0.4).copyWith(
-                          color: Colors.red.withOpacity(0.75),
+                          color: Colors.red.withValues(alpha: 0.75),
                         ),
                       ),
                     )

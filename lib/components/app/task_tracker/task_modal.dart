@@ -23,7 +23,7 @@ class TaskModal extends StatelessWidget {
                 height: 6,
                 margin: const EdgeInsets.only(top: 20),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.25),
+                  color: Colors.white.withValues(alpha: 0.25),
                   borderRadius: BorderRadius.circular(5),
                 ),
               ),

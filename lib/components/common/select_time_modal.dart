@@ -134,7 +134,7 @@ class _SelectTimeModalState extends State<SelectTimeModal> {
                           ":",
                           style: TextStyle(
                             fontSize: 50,
-                            color: Colors.white.withOpacity(0.4),
+                            color: Colors.white.withValues(alpha: 0.4),
                           ),
                         ),
                         WheelList(

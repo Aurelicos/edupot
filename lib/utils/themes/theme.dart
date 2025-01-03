@@ -164,7 +164,7 @@ class EduPotDarkTextTheme {
       fontFamily: "Inter",
       fontSize: 15,
       fontWeight: FontWeight.w400,
-      color: Colors.white.withOpacity(opacity),
+      color: Colors.white.withValues(alpha: opacity),
     );
   }
 
