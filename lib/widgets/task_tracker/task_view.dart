@@ -3,6 +3,7 @@ import 'package:edupot/models/entries/exam.dart';
 import 'package:edupot/models/entries/task.dart';
 import 'package:edupot/providers/entry_provider.dart';
 import 'package:edupot/providers/user_provider.dart';
+import 'package:edupot/routes/app/learning/study/study_page.dart';
 import 'package:edupot/routes/app/task_tracker/add_task_page.dart';
 import 'package:edupot/services/entry.dart';
 import 'package:edupot/utils/themes/theme.dart';
@@ -189,7 +190,8 @@ class TaskView extends StatelessWidget {
                             : null,
                       ),
                 const SizedBox(width: 15),
-                Text(title, style: EduPotDarkTextTheme.headline2(1)),
+                Text(formatTitle(title),
+                    style: EduPotDarkTextTheme.headline2(1)),
                 const Spacer(),
                 Text(
                   formattedDate["finalDate"],
