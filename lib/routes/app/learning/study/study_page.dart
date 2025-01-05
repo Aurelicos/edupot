@@ -3,6 +3,7 @@ import 'package:edupot/models/learning/quiz.dart';
 import 'package:edupot/providers/study_provider.dart';
 import 'package:edupot/providers/user_provider.dart';
 import 'package:edupot/routes/app/learning/create/creation_page.dart';
+import 'package:edupot/routes/app/learning/learning_page.dart';
 import 'package:edupot/routes/app/learning/study/quiz_page.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/widgets/learning/quiz_item.dart';
@@ -62,7 +63,7 @@ class _StudyPageState extends State<StudyPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   InkWell(
-                    onTap: () => Get.back(),
+                    onTap: () => Get.to(const LearningPage()),
                     child: const Icon(Icons.arrow_back_rounded,
                         size: 32, color: Colors.white),
                   ),
@@ -109,9 +110,9 @@ class _StudyPageState extends State<StudyPage> {
   }
 }
 
-String formatTitle(String title) {
-  if (title.length > 20) {
-    return '${title.substring(0, 20)}...';
+String formatTitle(String title, {int? length}) {
+  if (title.length > (length ?? 20)) {
+    return '${title.substring(0, length ?? 20)}...';
   }
   return title;
 }

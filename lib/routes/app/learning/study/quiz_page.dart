@@ -27,12 +27,21 @@ class _QuizPageState extends State<QuizPage> {
   int remainingTime = 0;
   Timer? timer;
 
+  List<String> userAnswers = [];
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initializeUserAnswers();
       _startTimer();
     });
+  }
+
+  void _initializeUserAnswers() {
+    final studyProvider = Provider.of<StudyProvider>(context, listen: false);
+    final quiz = studyProvider.quizzes[widget.quizId];
+    userAnswers = List<String>.filled(quiz.questions.length, '');
   }
 
   @override
@@ -62,18 +71,23 @@ class _QuizPageState extends State<QuizPage> {
         _evaluateQuiz(
           studyProvider.quizzes[widget.quizId].correctAnswers,
           "",
-          correctAnswer: studyProvider
-              .quizzes[widget.quizId].correctAnswers[quizIndex - 1][0],
           quizzes: studyProvider.quizzes[widget.quizId].questions,
           onSubmit: () {
             Get.back();
             setState(() {
+              userAnswers[quizIndex - 1] = '';
+
               if (quizIndex <
                   studyProvider.quizzes[widget.quizId].questions.length) {
                 quizIndex++;
                 _startTimer();
               } else {
-                Get.to(const SummaryPage());
+                Get.to(
+                  SummaryPage(
+                    userAnswers: userAnswers,
+                    quiz: studyProvider.quizzes[widget.quizId],
+                  ),
+                );
               }
             });
           },
@@ -145,6 +159,7 @@ class _QuizPageState extends State<QuizPage> {
               Align(
                 alignment: Alignment.center,
                 child: CircularTimer(
+                  key: ValueKey<int>(quizIndex),
                   remainingTime: remainingTime,
                   totalTime: currentTime,
                 ),
@@ -187,27 +202,25 @@ class _QuizPageState extends State<QuizPage> {
                         typeInAnswer = value;
                       });
                     } else {
-                      String correctAnswer;
-                      if (answerType == AnswerType.quiz) {
-                        correctAnswer =
-                            correctAnswers[quizIndex - 1].join(', ');
-                      } else {
-                        correctAnswer = correctAnswers[quizIndex - 1][0];
-                      }
-
                       _evaluateQuiz(
                         correctAnswers,
                         value,
-                        correctAnswer: correctAnswer,
                         quizzes: quizzes,
                         onSubmit: () {
                           Get.back();
                           setState(() {
+                            userAnswers[quizIndex - 1] = value;
+
                             if (quizIndex < quizzes.length) {
                               quizIndex++;
                               _startTimer();
                             } else {
-                              Get.to(const SummaryPage());
+                              Get.to(
+                                SummaryPage(
+                                  userAnswers: userAnswers,
+                                  quiz: studyProvider.quizzes[widget.quizId],
+                                ),
+                              );
                             }
                           });
                         },
@@ -222,44 +235,39 @@ class _QuizPageState extends State<QuizPage> {
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 25),
                     child: MainButton(
-                        onTap: () {
-                          final correctAnswer =
-                              correctAnswers[quizIndex - 1][0];
+                      onTap: () {
+                        setState(() {
+                          userAnswers[quizIndex - 1] = typeInAnswer;
+                        });
 
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: const Text('Vyhodnocení odpovědi'),
-                              content: Text(
-                                typeInAnswer.trim().toLowerCase() ==
-                                        correctAnswer.trim().toLowerCase()
-                                    ? 'Správně!'
-                                    : 'Špatně. Správná odpověď je: $correctAnswer',
-                              ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                    setState(() {
-                                      typeInAnswer = '';
-                                      if (quizIndex < quizzes.length) {
-                                        quizIndex++;
-                                        _startTimer();
-                                      } else {
-                                        Get.to(const SummaryPage());
-                                      }
-                                    });
-                                  },
-                                  child: const Text('Next'),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                        child: Text(
-                          'Next',
-                          style: EduPotDarkTextTheme.headline2(1),
-                        )),
+                        _evaluateQuiz(
+                          correctAnswers,
+                          typeInAnswer,
+                          quizzes: quizzes,
+                          onSubmit: () {
+                            Get.back();
+                            setState(() {
+                              typeInAnswer = '';
+                              if (quizIndex < quizzes.length) {
+                                quizIndex++;
+                                _startTimer();
+                              } else {
+                                Get.to(
+                                  SummaryPage(
+                                    userAnswers: userAnswers,
+                                    quiz: studyProvider.quizzes[widget.quizId],
+                                  ),
+                                );
+                              }
+                            });
+                          },
+                        );
+                      },
+                      child: Text(
+                        'Next',
+                        style: EduPotDarkTextTheme.headline2(1),
+                      ),
+                    ),
                   ),
                 ),
             ],
@@ -269,11 +277,17 @@ class _QuizPageState extends State<QuizPage> {
     );
   }
 
-  void _evaluateQuiz(List<List<String>> correctAnswers, String value,
-      {required String correctAnswer,
-      required List<String> quizzes,
-      void Function()? onSubmit}) {
+  void _evaluateQuiz(
+    List<List<String>> correctAnswers,
+    String value, {
+    required List<String> quizzes,
+    void Function()? onSubmit,
+  }) {
     _stopTimer();
+
+    setState(() {
+      userAnswers[quizIndex - 1] = value;
+    });
 
     showDialog(
       barrierDismissible: false,
@@ -295,7 +309,7 @@ class _QuizPageState extends State<QuizPage> {
               Text(
                 correctAnswers[quizIndex - 1].contains(value)
                     ? 'Correct!'
-                    : 'Incorrect!',
+                    : 'Wrong!',
                 style: EduPotDarkTextTheme.smallHeadline.copyWith(
                   color: correctAnswers[quizIndex - 1].contains(value)
                       ? Colors.green
@@ -303,7 +317,7 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               Text(
-                'The correct answer${correctAnswers[quizIndex - 1].length > 1 ? "s are" : " is"}: $correctAnswer',
+                'Correct answer${correctAnswers[quizIndex - 1].length > 1 ? "s are: ${correctAnswers[quizIndex - 1].join(', ')}" : " is: ${correctAnswers[quizIndex - 1][0]}"}',
                 style: EduPotDarkTextTheme.headline2(1),
                 textAlign: TextAlign.center,
               ),
