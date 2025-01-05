@@ -1,5 +1,7 @@
 import 'package:edupot/components/app/primary_scaffold.dart';
 import 'package:edupot/routes/app/learning/create/creation_page.dart';
+import 'package:edupot/routes/app/learning/reports/reports_page.dart';
+import 'package:edupot/routes/app/learning/settings/study_settings_page.dart';
 import 'package:edupot/routes/app/learning/study/study_page.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/widgets/learning/learn_button.dart';
@@ -16,8 +18,8 @@ class LearningPage extends StatelessWidget {
     const Map<String, Widget> data = {
       "study": StudyPage(),
       "create": CreationPage(),
-      "reports": Placeholder(),
-      "settings": Placeholder(),
+      "reports": ReportsPage(),
+      "settings": StudySettingsPage(),
     };
     return PrimaryScaffold(
       child: SafeArea(

@@ -53,16 +53,12 @@ class QuizModel with _$QuizModel {
 
   static List<Map<String, dynamic>> _encodeNestedArray(
       List<List<String>> nestedArray) {
-    return nestedArray
-        .map((innerList) =>
-            {'values': innerList}) // Každý seznam zabalíme do mapy
-        .toList();
+    return nestedArray.map((innerList) => {'values': innerList}).toList();
   }
 
   static List<List<String>> _decodeNestedArray(List<dynamic> encodedArray) {
     return encodedArray
-        .map((item) =>
-            List<String>.from(item['values'] ?? [])) // Extrahujeme hodnoty
+        .map((item) => List<String>.from(item['values'] ?? []))
         .toList();
   }
 }

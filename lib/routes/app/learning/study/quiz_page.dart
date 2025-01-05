@@ -4,6 +4,7 @@ import 'package:edupot/components/app/learning/quiz_content.dart';
 import 'package:edupot/components/app/primary_scaffold.dart';
 import 'package:edupot/models/learning/quiz.dart';
 import 'package:edupot/providers/study_provider.dart';
+import 'package:edupot/routes/app/learning/study/study_page.dart';
 import 'package:edupot/routes/app/learning/study/summary_page.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/widgets/learning/circular_timer.dart';
@@ -115,6 +116,7 @@ class _QuizPageState extends State<QuizPage> {
     final currentTime = quiz.times[quizIndex - 1];
 
     return PrimaryScaffold(
+      navBar: false,
       child: SafeArea(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -129,7 +131,7 @@ class _QuizPageState extends State<QuizPage> {
                 children: [
                   InkWell(
                     onTap: () {
-                      Get.back();
+                      Get.off(const StudyPage());
                     },
                     child: const Icon(Icons.arrow_back_rounded,
                         size: 32, color: Colors.white),
