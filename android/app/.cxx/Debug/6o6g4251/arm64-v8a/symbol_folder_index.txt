@@ -1,0 +1,1 @@
+/home/aurelius/Projects/STP/edupot/build/app/intermediates/cxx/Debug/6o6g4251/obj/arm64-v8a

@@ -1,0 +1,2 @@
+/home/aurelius/Projects/STP/edupot/android/app/.cxx/RelWithDebInfo/405fo3i0/arm64-v8a/CMakeFiles/edit_cache.dir
+/home/aurelius/Projects/STP/edupot/android/app/.cxx/RelWithDebInfo/405fo3i0/arm64-v8a/CMakeFiles/rebuild_cache.dir
