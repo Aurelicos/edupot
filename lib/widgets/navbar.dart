@@ -25,68 +25,63 @@ class _NavbarState extends State<Navbar> {
     return Container(
       height: 84,
       color: EduPotColorTheme.navbar,
-      child: ClipRRect(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 6.0, sigmaY: 6.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              _button(
-                index: 0,
-                icon: "calendar",
-                label: "Calendar",
-                onPressed: () async {
-                  if (provider.selectedIndex != 0) {
-                    provider.selectedIndex = 0;
-                    Get.off(const CalendarPage(),
-                        transition: Transition.noTransition);
-                  }
-                },
-                provider: provider,
-              ),
-              _button(
-                index: 1,
-                icon: "tasks",
-                label: "Tasks",
-                onPressed: () {
-                  if (provider.selectedIndex != 1) {
-                    provider.selectedIndex = 1;
-                    Get.off(const TaskTrackerPage(),
-                        transition: Transition.noTransition);
-                  }
-                },
-                provider: provider,
-              ),
-              _button(
-                index: 2,
-                icon: "study",
-                label: "Learn",
-                onPressed: () {
-                  if (provider.selectedIndex != 2) {
-                    provider.selectedIndex = 2;
-                    Get.off(const LearningPage(),
-                        transition: Transition.noTransition);
-                  }
-                },
-                provider: provider,
-              ),
-              _button(
-                index: 3,
-                icon: "setting",
-                label: "Settings",
-                onPressed: () {
-                  if (provider.selectedIndex != 3) {
-                    provider.selectedIndex = 3;
-                    Get.off(const SettingsPage(),
-                        transition: Transition.noTransition);
-                  }
-                },
-                provider: provider,
-              ),
-            ],
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          _button(
+            index: 0,
+            icon: "calendar",
+            label: "Calendar",
+            onPressed: () async {
+              if (provider.selectedIndex != 0) {
+                provider.selectedIndex = 0;
+                Get.off(const CalendarPage(),
+                    transition: Transition.noTransition);
+              }
+            },
+            provider: provider,
           ),
-        ),
+          _button(
+            index: 1,
+            icon: "tasks",
+            label: "Tasks",
+            onPressed: () {
+              if (provider.selectedIndex != 1) {
+                provider.selectedIndex = 1;
+                Get.off(const TaskTrackerPage(),
+                    transition: Transition.noTransition);
+              }
+            },
+            provider: provider,
+          ),
+          _button(
+            index: 2,
+            icon: "study",
+            label: "Learn",
+            onPressed: () {
+              if (provider.selectedIndex != 2) {
+                provider.selectedIndex = 2;
+                Get.off(const LearningPage(),
+                    transition: Transition.noTransition);
+              }
+            },
+            provider: provider,
+          ),
+          _button(
+            index: 3,
+            icon: "setting",
+            label: "Settings",
+            onPressed: () {
+              if (provider.selectedIndex != 3) {
+                provider.selectedIndex = 3;
+                Get.off(const SettingsPage(),
+                    transition: Transition.noTransition);
+              }
+            },
+            provider: provider,
+          ),
+        ],
       ),
     );
   }
@@ -129,33 +124,30 @@ class _NavbarState extends State<Navbar> {
         onPressed: onPressed,
         style: ButtonStyle(
           visualDensity: VisualDensity.compact,
-          overlayColor:
-              WidgetStateColor.resolveWith((states) => Colors.transparent),
+          overlayColor: WidgetStateProperty.all(Colors.transparent),
         ),
-        child: ColorFiltered(
-          colorFilter: ColorFilter.mode(
-            provider.selectedIndex == index
-                ? Colors.white
-                : Colors.white.withValues(alpha: 0.45),
-            BlendMode.srcIn,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 32,
-                child: SvgPicture.asset(
-                  'assets/icons/$icon.svg',
-                  fit: BoxFit.contain,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: 32,
+              child: SvgPicture.asset(
+                'assets/icons/$icon.svg',
+                fit: BoxFit.contain,
+                colorFilter: ColorFilter.mode(
+                  provider.selectedIndex == index
+                      ? Colors.white
+                      : Colors.white.withValues(alpha: 0.45),
+                  BlendMode.srcIn,
                 ),
               ),
-              const SizedBox(height: 6),
-              Text(
-                label,
-                style: EduPotDarkTextTheme.headline2(1),
-              ),
-            ],
-          ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              label,
+              style: EduPotDarkTextTheme.headline2(1),
+            ),
+          ],
         ),
       ),
     );
