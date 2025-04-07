@@ -1,0 +1,2 @@
+/home/aurelius/Projects/flutter/edupot/android/app/.cxx/Debug/1k45463n/x86_64/CMakeFiles/edit_cache.dir
+/home/aurelius/Projects/flutter/edupot/android/app/.cxx/Debug/1k45463n/x86_64/CMakeFiles/rebuild_cache.dir

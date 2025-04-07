@@ -84,11 +84,14 @@ class _ReportsPageState extends State<ReportsPage> {
                   itemBuilder: (context, index) {
                     return QuizItem(
                       answerType: AnswerType.quiz,
+                      showmenu: true,
                       title:
                           formatTitle(reportProvider.reports[index].quizName),
-                      customColor: EduPotColorTheme.projectBlue,
+                      customColor: EduPotColorTheme.examsOrange,
+                      reportId: reportProvider.reports[index].uid ?? "",
                       height: 84,
-                      iconSize: 50,
+                      iconSize: 40,
+                      iconName: "graph",
                       textStyle: EduPotDarkTextTheme.headline2(1).copyWith(
                         fontSize: 18,
                       ),

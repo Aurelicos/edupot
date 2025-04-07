@@ -52,4 +52,24 @@ class ReportProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> deleteReport(String userId, String reportId) async {
+    _isLoading = true;
+
+    try {
+      await _db
+          .collection('users')
+          .doc(userId)
+          .collection('reports')
+          .doc(reportId)
+          .delete();
+
+      await fetchReports(userId);
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
 }

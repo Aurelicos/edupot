@@ -29,4 +29,24 @@ class StudyProvider extends ChangeNotifier {
       return false;
     }
   }
+
+  Future<bool> deleteQuiz(String userId, String quizId) async {
+    try {
+      await _db
+          .collection('users')
+          .doc(userId)
+          .collection("quizzes")
+          .doc(quizId)
+          .delete();
+
+      _quizzes.removeWhere((quiz) => quiz.uid == quizId);
+
+      notifyListeners();
+
+      return true;
+    } catch (e) {
+      debugPrint(e.toString());
+      return false;
+    }
+  }
 }

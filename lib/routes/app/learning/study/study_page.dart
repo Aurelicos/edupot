@@ -86,10 +86,13 @@ class _StudyPageState extends State<StudyPage> {
                   itemBuilder: (context, index) {
                     return QuizItem(
                       answerType: AnswerType.quiz,
+                      showmenu: true,
+                      quizId: index,
+                      iconName: "learn",
                       title: formatTitle(studyProvider.quizzes[index].title),
-                      customColor: EduPotColorTheme.projectBlue,
+                      customColor: EduPotColorTheme.tasksPurple,
                       height: 84,
-                      iconSize: 50,
+                      iconSize: 48,
                       textStyle: EduPotDarkTextTheme.headline2(1).copyWith(
                         fontSize: 18,
                       ),

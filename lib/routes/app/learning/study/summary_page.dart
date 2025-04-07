@@ -3,11 +3,13 @@ import 'package:edupot/models/learning/quiz.dart';
 import 'package:edupot/models/learning/report.dart';
 import 'package:edupot/providers/report_provider.dart';
 import 'package:edupot/providers/user_provider.dart';
+import 'package:edupot/routes/app/learning/reports/reports_page.dart';
 import 'package:edupot/routes/app/learning/study/study_page.dart';
 import 'package:edupot/utils/themes/theme.dart';
 import 'package:edupot/widgets/learning/summary_animation.dart';
 import 'package:edupot/widgets/main_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
@@ -33,10 +35,8 @@ class _SummaryPageState extends State<SummaryPage> {
   late ReportProvider _reportProvider;
   late String _userId;
 
-  /// Uchovává report vytažený z provideru, pokud se volá jen `reportId`.
   ReportModel? _storedReport;
 
-  /// Pokud voláme s quiz + userAnswers, tak se vypočítá `_isCorrect` a uloží se do DB.
   List<bool> _isCorrect = [];
 
   @override
@@ -45,19 +45,14 @@ class _SummaryPageState extends State<SummaryPage> {
     _reportProvider = Provider.of<ReportProvider>(context, listen: false);
     _userId = Provider.of<UserProvider>(context, listen: false).user?.uid ?? "";
 
-    // Rozhodnutí logiky
     if (widget.quiz != null && widget.userAnswers != null) {
-      // Data poskytována přes navigaci - plný detail + uložení reportu
       _isCorrect = _calculateIsCorrect(widget.quiz!, widget.userAnswers!);
       _saveReport();
     } else if (widget.reportId != null) {
-      // Dostali jsme jen reportId, tak vyhledáme report v provideru
       _loadStoredReport(widget.reportId!);
     }
-    // Jinak, pokud nemáme nic, zobrazíme "No data" (v build logice).
   }
 
-  /// Spočítá bool pole, zda byla odpověď správná
   List<bool> _calculateIsCorrect(QuizModel quiz, List<String> userAnswers) {
     List<bool> results = [];
     for (int i = 0; i < quiz.correctAnswers.length; i++) {
@@ -70,7 +65,6 @@ class _SummaryPageState extends State<SummaryPage> {
     return results;
   }
 
-  /// Uloží report do databáze, pokud máme quiz + userAnswers
   Future<void> _saveReport() async {
     if (widget.quiz == null || widget.userAnswers == null) return;
 
@@ -171,7 +165,16 @@ class _SummaryPageState extends State<SummaryPage> {
                     ),
                   ),
                 ),
-                const SizedBox(width: 32),
+                GestureDetector(
+                  onTap: () {
+                    _reportProvider.deleteReport(_userId, quiz.uid ?? "");
+                  },
+                  child: SvgPicture.asset(
+                    "assets/icons/bin.svg",
+                    colorFilter:
+                        ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                  ),
+                )
               ],
             ),
             const SizedBox(height: 20),
@@ -245,7 +248,6 @@ class _SummaryPageState extends State<SummaryPage> {
     );
   }
 
-  /// Minimal detail - pokud zobrazujeme data z uloženého reportu (bez fetchu quizu a userAnswers)
   Widget _buildMinimalDetail(BuildContext context) {
     final report = _storedReport!;
     final percentage = report.percentage;
@@ -262,7 +264,7 @@ class _SummaryPageState extends State<SummaryPage> {
               children: [
                 InkWell(
                   onTap: () {
-                    Get.off(const StudyPage());
+                    Get.off(const ReportsPage());
                   },
                   child: const Icon(Icons.arrow_back_rounded,
                       size: 32, color: Colors.white),
